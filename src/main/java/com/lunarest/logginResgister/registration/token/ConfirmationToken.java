@@ -55,4 +55,17 @@ public class ConfirmationToken {
     }
 
 
+    public LocalDateTime getConfirmedAt() {
+        return confirmedAt;
+    }
+
+    public LocalDateTime getExpiresAt() {
+        return expiresAt;
+    }
+
+    public AppUser getAppUser() {
+        return appUser;
+    }
+
+
 }
