@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @Entity
 public class ConfirmationToken {
 
@@ -54,6 +53,9 @@ public class ConfirmationToken {
         this.appUser = appUser;
     }
 
+    public ConfirmationToken() {
+        // Default constructor
+    }
 
     public LocalDateTime getConfirmedAt() {
         return confirmedAt;

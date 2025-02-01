@@ -40,6 +40,9 @@ public class AppUser implements UserDetails {
     private Boolean locked = false;
     private Boolean enabled = false;
 
+    // No-argument constructor (required by JPA/Hibernate)
+    public AppUser() {
+    }
     //constructor
     public AppUser(String firstName,
                    String lastName,

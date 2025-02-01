@@ -16,18 +16,24 @@ import java.time.LocalDateTime;
 @Service
 public class RegistrationService {
 
-    @Autowired
-    private AppUserService appUserService;
 
-    @Autowired
-    private EmailValidater emailValidater;
-
-    private ConfirmationTokenService confirmationTokenService;
+    private final AppUserService appUserService;
+    private final EmailValidater emailValidater;
+    private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
 
-    public RegistrationService(EmailSender emailSender) {
+    // Use constructor injection for all dependencies
+    public RegistrationService(AppUserService appUserService,
+                               EmailValidater emailValidater,
+                               ConfirmationTokenService confirmationTokenService, // Add this
+                               EmailSender emailSender) {
+        this.appUserService = appUserService;
+        this.emailValidater = emailValidater;
+        this.confirmationTokenService = confirmationTokenService; // Initialize it
         this.emailSender = emailSender;
     }
+
+
 
     public String register(RegistrationRequest request) {
         boolean isValidEmail = emailValidater.test(request.getEmail());
