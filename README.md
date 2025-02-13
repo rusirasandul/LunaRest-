@@ -1,16 +1,31 @@
-# Luna Rest Frontend
+# Luna Rest Project
 
-This is the frontend of the Luna Rest project.  It is built using React and communicates with the backend API.
+Luna Rest is a full-stack web application for restaurant management.
 
-## Getting Started
+## Overview
 
-1.  Clone the repository: `git clone <repository_url>`
-2.  Navigate to the frontend directory: `cd frontend`
-3.  Install dependencies: `npm install`
-4.  Start the development server: `npm start`
+This repository contains the code for both the frontend and backend of the Luna Rest project.
 
-## Dependencies
+- [Frontend](./frontend/README.md): The user interface built with React.
+- [Backend](./backend/README.md): The API server built with Node.js and Express.
 
-*   React
-*   React Router
-*   Axios
+## Frontend
+
+The frontend of the Luna Rest project is built using React and communicates with the backend API.
+
+### Getting Started
+
+1. Clone the repository: `git clone <repository_url>`
+2. Navigate to the frontend directory: `cd frontend`
+3. Install dependencies: `npm install`
+4. Start the development server: `npm start`
+
+### Dependencies
+
+- React
+- React Router
+- Axios
+
+## Backend
+
+Refer to the `README.md` file in the `backend` directory for backend setup instructions.
