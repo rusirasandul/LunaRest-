@@ -1,9 +1,9 @@
 import { BrowserRouter as Router } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Hero from "./components/Hero";
-import Prediction from "./components/Prediction";
-import Setting from "./components/Setting";
-import Journal from "./components/Journal";
+import Navbar from "./layouts/Header";
+import Hero from "./pages/Home";
+import Prediction from "./pages/prediction";
+import Setting from "./pages/Setting";
+import Journal from "./pages/Journal";
 import LandingPage from "./pages/LandingPage";
 import "./App.css";
 
