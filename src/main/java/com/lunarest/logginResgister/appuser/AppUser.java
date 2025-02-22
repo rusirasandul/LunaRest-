@@ -15,7 +15,6 @@ import java.util.Collections;
 @Getter
 @Setter
 @EqualsAndHashCode
-@NoArgsConstructor
 @Entity
 public class AppUser implements UserDetails {
 
