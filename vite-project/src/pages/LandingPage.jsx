@@ -23,7 +23,7 @@ const LandingPage = () => {
 
             <button
               className="mt-8 w-full py-4 px-8 bg-[#1a237e] hover:bg-[#283593] text-white rounded-lg 
-                         text-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl"
+                        text-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl"
               onClick={() => console.log("Get Started clicked")}
             >
               Let's Get Started
