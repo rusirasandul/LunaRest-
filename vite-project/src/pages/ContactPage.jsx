@@ -3,9 +3,9 @@ import contact from "../assets/Contact.png";
 
 const ContactPage = () => {
     return (
-        <div className="min-h-screen p-4 text-white border border-purple-600 md:p-6 bg-herobg2">
+        <div className="flex items-center justify-center min-h-screen p-4 text-white border border-purple-600 md:p-6 bg-herobg2">
         {/* Main Content Section */}
-        <section className="container max-w-6xl mx-auto">
+        <section className="container max-w-6xl py-8 mx-auto">
             <div className="flex flex-col gap-8 md:flex-row md:items-center">
             {/* Left Column - About */}
             <div className="w-full md:w-1/2 md:pr-8">
