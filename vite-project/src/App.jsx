@@ -1,6 +1,6 @@
-import { BrowserRouter as Router } from "react-router-dom";
+// App.jsx
 import Navbar from "./layouts/Header";
-import Hero from "./pages/Home";
+import Home from "./pages/Home";
 import Prediction from "./pages/prediction";
 import Setting from "./pages/Setting";
 import Journal from "./pages/Journal";
@@ -9,16 +9,14 @@ import "./App.css";
 
 function App() {
   return (
-    <Router>
-      <div className="min-h-screen overflow-x-hidden font-heading">
-        <Navbar />
-        <Hero />
-        <Prediction />
-        <Journal />
-        <Setting />
-        <LandingPage />
-      </div>
-    </Router>
+    <div className="min-h-screen overflow-x-hidden font-heading">
+      <Navbar />
+      <Home />
+      <Prediction />
+      <Journal />
+      <Setting />
+      <LandingPage />
+    </div>
   );
 }
 

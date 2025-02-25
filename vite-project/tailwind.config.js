@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   darkMode: ["class"],
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}", "*.{js,ts,jsx,tsx,mdx}"],
   theme: {
@@ -13,13 +13,13 @@ module.exports = {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+        },
         heroBg: "#080030",
         pera: "#ffffff",
         h1: "#afa99e",
         h2: "#b34bfe",
         nav: "#b7fffe",
-        herobg2: '#1D0B50'
-        },
+        herobg2: '#1D0B50',
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
@@ -54,8 +54,11 @@ module.exports = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      fontFamily: {
+        heading: ["Radio Canada Big", "serif"],
+        primary: ["Inter", "serif"],
+      },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-}
-
+  plugins: [],
+};
