@@ -5,6 +5,7 @@ import Prediction from "./pages/prediction";
 import Setting from "./pages/Setting";
 import Journal from "./pages/Journal";
 import LandingPage from "./pages/LandingPage";
+import Footer from "./layouts/Footer";
 import "./App.css";
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
       <Journal />
       <Setting />
       <LandingPage />
+      <Footer/>
     </div>
   );
 }

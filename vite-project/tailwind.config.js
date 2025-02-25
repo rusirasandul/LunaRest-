@@ -20,6 +20,7 @@ export default {
         h2: "#b34bfe",
         nav: "#b7fffe",
         herobg2: '#1D0B50',
+        footer:"#3E3E3E",
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
