@@ -44,9 +44,9 @@ const Quiz = () => {
           </div>
 
           {!quizComplete ? (
-            <div className="w-full flex flex-col items-center text-center gap-6 mt-5">
+            <div className="w-full flex flex-col items-center text-center gap-10 mt-5">
               {/* Question */}
-              <h3 className="text-2xl font-heading font-semibold text-blue-950">{questions[currentIndex].question}</h3>
+              <h3 className="text-2xl font-heading semibold text-blue-950">{questions[currentIndex].question}</h3>
 
               {/* Options or Text Input based on question type */}
               <div className="w-full flex flex-col items-center gap-3">
