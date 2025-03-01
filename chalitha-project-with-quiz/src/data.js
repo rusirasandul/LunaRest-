@@ -40,27 +40,32 @@ export const questions = [
     answer: "Au",
   },
   {
-    question: "On a typical day, how many hours do you spend on screens for non-study activities (e.g., social media, gaming, TV)?",
+    question: "On a typical day, how many hours do you spend on screens for non-study activities (e.g., social media, gaming, TV) ?",
     options: ["Neil Armstrong", "Buzz Aldrin", "Yuri Gagarin", "John Glenn"],
     answer: "Neil Armstrong",
   },
   {
-    question: "Which country is known as the Land of the Rising Sun?",
+    question: "How many caffeinated drinks do you have per day(coffee, tea, energy drinks) ?",
     options: ["China", "Japan", "South Korea", "Thailand"],
     answer: "Japan",
   },
   {
-    question: "What is the hardest natural substance on Earth?",
+    question: "How many minutes of vigorous physical activity do you do per day?",
     options: ["Gold", "Diamond", "Iron", "Quartz"],
     answer: "Diamond",
   },
   {
-    question: "Which continent has the most countries?",
+    question: "How would you rate your sleep quality on a scale of 1 to 10? (1 = Very poor, 10 = Excellent)",
+    options: ["Gold", "Diamond", "Iron", "Quartz"],
+    answer: "Diamond",
+  },
+  {
+    question: "On weekdays, what time do you usually go to sleep? (24-hour format, e.g., 23:00 for 11 PM)",
     options: ["Africa", "Asia", "Europe", "South America"],
     answer: "Africa",
   },
   {
-    question: "What is the longest river in the world?",
+    question: "On weekends, what time do you usually go to sleep? (24-hour format, e.g., 00:30 for 12:30 AM)",
     options: [
       "Amazon River",
       "Nile River",
@@ -69,4 +74,25 @@ export const questions = [
     ],
     answer: "Nile River",
   },
+  {
+    question: "On weekdays, what time do you usually wake up? (24-hour format, e.g., 07:00 for 7 AM)",
+    options: [
+      "Amazon River",
+      "Nile River",
+      "Yangtze River",
+      "Mississippi River",
+    ],
+    answer: "Nile River",
+  },
+  {
+    question: "On weekends, what time do you usually wake up? (24-hour format, e.g., 09:30 for 9:30 AM)",
+    options: [
+      "Amazon River",
+      "Nile River",
+      "Yangtze River",
+      "Mississippi River",
+    ],
+    answer: "Nile River",
+  },
+
 ];
