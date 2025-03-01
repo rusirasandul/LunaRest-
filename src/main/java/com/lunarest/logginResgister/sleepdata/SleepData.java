@@ -36,6 +36,7 @@ public class SleepData {
     private int caffeineIntake;
     private String physicalActivityLevel;
     private int sleepQuality; // This will be populated by the ML model
+    private String recommendation; // ChatGPT-generated recommendation
 
     public SleepData(AppUser user, LocalDate date, String name, String dateOfBirth, String gender, int universityYear,
                      double weekdaysSleepDuration, double weekendsSleepDuration, double weekdaysStudyHours,
@@ -56,4 +57,54 @@ public class SleepData {
         this.caffeineIntake = caffeineIntake;
         this.physicalActivityLevel = physicalActivityLevel;
     }
+
+    public double getWeekdaysSleepDuration() {
+        return weekdaysSleepDuration;
+    }
+
+    public double getWeekendsSleepDuration() {
+        return weekendsSleepDuration;
+    }
+
+    public double getWeekdaysStudyHours() {
+        return weekdaysStudyHours;
+    }
+
+    public double getWeekendsStudyHours() {
+        return weekendsStudyHours;
+    }
+
+    public double getWeekdaysScreenTime() {
+        return weekdaysScreenTime;
+    }
+
+    public double getWeekendsScreenTime() {
+        return weekendsScreenTime;
+    }
+
+    public int getCaffeineIntake() {
+        return caffeineIntake;
+    }
+
+    public String getPhysicalActivityLevel() {
+        return physicalActivityLevel;
+    }
+
+    public int getSleepQuality() {
+        return sleepQuality;
+    }
+
+    public String getRecommendation() {
+        return recommendation;
+    }
+
+    public void setSleepQuality(int sleepQuality) {
+        this.sleepQuality = sleepQuality;
+    }
+
+    public void setRecommendation(String recommendation) {
+        this.recommendation = recommendation;
+    }
+
+
 }
