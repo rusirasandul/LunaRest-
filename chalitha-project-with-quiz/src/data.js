@@ -1,16 +1,21 @@
 export const questions = [
   {
-    question: "What is the capital of Canada?",
+    question: "Well done for getting started! What would you like us to call you?",
     options: ["Toronto", "Vancouver", "Ottawa", "Montreal"],
     answer: "Ottawa",
   },
   {
-    question: "Which planet is known as the 'Red Planet'?",
+    question: "Select your gender?" ,
     options: ["Venus", "Mars", "Jupiter", "Saturn"],
     answer: "Mars",
   },
   {
-    question: "Who wrote the play 'Romeo and Juliet'?",
+    question: "Which year are you born in?" ,
+    options: ["Venus", "Mars", "Jupiter", "Saturn"],
+    answer: "Mars",
+  },
+  {
+    question: "Which year do you study at University?",
     options: [
       "Charles Dickens",
       "William Shakespeare",
