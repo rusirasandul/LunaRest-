@@ -10,6 +10,11 @@ const Quiz = () => {
     setAnswers((prev) => ({ ...prev, [currentIndex]: option }));
   };
 
+    // Added this function to handle text input for questions without options
+    const handleTextInputChange = (e) => {
+      setAnswers((prev) => ({ ...prev, [currentIndex]: e.target.value }))
+    }
+
   const handleNext = () => {
     if (currentIndex < questions.length - 1) {
       setCurrentIndex(currentIndex + 1);
@@ -47,7 +52,9 @@ const Quiz = () => {
 
               {/* Options */}
               <div className="w-full flex flex-col items-center gap-3">
-                {questions[currentIndex].options.map((option, idx) => (
+                {questions[currentIndex].options.length > 0 ? (
+                  // Render radio buttons for questions with options
+                  questions[currentIndex].options.map((option, idx) => (
                   <label
                     key={idx}
                     className="flex items-center gap-3 w-[80%] bg-white/90 p-3 rounded-md border border-gray-300 cursor-pointer hover:bg-blue-100 transition"
@@ -62,7 +69,18 @@ const Quiz = () => {
                     />
                     <span className="text-lg">{option}</span>
                   </label>
-                ))}
+                ))
+              ) : (
+                // Render text input for questions without options
+                // part that provides text fields for user input
+                <input
+                  type="text"
+                  value={answers[currentIndex] || ""}
+                  onChange={handleTextInputChange}
+                  placeholder="Enter your answer here"
+                  className="w-[80%] bg-white/90 p-3 rounded-md border border-gray-300 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              )}
               </div>
 
               {/* Navigation Buttons */}
