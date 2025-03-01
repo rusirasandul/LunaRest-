@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,14 +25,17 @@ public class SleepDataService {
         this.recommendationService = recommendationService;
     }
 
-    public void addSleepData(AppUser user, LocalDate date, String name, String dateOfBirth, String gender, int universityYear,
+    public void addSleepData(AppUser user, LocalDate date, String name, int age, String gender, int universityYear,
                              double weekdaysSleepDuration, double weekendsSleepDuration, double weekdaysStudyHours,
                              double weekendsStudyHours, double weekdaysScreenTime, double weekendsScreenTime,
-                             int caffeineIntake, String physicalActivityLevel) {
+                             int caffeineIntake, int physicalActivityLevel, LocalTime weekdaysSleepStart,
+                             LocalTime weekdaysSleepEnd,
+                             LocalTime weekendsSleepStart, LocalTime weekendsSleepEnd ) {
 
-        SleepData sleepData = new SleepData(user, date, name, dateOfBirth, gender, universityYear,
+        SleepData sleepData = new SleepData(user, date, name, age, gender, universityYear,
                 weekdaysSleepDuration, weekendsSleepDuration, weekdaysStudyHours, weekendsStudyHours,
-                weekdaysScreenTime, weekendsScreenTime, caffeineIntake, physicalActivityLevel);
+                weekdaysScreenTime, weekendsScreenTime, caffeineIntake, physicalActivityLevel
+                ,weekdaysSleepStart, weekdaysSleepEnd, weekendsSleepStart, weekendsSleepEnd);
 
         sleepDataRepository.save(sleepData);
 

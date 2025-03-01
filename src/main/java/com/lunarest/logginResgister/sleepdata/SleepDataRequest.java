@@ -3,6 +3,8 @@ package com.lunarest.logginResgister.sleepdata;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalTime;
+
 @Getter
 @Setter
 public class SleepDataRequest {
@@ -17,5 +19,9 @@ public class SleepDataRequest {
     private double weekdaysScreenTime;
     private double weekendsScreenTime;
     private int caffeineIntake;
-    private String physicalActivityLevel;
+    private int physicalActivityLevel;
+    private LocalTime weekdaysSleepStart;
+    private LocalTime weekdaysSleepEnd;
+    private LocalTime weekendsSleepStart;
+    private LocalTime weekendsSleepEnd;
 }

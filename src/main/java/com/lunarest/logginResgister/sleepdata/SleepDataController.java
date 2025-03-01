@@ -7,6 +7,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -25,7 +26,7 @@ public class SleepDataController {
     @PostMapping
     public void addSleepData(@AuthenticationPrincipal AppUser user,
                              @RequestParam String name,
-                             @RequestParam String dateOfBirth,
+                             @RequestParam int age,
                              @RequestParam String gender,
                              @RequestParam int universityYear,
                              @RequestParam double weekdaysSleepDuration,
@@ -35,10 +36,16 @@ public class SleepDataController {
                              @RequestParam double weekdaysScreenTime,
                              @RequestParam double weekendsScreenTime,
                              @RequestParam int caffeineIntake,
-                             @RequestParam String physicalActivityLevel) {
-        sleepDataService.addSleepData(user, LocalDate.now(), name, dateOfBirth, gender, universityYear,
+                             @RequestParam int physicalActivityLevel,
+                             @RequestParam String weekdaysSleepStart,
+                             @RequestParam String weekdaysSleepEnd,
+                             @RequestParam String weekendsSleepStart,
+                             @RequestParam String weekendsSleepEnd) {
+        sleepDataService.addSleepData(user, LocalDate.now(), name, age, gender, universityYear,
                 weekdaysSleepDuration, weekendsSleepDuration, weekdaysStudyHours, weekendsStudyHours,
-                weekdaysScreenTime, weekendsScreenTime, caffeineIntake, physicalActivityLevel);
+                weekdaysScreenTime, weekendsScreenTime, caffeineIntake, physicalActivityLevel,
+                LocalTime.parse(weekdaysSleepStart), LocalTime.parse(weekdaysSleepEnd),
+                LocalTime.parse(weekendsSleepStart), LocalTime.parse(weekendsSleepEnd));
     }
 
     @GetMapping

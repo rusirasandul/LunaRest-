@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -24,7 +25,7 @@ public class SleepData {
 
     private LocalDate date;
     private String name;
-    private String dateOfBirth;
+    private int age;
     private String gender;
     private int universityYear;
     private double weekdaysSleepDuration;
@@ -34,18 +35,24 @@ public class SleepData {
     private double weekdaysScreenTime;
     private double weekendsScreenTime;
     private int caffeineIntake;
-    private String physicalActivityLevel;
+    private int physicalActivityLevel;
     private int sleepQuality; // This will be populated by the ML model
     private String recommendation; // ChatGPT-generated recommendation
 
-    public SleepData(AppUser user, LocalDate date, String name, String dateOfBirth, String gender, int universityYear,
+    private LocalTime weekdaysSleepStart;
+    private LocalTime weekdaysSleepEnd;
+    private LocalTime weekendsSleepStart;
+    private LocalTime weekendsSleepEnd;
+
+    public SleepData(AppUser user, LocalDate date, String name, int age, String gender, int universityYear,
                      double weekdaysSleepDuration, double weekendsSleepDuration, double weekdaysStudyHours,
                      double weekendsStudyHours, double weekdaysScreenTime, double weekendsScreenTime,
-                     int caffeineIntake, String physicalActivityLevel) {
+                     int caffeineIntake, int physicalActivityLevel, LocalTime weekdaysSleepStart,
+                     LocalTime weekdaysSleepEnd, LocalTime weekendsSleepStart, LocalTime weekendsSleepEnd) {
         this.user = user;
         this.date = date;
         this.name = name;
-        this.dateOfBirth = dateOfBirth;
+        this.age = age;
         this.gender = gender;
         this.universityYear = universityYear;
         this.weekdaysSleepDuration = weekdaysSleepDuration;
@@ -56,6 +63,10 @@ public class SleepData {
         this.weekendsScreenTime = weekendsScreenTime;
         this.caffeineIntake = caffeineIntake;
         this.physicalActivityLevel = physicalActivityLevel;
+        this.weekdaysSleepStart = weekdaysSleepStart;
+        this.weekdaysSleepEnd = weekdaysSleepEnd;
+        this.weekendsSleepStart = weekendsSleepStart;
+        this.weekendsSleepEnd = weekendsSleepEnd;
     }
 
     public double getWeekdaysSleepDuration() {
@@ -86,7 +97,7 @@ public class SleepData {
         return caffeineIntake;
     }
 
-    public String getPhysicalActivityLevel() {
+    public int getPhysicalActivityLevel() {
         return physicalActivityLevel;
     }
 
