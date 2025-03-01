@@ -15,7 +15,7 @@ export const questions = [
     answer: "Mars",
   },
   {
-    question: "Which year do you study at University?",
+    question: "What year are you currently in at university?",
     options: [
       "Charles Dickens",
       "William Shakespeare",
@@ -25,7 +25,7 @@ export const questions = [
     answer: "William Shakespeare",
   },
   {
-    question: "Which is the largest ocean on Earth?",
+    question: "On average, how many hours do you sleep per night?",
     options: [
       "Atlantic Ocean",
       "Indian Ocean",
@@ -35,12 +35,12 @@ export const questions = [
     answer: "Pacific Ocean",
   },
   {
-    question: "What is the chemical symbol for gold?",
+    question: "On a typical day, how many hours do you spend studying?",
     options: ["Ag", "Au", "Fe", "Pb"],
     answer: "Au",
   },
   {
-    question: "Who was the first person to step on the moon?",
+    question: "On a typical day, how many hours do you spend on screens for non-study activities (e.g., social media, gaming, TV)?",
     options: ["Neil Armstrong", "Buzz Aldrin", "Yuri Gagarin", "John Glenn"],
     answer: "Neil Armstrong",
   },
