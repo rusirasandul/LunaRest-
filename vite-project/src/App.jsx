@@ -6,20 +6,26 @@ import Journal from "./pages/Journal";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
+import Footer from "./layouts/Footer";
 import "./App.css";
 
 function App() {
   return (
-    <div className="min-h-screen overflow-x-hidden font-heading">
+    <div className="flex flex-col min-h-screen overflow-x-hidden font-heading">
       <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/journal" element={<Journal />} />
-        <Route path="/setting" element={<Setting />} />
-        <Route path="/landing" element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignUpPage />} />
-      </Routes>
+      
+      <div className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/journal" element={<Journal />} />
+          <Route path="/setting" element={<Setting />} />
+          <Route path="/landing" element={<LandingPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+        </Routes>
+      </div>
+
+      <Footer /> 
     </div>
   );
 }

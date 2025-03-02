@@ -103,14 +103,14 @@ const AboutAndFAQ = () => {
     return (
         <div className="bg-gray-50">
             {/* About Section */}
-            <section id="about" className="py-16 px-4">
+            <section id="about" className="px-4 py-16">
                 <div className="container mx-auto">
-                    <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div className="flex flex-col items-center justify-between gap-8 md:flex-row">
                         <div className="md:w-1/2">
                             <h2 className="text-3xl font-bold mb-6 text-gray-800 relative pb-3 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-20 after:h-1 after:bg-cyan-400">
                                 About Lunarest
                             </h2>
-                            <p className="text-gray-700 mb-4">
+                            <p className="mb-4 text-gray-700">
                                 Lunarest is a comprehensive sleep management platform created by students, for students. We understand the unique challenges university life presents to maintaining healthy sleep habits, and we are here to help.
                             </p>
                             <p className="text-gray-700">
@@ -121,7 +121,7 @@ const AboutAndFAQ = () => {
                             <img
                                 src="/placeholder-image.jpg"
                                 alt="Students using Lunarest app"
-                                className="rounded-lg shadow-lg w-full h-auto"
+                                className="w-full h-auto rounded-lg shadow-lg"
                             />
                         </div>
                     </div>
@@ -129,18 +129,18 @@ const AboutAndFAQ = () => {
             </section>
 
             {/* Features Section */}
-            <section className="py-12 px-4 bg-white">
+            <section className="px-4 py-12 bg-white">
                 <div className="container mx-auto">
                     <h2 className="text-3xl font-bold mb-8 text-gray-800 relative pb-3 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-20 after:h-1 after:bg-cyan-400">
                         Our Features
                     </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                         {features.map((feature, index) => (
                             <div
                                 key={index}
-                                className="bg-white rounded-lg shadow-md p-6 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg border border-gray-100"
+                                className="p-6 transition-transform duration-300 bg-white border border-gray-100 rounded-lg shadow-md hover:-translate-y-1 hover:shadow-lg"
                             >
-                                <h3 className="text-xl font-semibold mb-3 text-indigo-600">{feature.title}</h3>
+                                <h3 className="mb-3 text-xl font-semibold text-indigo-600">{feature.title}</h3>
                                 <p className="text-gray-700">{feature.description}</p>
                             </div>
                         ))}
@@ -149,7 +149,7 @@ const AboutAndFAQ = () => {
             </section>
 
             {/* FAQ Section */}
-            <section id="faq" className="py-16 px-4 bg-gray-50">
+            <section id="faq" className="px-4 py-16 bg-gray-50">
                 <div className="container mx-auto">
                     <h2 className="text-3xl font-bold mb-10 text-gray-800 relative pb-3 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-20 after:h-1 after:bg-cyan-400">
                         Frequently Asked Questions
@@ -158,33 +158,33 @@ const AboutAndFAQ = () => {
                     <div className="max-w-3xl mx-auto">
                         {Object.entries(faqData).map(([category, items], categoryIndex) => (
                             <div key={categoryIndex} className="mb-10">
-                                <h3 className="text-xl font-semibold mb-4 text-indigo-600">{category}</h3>
+                                <h3 className="mb-4 text-xl font-semibold text-indigo-600">{category}</h3>
 
                                 <div className="space-y-4">
                                     {items.map((item, itemIndex) => (
                                         <div
                                             key={itemIndex}
-                                            className="border-b border-gray-200 pb-4"
+                                            className="pb-4 border-b border-gray-200"
                                         >
                                             <button
-                                                className="flex justify-between items-center w-full text-left font-medium focus:outline-none"
+                                                className="flex items-center justify-between w-full font-medium text-left focus:outline-none"
                                                 onClick={() => toggleFAQ(category, itemIndex)}
                                             >
                                                 <span className="text-gray-800">{item.question}</span>
-                                                <span className="ml-6 flex-shrink-0 text-indigo-500">
+                                                <span className="flex-shrink-0 ml-6 text-indigo-500">
                           {openFAQ[`${category}-${itemIndex}`] ? (
-                              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                               </svg>
                           ) : (
-                              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                               </svg>
                           )}
                         </span>
                                             </button>
                                             {openFAQ[`${category}-${itemIndex}`] && (
-                                                <div className="mt-2 text-gray-600 pl-2">
+                                                <div className="pl-2 mt-2 text-gray-600">
                                                     <p>{item.answer}</p>
                                                 </div>
                                             )}
