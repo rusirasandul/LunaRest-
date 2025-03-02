@@ -27,15 +27,15 @@ const LoginPage = () => {
                     <div className="flex flex-col items-center lg:items-start gap-2">
                         <span className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">Welcome</span>
                         <span className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white
-                           ml-8 sm:ml-16 lg:ml-32 my-2">to</span>
+                            ml-8 sm:ml-16 lg:ml-32 my-2">to</span>
                         <span className="text-3xl sm:text-4xl lg:text-5xl font-bold text-purple-400
-                           ml-16 sm:ml-24 lg:ml-32">LunaRest!</span>
+                            ml-16 sm:ml-24 lg:ml-32">LunaRest!</span>
                     </div>
                 </div>
 
                 {/* Right side login form */}
                 <div className="w-full sm:w-[450px] lg:w-[600px] p-6 sm:p-8 lg:p-12
-                       bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl">
+                        bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl">
                     <div className="text-center mb-6 sm:mb-8 lg:mb-10">
                         <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">USER LOGIN</h2>
                         <p className="text-gray-500 mt-2 sm:mt-3 text-base sm:text-1lg">Please enter your details</p>
@@ -53,8 +53,8 @@ const LoginPage = () => {
                                 <input
                                     type="email"
                                     className="block w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3
-                           text-base sm:text-lg border border-gray-300 rounded-lg
-                           focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+                            text-base sm:text-lg border border-gray-300 rounded-lg
+                            focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
                                     placeholder="Enter your email"
                                 />
                             </div>
@@ -71,8 +71,8 @@ const LoginPage = () => {
                                 <input
                                     type="password"
                                     className="block w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3
-                           text-base sm:text-lg border border-gray-300 rounded-lg
-                           focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+                            text-base sm:text-lg border border-gray-300 rounded-lg
+                            focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
                                     placeholder="Enter your password"
                                 />
                             </div>
@@ -81,8 +81,8 @@ const LoginPage = () => {
                         <button
                             type="submit"
                             className="w-full sm:w-3/4 bg-[#172960] text-white
-                       py-2.5 sm:py-3 px-4 text-base sm:text-lg rounded-lg
-                       hover:bg-blue-700 transition duration-200"
+                        py-2.5 sm:py-3 px-4 text-base sm:text-lg rounded-lg
+                        hover:bg-blue-700 transition duration-200"
                         >
                             Log In
                         </button>
@@ -94,9 +94,9 @@ const LoginPage = () => {
                                 type="button"
                                 onClick={handleSignupRedirect}
                                 className="mt-3 sm:mt-4 w-full flex items-center justify-center
-                         gap-2 sm:gap-3 border border-gray-300 rounded-lg
-                         py-2.5 sm:py-3 px-4 hover:bg-gray-50
-                         transition duration-200 bg-white text-base sm:text-lg"
+                        gap-2 sm:gap-3 border border-gray-300 rounded-lg
+                        py-2.5 sm:py-3 px-4 hover:bg-gray-50
+                        transition duration-200 bg-white text-base sm:text-lg"
                             >
                                 <Mail className="h-5 w-5 sm:h-6 sm:w-6 text-gray-600" />
                                 Sign up with Email

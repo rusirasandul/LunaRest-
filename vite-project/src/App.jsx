@@ -1,12 +1,11 @@
-import {BrowserRouter as Router, Route} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./layouts/Header";
 import Hero from "./pages/Home";
-import Prediction from "./pages/prediction";
 import Setting from "./pages/Setting";
 import Journal from "./pages/Journal";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
-import SignUpPage from "./pages/SignUpPage";
+import SignUpPage from "./pages/Signup";
 import "./App.css";
 
 function App() {
@@ -14,15 +13,15 @@ function App() {
     <Router>
       <div className="min-h-screen overflow-x-hidden font-heading">
         <Navbar />
-        <Hero />
-        <Prediction />
-        <Journal />
-        <Setting />
-        <LandingPage />
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/home" element={<Hero />} />
+          <Route path="/journal" element={<Journal />} />
+          <Route path="/setting" element={<Setting />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+        </Routes>
       </div>
-      <Route path="/" element={<LoginPage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/signup" element={<SignUpPage />} />
     </Router>
   );
 }
