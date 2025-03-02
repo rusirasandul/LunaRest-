@@ -117,5 +117,9 @@ public class SleepData {
         this.recommendation = recommendation;
     }
 
+    public LocalDate getDate() {
+        return date;
+    }
+
 
 }
