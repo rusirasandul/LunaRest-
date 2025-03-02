@@ -1,104 +1,224 @@
 import { useNavigate } from "react-router-dom";
 import contact from "../assets/Contact.png";
+import { useState } from "react";
+import { Mail, MapPin, Send, User, MessageSquare } from 'lucide-react';
 
 const ContactPage = () => {
-    const navigate = useNavigate(); // Initialize navigate
+    const navigate = useNavigate();
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        message: ""
+    });
+    
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
+    
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Handle form submission logic here
+        console.log("Form submitted:", formData);
+        // Reset form
+        setFormData({ name: "", email: "", message: "" });
+    };
 
     return (
-        <div className="relative flex items-center justify-center min-h-screen p-4 overflow-hidden text-white border border-purple-600 md:p-6 bg-herobg2">
-            {/* Decorative Gradient Circles */}
-            <div className="absolute top-0 left-0 z-0 -translate-y-1/2 rounded-full w-96 h-96 bg-gradient-to-r from-purple-700/30 to-indigo-600/10 blur-xl -translate-x-1/3"></div>
-            
-            <div className="absolute bottom-0 right-0 z-0 rounded-full w-96 h-96 bg-gradient-to-l from-purple-700/30 to-indigo-600/10 blur-xl translate-y-1/3 translate-x-1/4"></div>
-            
-            {/* Main Content Section */}
-            <section className="container relative z-10 max-w-6xl py-8 mx-auto">
-                <div className="flex flex-col gap-8 md:flex-row md:items-center">
-                    {/* Left Column - About */}
-                    <div className="w-full md:w-1/2 md:pr-8">
-                        <h1 className="relative mb-4 text-2xl font-bold text-white md:text-3xl">
-                            Welcome to LunaRest !
-                            <span className="absolute bottom-0 left-0 w-16 h-1 mt-1 bg-h2"></span>
-                        </h1>
-                        <p className="mb-6 text-sm leading-relaxed text-gray-300 md:text-base">
-                            At LunaRest, we are dedicated to transforming sleep health through innovation, 
-                            technology, and personalized support. Our mission is to help university students 
-                            understand, improve, and optimize their sleep patterns, ultimately enhancing 
-                            overall well-being and quality of life.
-                        </p>
-                        
-                        <div className="flex justify-center mb-6 transition-transform duration-300 hover:scale-105">
-                            <div className="w-48 h-48 md:w-64 md:h-64 drop-shadow-lg">
-                                <img 
-                                    src={contact}
-                                    alt="Team collaboration" 
-                                    className="object-contain w-full h-full"
-                                />
+        <div className="min-h-screen overflow-x-hidden text-white bg-gradient-to-b from-slate-900 to-indigo-950">
+            {/* Hero Section with Animated Waves */}
+            <div className="relative overflow-hidden top-20">
+                {/* Animated wave background */}
+                <div className="absolute inset-0 z-0">
+                    <svg className="absolute bottom-0 left-0 w-full" viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
+                        <path 
+                            fill="rgba(129, 140, 248, 0.2)" 
+                            d="M0,192L48,197.3C96,203,192,213,288,202.7C384,192,480,160,576,165.3C672,171,768,213,864,213.3C960,213,1056,171,1152,149.3C1248,128,1344,128,1392,128L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+                            className="animate-pulse"
+                        ></path>
+                    </svg>
+                    <svg className="absolute bottom-0 left-0 w-full" viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
+                        <path 
+                            fill="rgba(139, 92, 246, 0.15)" 
+                            d="M0,64L48,80C96,96,192,128,288,128C384,128,480,96,576,90.7C672,85,768,107,864,144C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+                            className="animate-pulse animation-delay-1000"
+                        ></path>
+                    </svg>
+                </div>
+
+                {/* Content */}
+                <div className="container relative z-10 px-4 py-12 mx-auto">
+                    {/* Main content container */}
+                    <div className="mx-auto max-w-7xl">
+                        {/* Page header */}
+                        <div className="mb-16 text-center">
+                            <h1 className="mb-4 text-4xl font-bold md:text-5xl">
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-400">
+                                    Get in Touch
+                                </span>
+                            </h1>
+                            <p className="max-w-2xl mx-auto text-lg text-indigo-200">
+                                Have questions about how LunaRest can improve your sleep quality? We're here to help.
+                            </p>
+                        </div>
+
+                        {/* Two column layout */}
+                        <div className="flex flex-col items-stretch gap-12 lg:flex-row">
+                            {/* Left column - About */}
+                            <div className="flex flex-col w-full lg:w-5/12">
+                                {/* Company info card */}
+                                <div className="h-full p-8 border shadow-xl bg-white/5 backdrop-blur-sm rounded-xl border-indigo-500/20">
+                                    <div className="flex flex-col h-full">
+                                        <div className="mb-8">
+                                            <h2 className="mb-2 text-2xl font-bold text-indigo-300">About LunaRest</h2>
+                                            <p className="text-gray-300">
+                                                At LunaRest, we are dedicated to transforming sleep health through innovation, 
+                                                technology, and personalized support. Our mission is to help university students 
+                                                understand, improve, and optimize their sleep patterns.
+                                            </p>
+                                        </div>
+
+                                        {/* Company image with glow effect */}
+                                        <div className="relative mx-auto my-8 group">
+                                            <div className="absolute inset-0 transition-all duration-500 bg-indigo-500/30 rounded-xl blur-xl group-hover:bg-indigo-500/40"></div>
+                                            <div className="relative p-4 border bg-gradient-to-br from-indigo-900/80 to-purple-900/80 backdrop-blur-sm rounded-xl border-indigo-500/20">
+                                                <img 
+                                                    src={contact}
+                                                    alt="LunaRest Team" 
+                                                    className="object-contain mx-auto transition-all duration-300 rounded-lg max-h-48 group-hover:scale-105"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        {/* Contact info with icons */}
+                                        <div className="mt-auto space-y-4">
+                                            <h3 className="mb-4 text-xl font-semibold text-indigo-300">Reach Us Directly</h3>
+                                            <div className="flex items-center gap-3">
+                                                <div className="p-2 rounded-full bg-indigo-500/20">
+                                                    <Mail size={18} className="text-indigo-300" />
+                                                </div>
+                                                <span className="text-gray-300">lunaRest2024@gmail.com</span>
+                                            </div>
+                                            <div className="flex items-center gap-3">
+                                                <div className="p-2 rounded-full bg-indigo-500/20">
+                                                    <MapPin size={18} className="text-indigo-300" />
+                                                </div>
+                                                <span className="text-gray-300">Colombo, Western Province</span>
+                                            </div>
+
+                                            <div className="pt-6">
+                                                <button 
+                                                    onClick={() => navigate("/about")}
+                                                    className="w-full py-3 font-medium text-white transition-all duration-300 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:shadow-lg hover:shadow-indigo-500/30 hover:-translate-y-1"
+                                                >
+                                                    Learn more about us
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Right column - Contact Form */}
+                            <div className="w-full lg:w-7/12">
+                                <div className="overflow-hidden border shadow-xl bg-white/5 backdrop-blur-sm rounded-xl border-indigo-500/20">
+                                    {/* Form header gradient */}
+                                    <div className="h-1.5 bg-gradient-to-r from-purple-600 via-indigo-500 to-purple-600"></div>
+                                    
+                                    <div className="p-8">
+                                        <h2 className="mb-6 text-2xl font-bold text-indigo-300">Send Us a Message</h2>
+                                        
+                                        <form onSubmit={handleSubmit} className="space-y-6">
+                                            {/* Name field */}
+                                            <div>
+                                                <label className="block mb-2 text-sm font-medium text-indigo-200">Full Name</label>
+                                                <div className="relative">
+                                                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                                        <User size={18} className="text-indigo-400" />
+                                                    </div>
+                                                    <input
+                                                        type="text"
+                                                        name="name"
+                                                        value={formData.name}
+                                                        onChange={handleChange}
+                                                        className="w-full py-3 pl-10 text-white transition-all border rounded-lg bg-indigo-950/50 border-indigo-500/30 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                                        placeholder="Your name"
+                                                        required
+                                                    />
+                                                </div>
+                                            </div>
+                                            
+
+                                            {/* Email field */}
+                                            <div>
+                                                <label className="block mb-2 text-sm font-medium text-indigo-200">Email Address</label>
+                                                <div className="relative">
+                                                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                                        <Mail size={18} className="text-indigo-400" />
+                                                    </div>
+                                                    <input
+                                                        type="email"
+                                                        name="email"
+                                                        value={formData.email}
+                                                        onChange={handleChange}
+                                                        className="w-full py-3 pl-10 text-white transition-all border rounded-lg bg-indigo-950/50 border-indigo-500/30 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                                        placeholder="you@example.com"
+                                                        required
+                                                    />
+                                                </div>
+                                            </div>
+                                            
+
+                                            {/* Message field */}
+                                            <div>
+                                                <label className="block mb-2 text-sm font-medium text-indigo-200">Message</label>
+                                                <div className="relative">
+                                                    <div className="absolute pointer-events-none top-3 left-3">
+                                                        <MessageSquare size={18} className="text-indigo-400" />
+                                                    </div>
+                                                    <textarea
+                                                        name="message"
+                                                        value={formData.message}
+                                                        onChange={handleChange}
+                                                        rows="5"
+                                                        className="w-full py-3 pl-10 text-white transition-all border rounded-lg bg-indigo-950/50 border-indigo-500/30 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                                        placeholder="Tell us how we can help improve your sleep..."
+                                                        required
+                                                    ></textarea>
+                                                </div>
+                                            </div>
+                                            
+
+                                            {/* Submit button */}
+                                            <div className="pt-4">
+                                                <button
+                                                    type="submit"
+                                                    className="flex items-center justify-center w-full gap-2 py-3 font-medium text-white transition-all duration-300 rounded-lg shadow-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:shadow-indigo-500/30 hover:-translate-y-1"
+                                                >
+                                                    <span>Send Message</span>
+                                                    <Send size={18} />
+                                                </button>
+                                            </div>
+                                        </form>
+                                        
+                                        {/* Additional info */}
+                                        <div className="pt-6 mt-8 border-t border-indigo-500/20">
+                                            <p className="mb-4 text-sm text-indigo-200">
+                                                Your sleep matters to us. Our team typically responds within 24 hours on business days.
+                                            </p>
+                                            <p className="text-sm text-indigo-200">
+                                                Need immediate assistance? Call our sleep specialists at <span className="font-medium text-white">+1 (888) LUNA-REST</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        
-                        <div className="flex justify-center">
-                            <button 
-                                className="px-6 py-3 text-white transition duration-300 transform rounded-full shadow-lg bg-h2 hover:bg-purple-700 hover:shadow-xl hover:-translate-y-1"
-                                onClick={() => navigate("/about")} // Navigate to About page
-                            >
-                                Learn more about us
-                            </button>
-                        </div>
-                    </div>
-                    
-                    {/* Right Column - Contact Form */}
-                    <div className="w-full mt-12 md:mt-0 md:w-1/2 md:pl-4">
-                        <h2 className="relative inline-block mb-8 text-2xl font-bold text-center md:text-3xl text-h2 md:text-right md:float-right">
-                            Contact Us
-                            <span className="absolute bottom-0 right-0 w-16 h-1 mt-1 bg-h2"></span>
-                        </h2>
-                        
-                        <div className="clear-both"></div>
-                        
-                        <form className="p-6 space-y-6 rounded-lg shadow-lg bg-indigo-900/30 backdrop-blur-sm">
-                            <div>
-                                <label className="block mb-2 font-medium">Full Name</label>
-                                <input 
-                                    type="text" 
-                                    className="w-full p-3 text-black transition-all rounded-lg focus:outline-none focus:ring-2 focus:ring-h2"
-                                    placeholder="Enter your full name"
-                                />
-                            </div>
-                            
-                            <div>
-                                <label className="block mb-2 font-medium">Email</label>
-                                <input 
-                                    type="email" 
-                                    className="w-full p-3 text-black transition-all rounded-lg focus:outline-none focus:ring-2 focus:ring-h2"
-                                    placeholder="Enter your email address"
-                                />
-                            </div>
-                            
-                            <div>
-                                <label className="block mb-2 font-medium">Message</label>
-                                <textarea 
-                                    rows="4" 
-                                    className="w-full p-3 text-black transition-all rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-h2"
-                                    placeholder="How can we help you?"
-                                ></textarea>
-                            </div>
-                            
-                            <div className="flex justify-end">
-                                <button 
-                                    type="submit" 
-                                    className="flex items-center px-6 py-3 text-white transition duration-300 transform rounded-lg shadow-md bg-h2 hover:bg-purple-700 hover:shadow-lg hover:-translate-y-1"
-                                >
-                                    <span>Send</span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </form>
                     </div>
                 </div>
-            </section>
+            </div>
         </div>
     );
 };
