@@ -1,10 +1,12 @@
-import { BrowserRouter as Router } from "react-router-dom";
+import {BrowserRouter as Router, Route} from "react-router-dom";
 import Navbar from "./layouts/Header";
 import Hero from "./pages/Home";
 import Prediction from "./pages/prediction";
 import Setting from "./pages/Setting";
 import Journal from "./pages/Journal";
 import LandingPage from "./pages/LandingPage";
+import LoginPage from "./pages/LoginPage";
+import SignUpPage from "./pages/SignUpPage";
 import "./App.css";
 
 function App() {
@@ -18,6 +20,9 @@ function App() {
         <Setting />
         <LandingPage />
       </div>
+      <Route path="/" element={<LoginPage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/signup" element={<SignUpPage />} />
     </Router>
   );
 }
