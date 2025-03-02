@@ -7,6 +7,8 @@ import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import Footer from "./layouts/Footer";
+import AboutAndFAQ from "./pages/About";
+import ContactPage from "./pages/ContactPage";
 import "./App.css";
 
 function App() {
@@ -22,6 +24,8 @@ function App() {
           <Route path="/landing" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/about" element={<AboutAndFAQ/>} />
+          <Route path="/contact" element={<ContactPage />} />
         </Routes>
       </div>
 
