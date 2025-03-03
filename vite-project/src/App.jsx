@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import {useState, useEffect } from "react";
 import Navbar from "./layouts/Header";
 import Home from "./pages/Home";
 import Setting from "./pages/Setting";
@@ -10,8 +11,24 @@ import Footer from "./layouts/Footer";
 import AboutAndFAQ from "./pages/About";
 import ContactPage from "./pages/ContactPage";
 import "./App.css";
+import LoadingPage from "./pages/LoadingPage";
 
 function App() {
+  const[isLoading,setIsLoading] = useState(true)
+
+  useEffect (()=>{
+    //loading time or wait for actual resources to load 
+    const timer =setTimeout(()=>{
+      setIsLoading(false)
+    },3000) // this is for 3 s loading time 
+
+    return () => clearTimeout(timer)
+  },[])
+
+  if (isLoading){
+    return <LoadingPage/>
+  }
+  
   return (
     <div className="flex flex-col min-h-screen overflow-x-hidden font-heading">
       <Navbar />
