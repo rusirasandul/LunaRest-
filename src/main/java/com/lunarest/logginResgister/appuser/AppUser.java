@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -47,16 +48,14 @@ public class AppUser implements UserDetails {
                    String username,
                    String email,
                    String password,
-                   AppUserRole appUserRole,
-                   Boolean locked,
-                   Boolean enabled) {
+                   AppUserRole appUserRole
+                   ) {
         this.name = name;
         this.username = username;
         this.email = email;
         this.password = password;
         this.appUserRole = appUserRole;
-        this.locked = locked;
-        this.enabled = enabled;
+       
     }
 
     @Override
@@ -93,5 +92,14 @@ public class AppUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return enabled;
+    }
+
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
