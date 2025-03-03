@@ -23,3 +23,4 @@ public class LogginResgisterApplication {
         SpringApplication.run(LogginResgisterApplication.class, args);
     }
 } 
+

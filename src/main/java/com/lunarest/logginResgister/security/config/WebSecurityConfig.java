@@ -27,19 +27,17 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Disable CSRF protection (optional, depending on your use case)
+                .csrf(csrf -> csrf.disable()) // Disable CSRF for testing (optional)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v*/registration/**").permitAll()
-                        .requestMatchers("/api/v1/sleepdata/**").authenticated() // Secure sleep data endpoints
-                        .anyRequest().authenticated()
+                        .requestMatchers("/api/v1/registration/**").permitAll() // Allow public access to registration
+                        .anyRequest().authenticated() // Protect other endpoints
                 )
-                .formLogin(form -> form
-                        .loginPage("/login") // Custom login page (optional)
-                        .permitAll() // Allow everyone to access the login page
-                );
+                .formLogin(form -> form.disable()) // Disable default login page
+                .httpBasic(httpBasic -> httpBasic.disable()); // Disable HTTP Basic authentication
 
         return http.build();
     }
+
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
