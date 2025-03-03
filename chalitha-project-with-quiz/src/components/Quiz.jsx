@@ -116,9 +116,9 @@ const Quiz = () => {
             </div>
           ) : (
             <div className="text-center w-full">
-              <h3 className="text-2xl font-bold text-blue-950 mb-4">Quiz Completed!</h3>
-              <h4 className="text-xl font-semibold text-gray-700">Your Answers:</h4>
-              <ul className="text-left mt-3 space-y-3">
+              <h3 className="text-2xl font-bold text-blue-950 mb-4">Rest Assured!</h3>
+              <h4 className="text-xl font-semibold text-gray-700">Your Sleep Insights Are In!</h4>
+              {/* <ul className="text-left mt-3 space-y-3">
                 {questions.map((q, index) => (
                   <li key={index} className="border-b border-gray-300 pb-2">
                     <p className="font-medium">{q.question}</p>
@@ -130,12 +130,18 @@ const Quiz = () => {
                     </p>
                   </li>
                 ))}
-              </ul>
+              </ul> */}
               <button
-                onClick={() => window.location.reload()}
-                className="mt-6 h-[50px] w-[60%] rounded-lg text-lg font-semibold bg-green-600 text-white hover:bg-green-700 transition-colors shadow-md shadow-gray-600"
+                // onClick={() => window.location.reload()}
+                className="h-[50px] w-[40%] rounded-lg text-lg font-semibold bg-blue-950 text-white hover:bg-blue-900 shadow-md shadow-gray-600 transition-colors"
               >
-                Restart Quiz
+                Recommandation log
+              </button>
+              <button
+                // onClick={() => window.location.reload()}
+                className="h-[50px] w-[40%] rounded-lg text-lg font-semibold bg-blue-950 text-white hover:bg-blue-900 shadow-md shadow-gray-600 transition-colors"
+              >
+                Sleep Journal
               </button>
             </div>
           )}
