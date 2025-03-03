@@ -118,31 +118,38 @@ const Quiz = () => {
             <div className="text-center w-full">
               <h3 className="text-2xl font-bold text-blue-950 mb-4">Rest Assured!</h3>
               <h4 className="text-xl font-semibold text-gray-700">Your Sleep Insights Are In!</h4>
-              {/* <ul className="text-left mt-3 space-y-3">
-                {questions.map((q, index) => (
-                  <li key={index} className="border-b border-gray-300 pb-2">
-                    <p className="font-medium">{q.question}</p>
-                    <p>
-                      <strong>Selected:</strong> {answers[index] || "No answer"}
-                    </p>
-                    <p>
-                      <strong>Correct:</strong> {q.answer}
-                    </p>
-                  </li>
-                ))}
-              </ul> */}
-              <button
-                // onClick={() => window.location.reload()}
-                className="h-[50px] w-[40%] rounded-lg text-lg font-semibold bg-blue-950 text-white hover:bg-blue-900 shadow-md shadow-gray-600 transition-colors"
-              >
-                Recommandation log
-              </button>
-              <button
-                // onClick={() => window.location.reload()}
-                className="h-[50px] w-[40%] rounded-lg text-lg font-semibold bg-blue-950 text-white hover:bg-blue-900 shadow-md shadow-gray-600 transition-colors"
-              >
-                Sleep Journal
-              </button>
+              <div className="flex justify-center gap-20 mb-8 mt-15">
+                <div className="w-[40%]">
+                <input
+                    type="text"
+                    value={answers[currentIndex] || ""}
+                    onChange={handleTextInputChange}
+                    placeholder="Type your answer here"
+                    className="w-full bg-black text-white border-0 rounded-md p-3 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400 mb-2"
+                  />
+                  <h3 className="text-2xl font-heading semibold text-blue-950">Sleep Score</h3>
+                </div>
+                
+                <div className="w-[40%]">
+                <input
+                    type="text"
+                    value={answers[currentIndex] || ""}
+                    onChange={handleTextInputChange}
+                    placeholder="Type your answer here"
+                    className="w-full bg-black text-white border-0 rounded-md p-3 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400 mb-2"
+                  />
+                  <h3 className="text-2xl font-heading semibold text-blue-950">Sleep Status</h3>
+                </div>
+              </div>
+
+              <div className="flex justify-center gap-24 mt-25">
+                <button className="h-[50px] w-[40%] rounded-lg text-lg font-semibold bg-blue-950 text-white hover:bg-blue-900 shadow-md shadow-gray-600 transition-colors">
+                  Recommandation log
+                </button>
+                <button className="h-[50px] w-[40%] rounded-lg text-lg font-semibold bg-blue-950 text-white hover:bg-blue-900 shadow-md shadow-gray-600 transition-colors">
+                  Sleep Journal
+                </button>
+              </div>
             </div>
           )}
         </div>
