@@ -1,11 +1,12 @@
 import { Mail, Lock, User } from 'lucide-react';
+import log1 from "../assets/log1.jpg";
 
 const SignUpPage = () => {
     return (
         <div className="relative min-h-screen flex items-center justify-center">
             {/* Full screen background image */}
             <img
-                src="/bg2.jpg"
+                src={log1}
                 alt="Background"
                 className="absolute inset-0 w-full h-full object-cover"
             />

@@ -1,6 +1,8 @@
 import { Mail, Lock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
+import log1 from "../assets/log1.jpg";
+
 const LoginPage = () => {
     const navigate = useNavigate();
 
@@ -13,7 +15,7 @@ const LoginPage = () => {
         <div className="relative min-h-screen flex items-center">
             {/* Full screen background image */}
             <img
-                src="/bg2.jpg"
+                src={log1}
                 alt="Background"
                 className="absolute inset-0 w-full h-full object-cover"
             />
