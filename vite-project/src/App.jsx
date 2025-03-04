@@ -10,7 +10,6 @@ import SignUpPage from "./pages/SignUpPage";
 import Footer from "./layouts/Footer";
 import AboutAndFAQ from "./pages/About";
 import ContactPage from "./pages/ContactPage";
-import "./App.css";
 import LoadingPage from "./pages/LoadingPage";
 
 function App() {
