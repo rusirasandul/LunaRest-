@@ -1,4 +1,4 @@
-package com.lunarest.logginResgister.journal;
+package com.lunarest.logginResgister.Journal;
 
 import com.lunarest.logginResgister.appuser.AppUser;
 import jakarta.persistence.*;

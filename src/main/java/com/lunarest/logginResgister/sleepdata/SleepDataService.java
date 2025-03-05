@@ -28,30 +28,28 @@ public class SleepDataService {
         this.recommendationService = recommendationService;
     }
 
-    // ✅ Check if the user already entered sleep data for today
-    public Optional<SleepData> findSleepDataByDate(AppUser user, LocalDate date) {
-        return sleepDataRepository.findByUser(user)
-                .stream()
-                .filter(data -> data.getDate() != null && data.getDate().equals(date))
-                .findFirst();
-    }
-
-    // ✅ Add Sleep Data (Prevents duplicate entries)
+    // Add Sleep Data (Prevents duplicate entries)
     public void addSleepData(AppUser user, LocalDate date, String name, int age, String gender, int universityYear,
                              double weekdaysSleepDuration, double weekendsSleepDuration, double weekdaysStudyHours,
                              double weekendsStudyHours, double weekdaysScreenTime, double weekendsScreenTime,
                              int caffeineIntake, int physicalActivityLevel, LocalTime weekdaysSleepStart,
                              LocalTime weekdaysSleepEnd, LocalTime weekendsSleepStart, LocalTime weekendsSleepEnd) {
 
-        // 🔴 Prevent duplicate entries for the same day
-        if (findSleepDataByDate(user, date).isPresent()) {
+        // Prevent duplicate entries for the same day
+        Optional<SleepData> existingData = sleepDataRepository.findByUserAndDate(user, date);
+        if (existingData.isPresent()) {
             throw new IllegalStateException("Sleep data for today already exists.");
         }
 
+        // Calculate averages for sleep duration, study hours, and screen time
+        double averageSleepDuration = (weekdaysSleepDuration + weekendsSleepDuration) / 2;
+        double averageStudyHours = (weekdaysStudyHours + weekendsStudyHours) / 2;
+        double averageScreenTime = (weekdaysScreenTime + weekendsScreenTime) / 2;
+
         // Create a new sleep data entry
         SleepData sleepData = new SleepData(user, date, name, age, gender, universityYear,
-                weekdaysSleepDuration, weekendsSleepDuration, weekdaysStudyHours, weekendsStudyHours,
-                weekdaysScreenTime, weekendsScreenTime, caffeineIntake, physicalActivityLevel,
+                averageSleepDuration, averageSleepDuration, averageStudyHours, averageStudyHours,
+                averageScreenTime, averageScreenTime, caffeineIntake, physicalActivityLevel,
                 weekdaysSleepStart, weekdaysSleepEnd, weekendsSleepStart, weekendsSleepEnd);
 
         sleepDataRepository.save(sleepData);
@@ -60,7 +58,7 @@ public class SleepDataService {
         int predictedSleepQuality = getSleepQualityPrediction(sleepData);
         sleepData.setSleepQuality(predictedSleepQuality);
 
-        //Call AI for Sleep Recommendations
+        // Call AI for Sleep Recommendations
         String recommendation = recommendationService.getSleepRecommendation(predictedSleepQuality,
                 sleepData.getCaffeineIntake(), sleepData.getWeekdaysScreenTime(), sleepData.getWeekdaysStudyHours());
 
@@ -68,9 +66,78 @@ public class SleepDataService {
         sleepDataRepository.save(sleepData);
     }
 
-    // Call the ML Model for Sleep Quality Prediction (Fixed type issue)
+    // Fetch Sleep Data for User
+    public List<SleepData> getSleepDataByUser(AppUser user) {
+        return sleepDataRepository.findByUser(user);
+    }
+
+    // Sleep Habits Comparison Data for Five Separate Charts
+    public Map<String, List<Map<String, Object>>> getSleepHabitsComparison(AppUser user) {
+        List<SleepData> sleepRecords = sleepDataRepository.findByUser(user);
+
+        Map<String, List<Map<String, Object>>> comparisonData = new HashMap<>();
+
+        // Average Sleep Duration (Weekdays + Weekends) / 2
+        comparisonData.put("sleepDuration", sleepRecords.stream()
+                .filter(data -> data.getDate() != null)
+                .map(data -> {
+                    Map<String, Object> result = new HashMap<>();
+                    result.put("date", data.getDate().toString());
+                    result.put("averageSleepDuration", (data.getWeekdaysSleepDuration() + data.getWeekendsSleepDuration()) / 2);
+                    return result;
+                })
+                .collect(Collectors.toList()));
+
+        // Average Study Hours (Weekdays + Weekends) / 2
+        comparisonData.put("studyHours", sleepRecords.stream()
+                .filter(data -> data.getDate() != null)
+                .map(data -> {
+                    Map<String, Object> result = new HashMap<>();
+                    result.put("date", data.getDate().toString());
+                    result.put("averageStudyHours", (data.getWeekdaysStudyHours() + data.getWeekendsStudyHours()) / 2);
+                    return result;
+                })
+                .collect(Collectors.toList()));
+
+        // Average Screen Time (Weekdays + Weekends) / 2
+        comparisonData.put("screenTime", sleepRecords.stream()
+                .filter(data -> data.getDate() != null)
+                .map(data -> {
+                    Map<String, Object> result = new HashMap<>();
+                    result.put("date", data.getDate().toString());
+                    result.put("averageScreenTime", (data.getWeekdaysScreenTime() + data.getWeekendsScreenTime()) / 2);
+                    return result;
+                })
+                .collect(Collectors.toList()));
+
+        // Average Caffeine Intake
+        comparisonData.put("caffeineIntake", sleepRecords.stream()
+                .filter(data -> data.getDate() != null)
+                .map(data -> {
+                    Map<String, Object> result = new HashMap<>();
+                    result.put("date", data.getDate().toString());
+                    result.put("averageCaffeineIntake", data.getCaffeineIntake());
+                    return result;
+                })
+                .collect(Collectors.toList()));
+
+        // Average Physical Activity Level
+        comparisonData.put("physicalActivityLevel", sleepRecords.stream()
+                .filter(data -> data.getDate() != null)
+                .map(data -> {
+                    Map<String, Object> result = new HashMap<>();
+                    result.put("date", data.getDate().toString());
+                    result.put("averagePhysicalActivityLevel", data.getPhysicalActivityLevel());
+                    return result;
+                })
+                .collect(Collectors.toList()));
+
+        return comparisonData;
+    }
+
+    // Call the ML Model for Sleep Quality Prediction
     private int getSleepQualityPrediction(SleepData sleepData) {
-        String mlModelUrl = "http://localhost:5000/predict"; // Your ML model API
+        String mlModelUrl = "http://localhost:5000/predict";
 
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("weekdaysSleepDuration", sleepData.getWeekdaysSleepDuration());
@@ -82,7 +149,7 @@ public class SleepDataService {
         requestBody.put("caffeineIntake", sleepData.getCaffeineIntake());
 
         try {
-            // ✅ Use `exchange()` for proper type inference
+            // Use `exchange()` for proper type inference
             ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
                     mlModelUrl, HttpMethod.POST, new HttpEntity<>(requestBody),
                     new ParameterizedTypeReference<Map<String, Object>>() {}
@@ -98,45 +165,7 @@ public class SleepDataService {
         return -1; // Default value in case of failure
     }
 
-    // ✅ Fetch Sleep Data for User
-    public List<SleepData> getSleepDataByUser(AppUser user) {
-        return sleepDataRepository.findByUser(user);
-    }
-
-    // 📊 **1. Sleep Quality Trend Data for Chart**
-    public List<Map<String, Object>> getSleepQualityTrends(AppUser user) {
-        return sleepDataRepository.findByUser(user).stream()
-                .filter(data -> data.getDate() != null)  // ✅ Ensure getDate() is not null
-                .map(data -> {
-                    Map<String, Object> result = new HashMap<>();
-                    result.put("date", data.getDate().toString());
-                    result.put("sleepQuality", (Integer) data.getSleepQuality());
-                    return result;
-                })
-                .collect(Collectors.toList());
-    }
-
-    // 📊 **2. Sleep Habits Comparison Data for Chart**
-    public List<Map<String, Object>> getSleepHabitsComparison(AppUser user) {
-        return sleepDataRepository.findByUser(user).stream()
-                .filter(data -> data.getDate() != null)  // ✅ Ensure no null dates
-                .map(data -> {
-                    Map<String, Object> result = new HashMap<>();
-                    result.put("date", data.getDate().toString());
-                    result.put("weekdaysSleep", (Double) data.getWeekdaysSleepDuration());
-                    result.put("weekendsSleep", (Double) data.getWeekendsSleepDuration());
-                    result.put("weekdaysStudyHours", (Double) data.getWeekdaysStudyHours());
-                    result.put("weekendsStudyHours", (Double) data.getWeekendsStudyHours());
-                    result.put("weekdaysScreenTime", (Double) data.getWeekdaysScreenTime());
-                    result.put("weekendsScreenTime", (Double) data.getWeekendsScreenTime());
-                    result.put("caffeineIntake", (Integer) data.getCaffeineIntake());
-                    result.put("physicalActivityLevel", (Integer) data.getPhysicalActivityLevel());
-                    return result;
-                })
-                .collect(Collectors.toList());
-    }
-
-    // 📌 **3. Overview Block Data**
+    // Overview Block Data
     public Map<String, Double> getSummaryAnalytics(AppUser user) {
         List<SleepData> sleepRecords = sleepDataRepository.findByUser(user);
 
