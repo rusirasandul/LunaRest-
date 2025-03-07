@@ -12,7 +12,7 @@ const Navbar = () => {
         setIsOpen(false)
     }
     const handleScroll =()=>{
-        const sections =['home','prediction','journal','setting','setting'];
+        const sections =['home','prediction','journal','setting','Goal Tracker'];
         const scrollPosition =window.scrollY +100;
 
         sections.forEach(section => {
@@ -95,6 +95,19 @@ const Navbar = () => {
                 }}
                 className={`text-nav ${activeSection=== 'setting' ? 'isActive' : ''}`}>
                     Settings
+                </motion.a>
+            </li>
+            <li>
+                <motion.a href="#GoalTracker"
+                whileHover={{scale:1.1}}
+                whileTap={{scale:0.9}}
+                onClick={(e) => {
+                    e.preventDefault();
+                    handleCLoseMenu();
+                    handleScrollTo('settings')
+                }}
+                className={`text-nav ${activeSection=== 'GoalTracker' ? 'isActive' : ''}`}>
+                    Goal Tracker
                 </motion.a>
             </li>
             
