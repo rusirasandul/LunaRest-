@@ -12,6 +12,8 @@ import ContactPage from "./pages/ContactPage";
 import LoadingPage from "./pages/LoadingPage";
 import Dashboard from "./pages/Dashboard.jsx";
 import Recommendation from "./pages/Recommendation.jsx";
+import Article from "./pages/Article.jsx";
+
 
 function App() {
   const[isLoading,setIsLoading] = useState(true)
@@ -44,6 +46,7 @@ function App() {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/recommendation" element={<Recommendation />} />
+          <Route path="/article" element={<Article />} />
         </Routes>
       </div>
 
