@@ -33,6 +33,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable()) // Enable CSRF protection
+                .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/registration/**").permitAll() // Allow public access to registration
                         .requestMatchers("/api/v1/sleepdata/**").hasRole("ADMIN") // Only allow access to users with ADMIN role
@@ -42,7 +43,9 @@ public class WebSecurityConfig {
                 .httpBasic(httpBasic -> httpBasic.disable()) // Disable HTTP Basic authentication
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(Arrays.asList("http://disallowed-origin.com")); // Disallow certain origins
+                    config.setAllowedOrigins(Arrays.asList("*")); // Allow all origins
+                    config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    config.setAllowedHeaders(Arrays.asList("*"));
                     return config;
                 }));
 
