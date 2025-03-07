@@ -188,7 +188,7 @@ const AboutAndFAQ = () => {
             </section>
 
             {/* About Section */}
-            <section id="about" className="py-20 px-4 relative">
+            <section id="about" className="py-20 px-4 bg-gradient-to-b from-[#f1f8fbc5] to-[#aaa7d0] relative">
                 <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-[#9F1CFD] opacity-5 blur-3xl"></div>
                 <div className="container mx-auto">
                     <div className={`flex flex-col md:flex-row items-center justify-between gap-12 transition-all duration-1000 ${isVisible.about ? 'opacity-100' : 'opacity-0 translate-y-10'}`}>
@@ -196,15 +196,12 @@ const AboutAndFAQ = () => {
                             <h2 className="text-3xl font-bold mb-6 text-[#080030] relative pb-3 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-20 after:h-1 after:bg-[#9F1CFD]">
                                 About Lunarest
                             </h2>
-                            <p className="text-[#7A7676] mb-6 text-lg">
+                            <p className="text-[#494833] mb-6 text-lg">
                                 Lunarest is a comprehensive sleep management platform created by students, for students. We understand the unique challenges university life presents to maintaining healthy sleep habits, and we are here to help.
                             </p>
-                            <p className="text-[#7A7676] mb-8 text-lg">
+                            <p className="text-[#494833] mb-8 text-lg">
                                 Our team developed Lunarest to address the sleep quality issues that many students face during their academic journey. Through data-driven insights and personalized recommendations, we aim to help you improve your sleep habits, boost your academic performance, and enhance your overall wellbeing.
                             </p>
-                            <button className="bg-gradient-to-r from-[#9F1CFD] to-[#B34BFE] text-white px-8 py-3 rounded-full font-medium shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-[#9F1CFD] focus:ring-opacity-50">
-                                Learn More
-                            </button>
                         </div>
                         <div className="md:w-1/2 relative group">
                             <div className="absolute -z-10 w-full h-full rounded-2xl -right-5 -bottom-5 bg-[#B34BFE] opacity-30 transition-all duration-500 group-hover:-right-3 group-hover:-bottom-3"></div>
@@ -253,7 +250,7 @@ const AboutAndFAQ = () => {
             </section>
 
             {/* Features Section */}
-            <section id="features" className="py-20 px-4 bg-gradient-to-b from-[#F0EEFF] to-[#F8F7FF] relative">
+            <section id="features" className="py-20 px-4 bg-gradient-to-b from-[#3f539b94] to-[#eae9f7] relative">
                 <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-[#080030] to-transparent opacity-10"></div>
                 <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-[#9F1CFD] opacity-5 blur-3xl"></div>
                 <div className="container mx-auto">
@@ -278,7 +275,7 @@ const AboutAndFAQ = () => {
             </section>
 
             {/* FAQ Section */}
-            <section id="faq" className="py-20 px-4 bg-gradient-to-b from-[#F8F7FF] to-[#F0EEFF] relative">
+            <section id="faq" className="py-20 px-4 bg-gradient-to-b from-[#ebecf3] to-[#08084e] relative">
                 {/* Decorative Elements */}
                 <div className="absolute top-0 right-10 w-6 h-6 rounded-full bg-[#9F1CFD] opacity-10"></div>
                 <div className="absolute top-20 left-20 w-4 h-4 rounded-full bg-[#B34BFE] opacity-10"></div>
