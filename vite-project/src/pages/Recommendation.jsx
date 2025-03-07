@@ -133,7 +133,7 @@ const Recommendations = () => {
                                 <div className={`${colors.primary} p-4`}>
                                     <div className="flex items-center">
                                         <Moon className="text-white mr-3" size={24} />
-                                        <h2 className="text-xl font-bold text-white">Sleep Recommendations</h2>
+                                        <h2 className="text-xl font-bold text-white">Sleep Quality Recommendations</h2>
                                     </div>
                                 </div>
                                 <div className="p-6">
@@ -162,7 +162,7 @@ const Recommendations = () => {
                                 <div className={`${colors.accent} p-4`}>
                                     <div className="flex items-center">
                                         <TrendingUp className="text-white mr-3" size={24} />
-                                        <h2 className="text-xl font-bold text-white">How to Improve</h2>
+                                        <h2 className="text-xl font-bold text-white">Improvements</h2>
                                     </div>
                                 </div>
                                 <div className="p-6">

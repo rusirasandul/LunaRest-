@@ -10,6 +10,8 @@ import Footer from "./layouts/Footer";
 import AboutAndFAQ from "./pages/About";
 import ContactPage from "./pages/ContactPage";
 import LoadingPage from "./pages/LoadingPage";
+import Dashboard from "./pages/Dashboard.jsx";
+import Recommendation from "./pages/Recommendation.jsx";
 
 function App() {
   const[isLoading,setIsLoading] = useState(true)
@@ -40,6 +42,8 @@ function App() {
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/about" element={<AboutAndFAQ/>} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/recommendation" element={<Recommendation />} />
         </Routes>
       </div>
 
