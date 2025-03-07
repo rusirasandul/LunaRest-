@@ -13,6 +13,8 @@ import LoadingPage from "./pages/LoadingPage";
 import Dashboard from "./pages/Dashboard.jsx";
 import Recommendation from "./pages/Recommendation.jsx";
 import Article from "./pages/Article.jsx";
+//import WelcomeCard from "./pages/WelcomeCard";
+//import Quiz from "./pages/Quiz";
 
 
 function App() {
@@ -56,3 +58,9 @@ function App() {
 }
 
 export default App;
+
+/*function App() {
+  const [quizStart, setQuizStart] = useState(false);
+
+  return quizStart ? <Quiz /> : <WelcomeCard setQuizStart={setQuizStart} />;
+} */
