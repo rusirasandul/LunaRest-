@@ -1,7 +1,7 @@
 "use client"
 
-import { useState } from "react"
-import { questions } from "../data"
+import { useState } from "react";
+import { questions } from "../utils/data";
 
 const Quiz = () => {
     const [currentIndex, setCurrentIndex] = useState(0)
