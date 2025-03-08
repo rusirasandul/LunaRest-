@@ -13,6 +13,7 @@ import LoadingPage from "./pages/LoadingPage";
 import Dashboard from "./pages/Dashboard.jsx";
 import Recommendation from "./pages/Recommendation.jsx";
 import Article from "./pages/Article.jsx";
+import GoalTracker from "./pages/GoalTracker.jsx";
 //import WelcomeCard from "./pages/WelcomeCard";
 //import Quiz from "./pages/Quiz";
 function App() {
@@ -42,6 +43,7 @@ function App() {
           <Route path="/setting" element={<Setting />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
+          <Route path="goalTracker" element={<GoalTracker/>} />
           <Route path="/about" element={<AboutAndFAQ/>} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
