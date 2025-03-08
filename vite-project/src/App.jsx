@@ -15,8 +15,6 @@ import Recommendation from "./pages/Recommendation.jsx";
 import Article from "./pages/Article.jsx";
 //import WelcomeCard from "./pages/WelcomeCard";
 //import Quiz from "./pages/Quiz";
-
-
 function App() {
   const[isLoading,setIsLoading] = useState(true)
 
@@ -41,7 +39,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/journal" element={<Journal />} />
-          <Route path="/setting" element={<Setting />} />cd
+          <Route path="/setting" element={<Setting />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/about" element={<AboutAndFAQ/>} />

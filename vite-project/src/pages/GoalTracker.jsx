@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
-const SleepGoalTracker = () => {
+const GoalTracker = () => {
     const [prevQuality, setPrevQuality] = useState(6); // Example previous score
     const [latestQuality, setLatestQuality] = useState(7); // Example latest score
     const [goal, setGoal] = useState(8); // User-defined goal
@@ -83,4 +85,4 @@ const SleepGoalTracker = () => {
     );
     };
 
-export default SleepGoalTracker;
+export default GoalTracker;
