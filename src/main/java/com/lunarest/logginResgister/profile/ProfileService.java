@@ -3,6 +3,7 @@ package com.lunarest.logginResgister.profile;
 import com.lunarest.logginResgister.appuser.AppUser;
 import com.lunarest.logginResgister.appuser.AppUserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -10,11 +11,14 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
 public class ProfileService {
 
     private final AppUserRepository appUserRepository;
 
+    @Autowired
+    public ProfileService(AppUserRepository appUserRepository) {
+        this.appUserRepository = appUserRepository;
+    }
     public ProfileDTO getCurrentUserProfile() {
         AppUser user = getCurrentUser();
         return mapToProfileDTO(user);
