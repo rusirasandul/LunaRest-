@@ -10,6 +10,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -27,13 +32,22 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Disable CSRF for testing (optional)
+                .csrf(csrf -> csrf.disable()) // Enable CSRF protection
+                .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/registration/**").permitAll() // Allow public access to registration
+                        .requestMatchers("/api/v1/sleepdata/**").hasRole("ADMIN") // Only allow access to users with ADMIN role
                         .anyRequest().authenticated() // Protect other endpoints
                 )
                 .formLogin(form -> form.disable()) // Disable default login page
-                .httpBasic(httpBasic -> httpBasic.disable()); // Disable HTTP Basic authentication
+                .httpBasic(httpBasic -> httpBasic.disable()) // Disable HTTP Basic authentication
+                .cors(cors -> cors.configurationSource(request -> {
+                    CorsConfiguration config = new CorsConfiguration();
+                    config.setAllowedOrigins(Arrays.asList("*")); // Allow all origins
+                    config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    config.setAllowedHeaders(Arrays.asList("*"));
+                    return config;
+                }));
 
         return http.build();
     }
