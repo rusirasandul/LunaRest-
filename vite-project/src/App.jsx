@@ -14,6 +14,7 @@ import Dashboard from "./pages/Dashboard.jsx";
 import Recommendation from "./pages/Recommendation.jsx";
 import Article from "./pages/Article.jsx";
 import GoalTracker from "./pages/GoalTracker.jsx";
+import ProfilePage from "./pages/ProfilePage.jsx";
 //import WelcomeCard from "./pages/WelcomeCard";
 //import Quiz from "./pages/Quiz";
 function App() {
@@ -49,6 +50,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/recommendation" element={<Recommendation />} />
           <Route path="/article" element={<Article />} />
+          <Route path="/profile" element={<ProfilePage/>} />
         </Routes>
       </div>
 
