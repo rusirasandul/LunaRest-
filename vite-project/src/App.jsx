@@ -17,6 +17,7 @@ import GoalTracker from "./pages/GoalTracker.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
 //import WelcomeCard from "./pages/WelcomeCard";
 import Quiz from "./pages/Quiz";
+import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
 
 function App() {
   const[isLoading,setIsLoading] = useState(true)
@@ -53,6 +54,7 @@ function App() {
           <Route path="/recommendation" element={<Recommendation />} />
           <Route path="/article" element={<Article />} />
           <Route path="/profile" element={<ProfilePage/>} />
+          <Route path="/privacyPolicy" element={<PrivacyPolicy/>} />
         </Routes>
       </div>
 
