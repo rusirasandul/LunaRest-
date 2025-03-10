@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, Cell } from "recharts";
 import { Moon, Award, TrendingUp, Activity } from "lucide-react";
 
 // Utility function for combining class names
@@ -61,6 +61,8 @@ const SleepQualityTracker = () => {
         accent: "#818cf8", // indigo-400
         success: "#10b981", // emerald-500
         warning: "#f59e0b", // amber-500
+        optimal: "#4f46e5", // blue for optimal sleep (≤ 5)
+        excessive: "#ef4444", // red for excessive sleep (> 5)
     };
 
     const BADGES = {
@@ -93,7 +95,7 @@ const SleepQualityTracker = () => {
                 
                 setPrevQuality(prevDayQuality);
                 setLatestQuality(latestQuality);
-                setGoal(data.userGoal || 8);
+                setGoal(data.userGoal || 5); // Updated default goal to 5
                 setStreak(data.currentStreak || 0);
                 setBadge(data.badge || null);
                 setWeeklyData(data.weeklyData || []);
@@ -110,7 +112,8 @@ const SleepQualityTracker = () => {
 
     // Update streak and badge when latest quality changes
     useEffect(() => {
-        if (latestQuality >= goal && !loading) {
+        // Changed to consider optimal sleep as 5 or below
+        if (latestQuality <= 5 && !loading) {
             setStreak(prevStreak => {
                 const newStreak = prevStreak + 1;
                 // Update badge based on streak
@@ -120,7 +123,7 @@ const SleepQualityTracker = () => {
                 return newStreak;
             });
         }
-    }, [latestQuality, goal, loading]);
+    }, [latestQuality, loading]);
 
     const handleSetGoal = () => {
         const numGoal = parseFloat(inputGoal);
@@ -141,12 +144,41 @@ const SleepQualityTracker = () => {
         return COLORS.primary;
     };
 
-    // Goal progress calculation
-    const progressPercentage = Math.min(100, (latestQuality / goal) * 100);
+    // Goal progress calculation - Modified to consider lower values as better
+    // If goal is 5, and user has 4, they're at 100% of goal (or better)
+    const progressPercentage = goal >= 5 
+        ? Math.min(100, ((5 - Math.abs(latestQuality - 5)) / 5) * 100)
+        : Math.min(100, (latestQuality / goal) * 100);
     
-    // Calculate improvement
-    const improvement = (latestQuality - prevQuality).toFixed(1);
-    const improvementColor = improvement >= 0 ? COLORS.success : COLORS.warning;
+    // Calculate improvement - lower is better if above 5, higher is better if below 5
+    const isCurrentExcessive = latestQuality > 5;
+    const isPrevExcessive = prevQuality > 5;
+    
+    let improvement;
+    if (isCurrentExcessive && isPrevExcessive) {
+        // Both excessive, lower is better
+        improvement = (prevQuality - latestQuality).toFixed(1);
+    } else if (!isCurrentExcessive && !isPrevExcessive) {
+        // Both optimal, higher is better (up to 5)
+        improvement = (latestQuality - prevQuality).toFixed(1);
+        // But cap at 5
+        if (latestQuality > 5 && prevQuality <= 5) {
+            improvement = -Math.abs(improvement);
+        }
+    } else if (isCurrentExcessive && !isPrevExcessive) {
+        // Was optimal, now excessive - that's bad
+        improvement = -Math.abs((latestQuality - 5).toFixed(1));
+    } else {
+        // Was excessive, now optimal - that's good
+        improvement = Math.abs((5 - latestQuality).toFixed(1));
+    }
+
+    const improvementColor = parseFloat(improvement) >= 0 ? COLORS.success : COLORS.warning;
+
+    // Determine color for each bar based on quality value
+    const getBarColor = (quality) => {
+        return quality > 5 ? COLORS.excessive : COLORS.optimal;
+    };
 
     if (loading) {
         return (
@@ -174,7 +206,7 @@ const SleepQualityTracker = () => {
     }
 
     return (
-        <div className="min-h-screen p-4 sm:p-6 bg-gray-50" style={{ marginTop: '20px' }}>
+        <div className="min-h-screen p-4 sm:p-6 bg-gray-50" >
             <div className="max-w-4xl mx-auto ">
                 <Card className="overflow-hidden">
                     <div className="p-4 text-white sm:p-6 md:p-8 bg-gradient-to-r from-indigo-500 to-purple-600">
@@ -208,16 +240,27 @@ const SleepQualityTracker = () => {
                                         <Bar 
                                             name="Sleep Quality" 
                                             dataKey="quality" 
-                                            fill={COLORS.primary} 
                                             radius={[4, 4, 0, 0]}
-                                        />
+                                        >
+                                            {weeklyData.map((entry, index) => (
+                                                <Cell key={`cell-${index}`} fill={getBarColor(entry.quality)} />
+                                            ))}
+                                        </Bar>
                                     </BarChart>
                                 </ResponsiveContainer>
                             </div>
-                            <div className="mt-2 text-sm text-center text-gray-500">
-                                <span className="inline-block px-2 py-1 text-indigo-700 bg-indigo-100 rounded-md">
+                            <div className="mt-2 text-center">
+                                <span className="inline-block px-2 py-1 text-sm rounded-md" 
+                                      style={{ 
+                                          backgroundColor: latestQuality > 5 ? 'rgba(239, 68, 68, 0.1)' : 'rgba(79, 70, 229, 0.1)',
+                                          color: latestQuality > 5 ? 'rgb(220, 38, 38)' : 'rgb(67, 56, 202)'
+                                      }}>
                                     Today's Predicted Quality: {latestQuality.toFixed(1)}/10
+                                    {latestQuality > 5 ? " (Excessive)" : " (Optimal)"}
                                 </span>
+                                <p className="mt-1 text-xs text-gray-500">
+                                    Optimal sleep quality is 5 or below. Values above 5 indicate excessive sleep.
+                                </p>
                             </div>
                         </Card>
 
@@ -229,7 +272,7 @@ const SleepQualityTracker = () => {
                                     Sleep Goal
                                 </h2>
                                 <div className="mb-4">
-                                    <p className="mb-1 text-sm text-gray-600">Current Goal: <span className="font-semibold text-indigo-600">{goal}/10</span></p>
+                                    <p className="mb-1 text-sm text-gray-600">Target Quality: <span className="font-semibold text-indigo-600">{goal}/10</span></p>
                                     <div className="w-full bg-gray-200 rounded-full h-2.5">
                                         <div 
                                             className="bg-indigo-600 h-2.5 rounded-full transition-all duration-500" 
@@ -267,7 +310,7 @@ const SleepQualityTracker = () => {
                                     <div>
                                         <p className="text-sm text-gray-600">Current Streak</p>
                                         <p className="text-3xl font-bold text-indigo-600">{streak}</p>
-                                        <p className="text-xs text-gray-500">consecutive days on target</p>
+                                        <p className="text-xs text-gray-500">consecutive days with optimal sleep</p>
                                     </div>
                                     {badge && (
                                         <div 
@@ -286,11 +329,21 @@ const SleepQualityTracker = () => {
                                 <div className="space-y-3">
                                     <div className="flex items-center justify-between p-2 rounded-md bg-gray-50">
                                         <span className="text-sm text-gray-600">Previous Quality</span>
-                                        <span className="font-semibold text-indigo-600">{prevQuality.toFixed(1)}/10</span>
+                                        <span 
+                                            className="font-semibold" 
+                                            style={{ color: prevQuality > 5 ? COLORS.excessive : COLORS.optimal }}
+                                        >
+                                            {prevQuality.toFixed(1)}/10
+                                        </span>
                                     </div>
                                     <div className="flex items-center justify-between p-2 rounded-md bg-gray-50">
                                         <span className="text-sm text-gray-600">Predicted Quality</span>
-                                        <span className="font-semibold text-indigo-600">{latestQuality.toFixed(1)}/10</span>
+                                        <span 
+                                            className="font-semibold" 
+                                            style={{ color: latestQuality > 5 ? COLORS.excessive : COLORS.optimal }}
+                                        >
+                                            {latestQuality.toFixed(1)}/10
+                                        </span>
                                     </div>
                                     <div className="flex items-center justify-between p-2 rounded-md bg-gray-50">
                                         <span className="text-sm text-gray-600">Improvement</span>
@@ -299,9 +352,9 @@ const SleepQualityTracker = () => {
                                         </span>
                                     </div>
                                     <div className="flex items-center justify-between p-2 rounded-md bg-gray-50">
-                                        <span className="text-sm text-gray-600">From Goal</span>
+                                        <span className="text-sm text-gray-600">Optimal Range</span>
                                         <span className="font-semibold text-indigo-600">
-                                            {(goal - latestQuality).toFixed(1)}
+                                            1-5
                                         </span>
                                     </div>
                                 </div>
@@ -309,7 +362,27 @@ const SleepQualityTracker = () => {
                         </div>
 
                         {/* Recommendations */}
-                        {latestQuality < goal && (
+                        {latestQuality > 5 ? (
+                            <Card className="p-4 mt-6 border-red-100 bg-red-50">
+                                <h2 className="mb-2 text-lg font-semibold text-red-700">
+                                    Recommendations for Excessive Sleep
+                                </h2>
+                                <ul className="space-y-2">
+                                    <li className="flex items-start text-sm text-gray-700">
+                                        <span className="mr-2 text-red-500">•</span> 
+                                        Try to limit your sleep duration to 7-8 hours per night
+                                    </li>
+                                    <li className="flex items-start text-sm text-gray-700">
+                                        <span className="mr-2 text-red-500">•</span> 
+                                        Set a consistent wake-up time and avoid oversleeping on weekends
+                                    </li>
+                                    <li className="flex items-start text-sm text-gray-700">
+                                        <span className="mr-2 text-red-500">•</span> 
+                                        If you consistently need more than 9 hours of sleep, consider consulting a healthcare provider
+                                    </li>
+                                </ul>
+                            </Card>
+                        ) : (
                             <Card className="p-4 mt-6 border-indigo-100 bg-indigo-50">
                                 <h2 className="mb-2 text-lg font-semibold text-indigo-700">
                                     Personalized Recommendations
@@ -317,15 +390,15 @@ const SleepQualityTracker = () => {
                                 <ul className="space-y-2">
                                     <li className="flex items-start text-sm text-gray-700">
                                         <span className="mr-2 text-indigo-500">•</span> 
-                                        Try to maintain a consistent sleep schedule, even on weekends
+                                        You're sleeping at an optimal level, maintain your current sleep routine
                                     </li>
                                     <li className="flex items-start text-sm text-gray-700">
                                         <span className="mr-2 text-indigo-500">•</span> 
-                                        Consider reducing screen time 1 hour before bed
+                                        Continue to maintain a consistent sleep schedule
                                     </li>
                                     <li className="flex items-start text-sm text-gray-700">
                                         <span className="mr-2 text-indigo-500">•</span> 
-                                        Your sleep shows improvement - keep focusing on your bedtime routine
+                                        Your sleep quality is excellent - keep focusing on your bedtime routine
                                     </li>
                                 </ul>
                             </Card>

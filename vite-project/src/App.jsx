@@ -62,7 +62,7 @@ function App() {
       </div>
       
       {/* Main content with padding-top to account for fixed navbar height */}
-      <div className="flex-grow pt-5 mt-16">
+      <div className="flex-grow pt-5 mt-10">
         {/* The mt-16 accounts for navbar height, pt-5 gives the 20px spacing */}
         <Routes>
           <Route path="/" element={<Home />} />
