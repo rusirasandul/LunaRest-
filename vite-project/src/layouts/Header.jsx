@@ -61,7 +61,7 @@ const Navbar = () => {
                         to="/article"
                         onClick={handleCloseMenu}
                         className={`text-nav relative px-2 py-1 transition-all duration-300 ${
-                            getActiveSection() === "goaltracker" 
+                            getActiveSection() === "article" 
                                 ? "text-blue-400 font-bold after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-400" 
                                 : "hover:text-blue-300"
                         }`}
