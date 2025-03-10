@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="50893a57-3f9b-4ff4-890e-ee310743adb8" name="Changes" comment="commiting">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/lunarest/logginResgister/registration/RegistrationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/lunarest/logginResgister/registration/RegistrationService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +58,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "Spring Boot.LogginResgisterApplication.executor": "Run",
     "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "#28 on backend",
+    "git-widget-placeholder": "backend",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/rusir/Downloads/repolunarestbackend/repo",
     "node.js.detected.package.eslint": "true",
@@ -124,6 +125,7 @@
       <workItem from="1741235195074" duration="896000" />
       <workItem from="1741252499929" duration="398000" />
       <workItem from="1741590421847" duration="4079000" />
+      <workItem from="1741608107195" duration="1531000" />
     </task>
     <servers />
   </component>
