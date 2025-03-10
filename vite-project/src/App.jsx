@@ -45,11 +45,6 @@ function App() {
     }
   }, [pageChanged]);
 
-  // Function to handle page changes
-  const handlePageChange = () => {
-    setPageChanged(true);
-  };
-
   if (isLoading) {
     return <LoadingPage />;
   }
