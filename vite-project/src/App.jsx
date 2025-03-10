@@ -17,6 +17,7 @@ import GoalTracker from "./pages/GoalTracker.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
 //import WelcomeCard from "./pages/WelcomeCard";
 //import Quiz from "./pages/Quiz";
+
 function App() {
   const[isLoading,setIsLoading] = useState(true)
 

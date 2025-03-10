@@ -428,9 +428,12 @@ const Article = () => {
                             </div>
                         </div>
                     </>
+
                 ) : (
+
                     // Article Detail View with iframe
                     <div className="rounded-lg shadow-lg p-6" style={{ backgroundColor: colors.cardBackground }}>
+
                         <button
                             onClick={handleBackClick}
                             className="mb-4 text-white px-4 py-2 rounded flex items-center transition-colors hover:opacity-90"
@@ -441,13 +444,16 @@ const Article = () => {
                             </svg>
                             Back to Articles
                         </button>
+
                         <iframe
                             src={selectedArticle}
                             title="Article Content"
                             className="w-full h-screen border-0"
                         />
+
                     </div>
                 )}
+
             </main>
         </div>
     );
