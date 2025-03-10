@@ -43,7 +43,7 @@ const Navbar = () => {
             <li>
                 <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                     <Link
-                        to="/prediction"
+                        to="/quiz"
                         onClick={handleCloseMenu}
                         className={`text-nav relative px-2 py-1 transition-all duration-300 ${
                             getActiveSection() === "prediction" 
@@ -52,6 +52,21 @@ const Navbar = () => {
                         }`}
                     >
                         Prediction
+                    </Link>
+                </motion.div>
+            </li>
+            <li>
+                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                    <Link
+                        to="/article"
+                        onClick={handleCloseMenu}
+                        className={`text-nav relative px-2 py-1 transition-all duration-300 ${
+                            getActiveSection() === "goaltracker" 
+                                ? "text-blue-400 font-bold after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-400" 
+                                : "hover:text-blue-300"
+                        }`}
+                    >
+                        Article
                     </Link>
                 </motion.div>
             </li>
