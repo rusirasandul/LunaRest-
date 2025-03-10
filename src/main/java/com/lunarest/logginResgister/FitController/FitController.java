@@ -16,6 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.services.fitness.Fitness;
+import com.google.api.services.fitness.model.ListSessionResponse;
+
 
 @RestController
 public class FitController {
