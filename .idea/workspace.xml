@@ -4,7 +4,77 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="50893a57-3f9b-4ff4-890e-ee310743adb8" name="Changes" comment="" />
+    <list default="true" id="50893a57-3f9b-4ff4-890e-ee310743adb8" name="Changes" comment="commiting">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vite-project/postcss.config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vite-project/public/logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vite-project/src/assets/contact.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vite-project/src/pages/About.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vite-project/src/pages/Art1.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vite-project/src/pages/Art2.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vite-project/src/pages/Art3.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vite-project/src/pages/Article.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vite-project/src/pages/ContactPage.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vite-project/src/pages/Dashboard.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vite-project/src/pages/GoalTracker.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vite-project/src/pages/LoadingPage.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vite-project/src/pages/PrivacyPolicy.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vite-project/src/pages/ProfilePage.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vite-project/src/pages/Quiz.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vite-project/src/pages/Recommendation.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vite-project/src/pages/SignUpPage.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vite-project/src/pages/SplashScreen.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vite-project/src/pages/WelcomeCard.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vite-project/src/utils/data.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/pylint.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SleepScore.py" beforeDir="false" afterPath="$PROJECT_DIR$/SleepScore.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StudentSleepPattern.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/StudentSleepPatterns2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chalitha-project-with-quiz/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/chalitha-project-with-quiz/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chalitha-project-with-quiz/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/chalitha-project-with-quiz/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chalitha-project-with-quiz/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/chalitha-project-with-quiz/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/student_sleep_patterns.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lunarest/logginResgister/Journal/JournalEntry.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lunarest/logginResgister/LogginResgisterApplication.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lunarest/logginResgister/appuser/AppUserRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lunarest/logginResgister/appuser/AppUserRole.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lunarest/logginResgister/appuser/AppUserService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lunarest/logginResgister/email/EmailSender.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lunarest/logginResgister/email/EmailService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lunarest/logginResgister/profile/ProfileUpdateRequest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lunarest/logginResgister/pythonApi/Api.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lunarest/logginResgister/pythonApi/SleepScoreController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lunarest/logginResgister/recommendation/RecommendationService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lunarest/logginResgister/recommendation/SleepData.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lunarest/logginResgister/registration/EmailValidater.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lunarest/logginResgister/registration/RegistrationController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lunarest/logginResgister/registration/RegistrationRequest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lunarest/logginResgister/registration/RegistrationService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lunarest/logginResgister/registration/token/ConfirmationToken.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lunarest/logginResgister/registration/token/ConfirmationTokenRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lunarest/logginResgister/registration/token/ConfirmationTokenService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lunarest/logginResgister/security/PasswordEncoder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lunarest/logginResgister/sleepdata/SleepData.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lunarest/logginResgister/sleepdata/SleepDataController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lunarest/logginResgister/sleepdata/SleepDataRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lunarest/logginResgister/sleepdata/SleepDataRequest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lunarest/logginResgister/sleepdata/SleepDataService$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/lunarest/logginResgister/sleepdata/SleepDataService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vite-project/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/vite-project/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vite-project/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/vite-project/src/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vite-project/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/vite-project/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vite-project/src/layouts/Footer.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/vite-project/src/layouts/Footer.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vite-project/src/layouts/Header.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/vite-project/src/layouts/Header.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vite-project/src/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/vite-project/src/main.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vite-project/src/pages/Home.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/vite-project/src/pages/Home.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vite-project/src/pages/LoginPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/vite-project/src/pages/LoginPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vite-project/tailwind.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/vite-project/tailwind.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vite-project/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/vite-project/vite.config.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -34,6 +104,9 @@
     &quot;accountId&quot;: &quot;83b65df7-8a76-427d-90f9-742650828a17&quot;
   }
 }</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
     &quot;associatedIndex&quot;: 8
     }</component>
@@ -42,27 +115,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;Spring Boot.LogginResgisterApplication.executor&quot;: &quot;Run&quot;,
-    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;backend&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/rusir/Downloads/repolunarestbackend/repo&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Spring Boot.LogginResgisterApplication.executor": "Run",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "#28 on Merging backend",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/rusir/Downloads/repolunarestbackend/repo",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "show.migrate.to.gradle.popup": "false",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="LogginResgisterApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="logginResgister" />
@@ -117,6 +191,7 @@
       <workItem from="1741066469494" duration="634000" />
       <workItem from="1741235195074" duration="896000" />
       <workItem from="1741252499929" duration="398000" />
+      <workItem from="1741590421847" duration="2129000" />
     </task>
     <servers />
   </component>

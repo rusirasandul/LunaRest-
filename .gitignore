@@ -1,0 +1,15 @@
+# WebStorm
+.idea/
+
+# Node.js dependencies
+node_modules/
+
+# Log files
+*.log
+
+# Environment files
+.env
+
+# Backup and swap files
+*.bak
+*.swp
