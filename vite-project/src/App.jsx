@@ -16,7 +16,7 @@ import Article from "./pages/Article.jsx";
 import GoalTracker from "./pages/GoalTracker.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
 //import WelcomeCard from "./pages/WelcomeCard";
-//import Quiz from "./pages/Quiz";
+import Quiz from "./pages/Quiz";
 
 function App() {
   const[isLoading,setIsLoading] = useState(true)
@@ -41,6 +41,7 @@ function App() {
       <div className="flex-grow">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/quiz" element={<Quiz/>}/>
           <Route path="/journal" element={<Journal />} />
           <Route path="/setting" element={<Setting />} />
           <Route path="/login" element={<LoginPage />} />
