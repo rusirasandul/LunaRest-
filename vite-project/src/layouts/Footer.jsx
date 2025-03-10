@@ -28,7 +28,7 @@ const Footer = () => {
                 <a href="/about" className="mb-2 text-sm hover:text-nav md:mb-0">About Us</a>
                 <a href="/faq" className="mb-2 text-sm hover:text-nav md:mb-0">FAQ</a>
                 <a href="/contact" className="mb-2 text-sm hover:text-nav md:mb-0">Contact Us</a>
-                <a href="/privacy" className="text-sm hover:text-nav">Privacy Policy</a>
+                <a href="/privacyPolicy" className="text-sm hover:text-nav">Privacy Policy</a>
             </div>
 
             {/* Social Media Icons */}

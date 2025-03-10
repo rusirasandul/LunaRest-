@@ -28,7 +28,7 @@ const LunaRestSplash = () => {
 
     return (
         <div className={`fixed inset-0 flex items-center justify-center bg-black transition-opacity duration-1000 z-50 ${fadeOut ? 'opacity-0' : 'opacity-100'}`}>
-            <div className="w-full h-full max-w-4xl max-h-screen relative overflow-hidden">
+            <div className="relative w-full h-full max-w-4xl max-h-screen overflow-hidden">
                 {/* Background - dark blue almost black */}
                 <div className="absolute inset-0 bg-gradient-to-b from-black to-blue-950"></div>
 
@@ -42,7 +42,7 @@ const LunaRestSplash = () => {
                     return (
                         <div
                             key={`star-${i}`}
-                            className="absolute rounded-full bg-white"
+                            className="absolute bg-white rounded-full"
                             style={{
                                 width: `${size}rem`,
                                 height: `${size}rem`,
@@ -79,14 +79,14 @@ const LunaRestSplash = () => {
                 })}
 
                 {/* Crescent Moon */}
-                <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                <div className="absolute transform -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2">
                     <div className="relative w-48 h-48">
                         {/* Moon outer glow */}
-                        <div className="absolute w-48 h-48 rounded-full bg-blue-200 opacity-5 animate-pulse"
+                        <div className="absolute w-48 h-48 bg-blue-200 rounded-full opacity-5 animate-pulse"
                              style={{filter: 'blur(20px)'}}></div>
 
                         {/* Crescent moon */}
-                        <div className="absolute inset-0 rounded-full bg-blue-100"
+                        <div className="absolute inset-0 bg-blue-100 rounded-full"
                              style={{
                                  boxShadow: 'inset -15px 0 20px -10px rgba(0, 0, 0, 0.5)',
                                  animation: 'float 6s ease-in-out infinite'
@@ -122,18 +122,18 @@ const LunaRestSplash = () => {
                 </div>
 
                 {/* Logo text */}
-                <div className="absolute left-1/2 top-3/4 transform -translate-x-1/2">
-                    <h1 className="text-5xl md:text-7xl font-thin text-blue-50 tracking-widest opacity-0 animate-fadeIn">
+                <div className="absolute transform -translate-x-1/2 left-1/2 top-3/4">
+                    <h1 className="text-5xl font-thin tracking-widest opacity-0 md:text-7xl text-blue-50 animate-fadeIn">
                         LUNAREST
                     </h1>
-                    <div className="h-px bg-blue-200 w-0 mx-auto mt-2 opacity-60 animate-lineExpand"></div>
+                    <div className="w-0 h-px mx-auto mt-2 bg-blue-200 opacity-60 animate-lineExpand"></div>
                 </div>
 
                 {/* Loading indicator */}
-                <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex items-center space-x-1">
+                <div className="absolute flex items-center space-x-1 transform -translate-x-1/2 bottom-10 left-1/2">
                     <div className="w-48 h-0.5 bg-blue-900 rounded overflow-hidden">
                         <div
-                            className="h-full bg-blue-200 opacity-70 transition-all duration-300 ease-out"
+                            className="h-full transition-all duration-300 ease-out bg-blue-200 opacity-70"
                             style={{ width: `${progress}%` }}
                         ></div>
                     </div>
