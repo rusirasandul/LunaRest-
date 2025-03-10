@@ -39,7 +39,7 @@ public class RegistrationService {
         boolean isValidEmail = emailValidater.test(request.getEmail());
 
         if (!isValidEmail) {
-            throw new IllegalStateException("Invalid email");
+            throw new InvalidEmailException("Invalid email");
         }
 
         String token = appUserService.signUpUser(
@@ -65,15 +65,15 @@ public class RegistrationService {
         ConfirmationToken confirmationToken = confirmationTokenService
                 .getToken(token)
                 .orElseThrow(() ->
-                        new IllegalStateException("token not found"));
+                        new TokenNotFoundException("token not found"));
 
         if (confirmationToken.getConfirmedAt() != null) {
-            throw new IllegalStateException("email already confirmed");
+            throw new EmailAlreadyConfirmedException("email already confirmed");
         }
         LocalDateTime expiredAt = confirmationToken.getExpiresAt();
 
         if (expiredAt.isBefore(LocalDateTime.now())) {
-            throw new IllegalStateException("token expired");
+            throw new TokenExpiredException("token expired");
         }
 
         confirmationTokenService.setConfirmedAt(token);
