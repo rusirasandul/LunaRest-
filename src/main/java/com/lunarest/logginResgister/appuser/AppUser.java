@@ -37,6 +37,7 @@ public class AppUser implements UserDetails {
     private String username;
     private String email;
     private String password;
+    private String profileImage; // New field for profile image URL
 
     @Enumerated(EnumType.STRING)
     private AppUserRole appUserRole;
@@ -55,6 +56,7 @@ public class AppUser implements UserDetails {
         this.email = email;
         this.password = password;
         this.appUserRole = appUserRole;
+        this.profileImage = "/api/placeholder/150/150"; // Default profile image
        
     }
 

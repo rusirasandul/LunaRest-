@@ -14,7 +14,7 @@ import java.util.Map;
 public class RecommendationService {
 
     private static final String OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
-    private static final String OPENAI_API_KEY = "your_openai_api_key"; // Replace with your OpenAI API key
+    private static final String OPENAI_API_KEY = "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"; // Replace with your OpenAI API key
 
     public String getSleepRecommendation(int sleepQuality, int caffeineIntake, double screenTime, double studyHours) {
         RestTemplate restTemplate = new RestTemplate();
