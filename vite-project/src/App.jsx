@@ -1,54 +1,34 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Navbar from "./layouts/Header";
+import Footer from "./layouts/Footer";
 import Home from "./pages/Home";
-import Setting from "./pages/Setting";
 import Journal from "./pages/Journal";
+import Setting from "./pages/Setting";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
-import Footer from "./layouts/Footer";
 import AboutAndFAQ from "./pages/About";
 import ContactPage from "./pages/ContactPage";
-import LoadingPage from "./pages/LoadingPage";
 import Dashboard from "./pages/Dashboard.jsx";
 import Recommendation from "./pages/Recommendation.jsx";
 import Article from "./pages/Article.jsx";
 import GoalTracker from "./pages/GoalTracker.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
-//import WelcomeCard from "./pages/WelcomeCard";
 import Quiz from "./pages/Quiz";
 import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
+import LoadingPage from "./pages/LoadingPage";
+import MusicPlayer from "./pages/MusicPlayer"; // Import the player
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const [pageChanged, setPageChanged] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
-    // Initial loading time
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 3000); // 3s loading time for initial page load
-
+    }, 3000);
     return () => clearTimeout(timer);
   }, []);
-
-  // Listen for route changes to show loading screen
-  useEffect(() => {
-    if (pageChanged) {
-      setIsLoading(true);
-      const timer = setTimeout(() => {
-        setIsLoading(false);
-        setPageChanged(false);
-      }, 1500); // shorter loading time for subsequent page changes
-
-      return () => clearTimeout(timer);
-    }
-  }, [pageChanged]);
-
-  // Function to handle page changes
-  const handlePageChange = () => {
-    setPageChanged(true);
-  };
 
   if (isLoading) {
     return <LoadingPage />;
@@ -56,14 +36,9 @@ function App() {
 
   return (
     <div className="flex flex-col min-h-screen overflow-x-hidden font-heading">
-      {/* Fixed navbar with z-index to ensure it stays on top */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
-        <Navbar />
-      </div>
-      
-      {/* Main content with padding-top to account for fixed navbar height */}
-      <div className="flex-grow pt-5 mt-16">
-        {/* The mt-16 accounts for navbar height, pt-5 gives the 20px spacing */}
+      <Navbar />
+
+      <div className="flex-grow">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/quiz" element={<Quiz />} />
@@ -83,14 +58,11 @@ function App() {
       </div>
 
       <Footer />
+
+      {/* Music Player - Full player only on Home, Mini on other pages */}
+      {location.pathname !== "/" && <MusicPlayer />}
     </div>
   );
 }
 
 export default App;
-
-/*function App() {
-  const [quizStart, setQuizStart] = useState(false);
-
-  return quizStart ? <Quiz /> : <WelcomeCard setQuizStart={setQuizStart} />;
-} */

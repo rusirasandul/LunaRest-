@@ -1,14 +1,14 @@
 {
-    "userGoal": 8,
+    "userGoal": 2.5,
     "currentStreak": 3,
     "badge": "Bronze Sleeper",
     "weeklyData": [
-        { "day": "Mon", "quality": 5.8 },
+        { "day": "Mon", "quality": 2.8 },
         { "day": "Tue", "quality": 6.2 },
-        { "day": "Wed", "quality": 6.5 },
+        { "day": "Wed", "quality": 4.5 },
         { "day": "Thu", "quality": 6.8 },
         { "day": "Fri", "quality": 7.0 },
-        { "day": "Sat", "quality": 7.2 },
-        { "day": "Sun", "quality": 7.5 }
+        { "day": "Sat", "quality": 5.0 },
+        { "day": "Sun", "quality": 5.5 }
     ]
 }
