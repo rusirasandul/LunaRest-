@@ -1,11 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Play, Pause, SkipBack, SkipForward, Volume2, Shuffle, Repeat, Heart, Minimize2, Maximize2 } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Play, Pause, SkipBack, SkipForward, Volume2, Shuffle, Repeat, Heart, Minimize2, Maximize2, X } from 'lucide-react';
 
 function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [isMinimized, setIsMinimized] = useState(true);
-  
+
+  // For making the mini player draggable
+  const playerRef = useRef(null);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const startPosition = useRef({ x: 0, y: 0 });
+
   // Sample song data
   const currentSong = {
     title: "Midnight Dreams",
@@ -31,6 +37,44 @@ function MusicPlayer() {
     return () => clearInterval(interval);
   }, [isPlaying, currentTime, currentSong.duration]);
 
+  // Handle dragging
+  const handleMouseDown = (e) => {
+    // Prevent drag if the user is clicking on a button
+    if (e.target.tagName === 'BUTTON') return;
+    setIsDragging(true);
+    startPosition.current = { x: e.clientX - position.x, y: e.clientY - position.y };
+  };
+
+  const handleMouseMove = (e) => {
+    if (isDragging) {
+      setPosition({
+        x: e.clientX - startPosition.current.x,
+        y: e.clientY - startPosition.current.y
+      });
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  // Add event listeners when dragging
+  useEffect(() => {
+    if (isDragging) {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+    } else {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    }
+
+    // Clean up the event listeners
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDragging]);
+
   // Full player component
   const FullPlayer = () => (
     <div className="w-full max-w-4xl bg-blue-950 rounded-lg shadow-2xl p-8 transition-all duration-300">
@@ -38,9 +82,9 @@ function MusicPlayer() {
       <div className="flex flex-col md:flex-row gap-8">
         {/* Album art */}
         <div className="w-full md:w-1/3">
-          <img 
-            src={currentSong.coverUrl} 
-            alt="Album Cover" 
+          <img
+            src={currentSong.coverUrl}
+            alt="Album Cover"
             className="w-full aspect-square rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300"
           />
         </div>
@@ -52,7 +96,7 @@ function MusicPlayer() {
               <h1 className="text-3xl font-bold mb-2">{currentSong.title}</h1>
               <p className="text-lg text-blue-300 mb-8">{currentSong.artist}</p>
             </div>
-            <button 
+            <button
               onClick={() => setIsMinimized(true)}
               className="text-blue-300 hover:text-white p-2"
             >
@@ -63,7 +107,7 @@ function MusicPlayer() {
           {/* Progress bar */}
           <div className="mb-6">
             <div className="relative h-1 bg-blue-900 rounded-full">
-              <div 
+              <div
                 className="absolute h-full bg-blue-400 rounded-full"
                 style={{ width: `${(currentTime / currentSong.duration) * 100}%` }}
               ></div>
@@ -83,7 +127,7 @@ function MusicPlayer() {
               <button className="text-blue-300 hover:text-white transition-colors">
                 <SkipBack size={24} />
               </button>
-              <button 
+              <button
                 className="bg-blue-400 p-4 rounded-full hover:bg-blue-500 transition-colors"
                 onClick={() => setIsPlaying(!isPlaying)}
               >
@@ -112,30 +156,35 @@ function MusicPlayer() {
 
   // Mini player component
   const MiniPlayer = () => (
-    <div className="bg-blue-950 rounded-lg shadow-lg p-3 flex items-center gap-3 max-w-md transition-all duration-300">
-      <button 
+    <div
+      className="bg-blue-950 rounded-lg shadow-lg p-3 flex items-center gap-3 max-w-md transition-all duration-300"
+      style={{ transform: `translate(${position.x}px, ${position.y}px)` }}
+      ref={playerRef}
+      onMouseDown={handleMouseDown}
+    >
+      <button
         onClick={() => setIsMinimized(false)}
         className="text-blue-300 hover:text-white p-1"
       >
         <Maximize2 size={16} />
       </button>
-      
-      <img 
-        src={currentSong.coverUrl} 
-        alt="Mini Cover" 
+
+      <img
+        src={currentSong.coverUrl}
+        alt="Mini Cover"
         className="w-12 h-12 rounded"
       />
-      
+
       <div className="flex-1 min-w-0">
         <p className="font-medium text-white truncate">{currentSong.title}</p>
         <p className="text-sm text-blue-300 truncate">{currentSong.artist}</p>
       </div>
-      
+
       <div className="flex items-center gap-2">
         <button className="text-blue-300 hover:text-white transition-colors">
           <SkipBack size={18} />
         </button>
-        <button 
+        <button
           className="bg-blue-400 p-2 rounded-full hover:bg-blue-500 transition-colors"
           onClick={() => setIsPlaying(!isPlaying)}
         >
@@ -143,6 +192,14 @@ function MusicPlayer() {
         </button>
         <button className="text-blue-300 hover:text-white transition-colors">
           <SkipForward size={18} />
+        </button>
+
+        {/* Close button to remove mini player */}
+        <button
+          onClick={() => setIsMinimized(false)}
+          className="text-red-500 hover:text-red-700 p-1"
+        >
+          <X size={16} />
         </button>
       </div>
     </div>
