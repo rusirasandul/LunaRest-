@@ -29,7 +29,7 @@ function Journal() {
   return (
     <div className="min-h-screen bg-[#0a1128] text-white p-8">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold mb-8 animate-fade-in mt-10">
+        <h1 className="text-4xl font-bold mb-8 mt-10">
           Your Sleep Journal
         </h1>
 
@@ -39,7 +39,7 @@ function Journal() {
               key={entry.id}
               className="bg-[#1a2b4c] rounded-lg p-6 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
               style={{
-                animation: fadeSlideIn 0.5s ease-out ${index * 0.1}s both
+                animation: `fadeSlideIn 0.5s ease-out ${index * 0.1}s both`
               }}
             >
               <div className="grid md:grid-cols-2 gap-6">
