@@ -3,14 +3,14 @@ import heroImg from "../assets/heroImg.png";
 import Art1 from './Art1';
 import Art2 from './Art2';
 import Art3 from './Art3';
-import SplashScreen from './SplashScreen'
+//import SplashScreen from './SplashScreen'
 
 const Home = () => {
     const navigate = useNavigate();
 
     return (
         <>
-            <SplashScreen/>
+        {/*<SplashScreen/>*/}
             {/* Hero Section */}
             <section 
                 id='home' 
