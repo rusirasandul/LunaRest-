@@ -112,29 +112,39 @@ const Dashboard = ({ apiUrl = "/api/user-data", authToken = null }) => {
             const response = await fetch(apiUrl, { headers });
 
             if (!response.ok) {
-                // Handle different HTTP error codes
-                if (response.status === 401 || response.status === 403) {
-                    throw new Error("Authentication failed. Please log in again.");
-                } else if (response.status === 404) {
-                    throw new Error("The requested data could not be found.");
-                } else if (response.status >= 500) {
-                    throw new Error("A server error occurred. Please try again later.");
-                } else {
-                    throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
-                }
+                // Instead of throwing errors, we'll just log them and continue with empty data
+                console.error(`Network response was not ok: ${response.status} ${response.statusText}`);
+                setError(`Network response was not ok: ${response.status} ${response.statusText}`);
+                setAllData([]);
+                setDisplayData([]);
+                setRefreshing(false);
+                setLoading(false);
+                return;
             }
 
             const result = await response.json();
 
             // Validate data structure
             if (!Array.isArray(result)) {
-                throw new Error("Invalid data format: expected an array");
+                console.error("Invalid data format: expected an array");
+                setError("Invalid data format: expected an array");
+                setAllData([]);
+                setDisplayData([]);
+                setRefreshing(false);
+                setLoading(false);
+                return;
             }
 
             const validatedData = result.filter(item => validateDataItem(item));
 
             if (validatedData.length === 0) {
-                throw new Error("No valid data items found");
+                console.warn("No valid data items found");
+                setError("No valid data items found");
+                setAllData([]);
+                setDisplayData([]);
+                setRefreshing(false);
+                setLoading(false);
+                return;
             }
 
             if (validatedData.length < result.length) {
@@ -160,6 +170,8 @@ const Dashboard = ({ apiUrl = "/api/user-data", authToken = null }) => {
         } catch (err) {
             console.error("Error fetching data:", err);
             setError(err.message || "An error occurred while fetching data");
+            setAllData([]);
+            setDisplayData([]);
             setRefreshing(false);
             setLoading(false);
         }
@@ -279,28 +291,6 @@ const Dashboard = ({ apiUrl = "/api/user-data", authToken = null }) => {
         </div>
     );
 
-    // Error component
-    const ErrorDisplay = ({ message }) => (
-        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded">
-            <div className="flex items-center">
-                <AlertCircle size={20} className="mr-2" />
-                <p className="font-medium">Error loading data</p>
-            </div>
-            <p className="mt-2 text-sm">{message}</p>
-            <button
-                className="mt-3 bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded text-sm transition-colors"
-                onClick={fetchData}
-            >
-                Retry
-            </button>
-        </div>
-    );
-
-    // Prop validation for ErrorDisplay
-    ErrorDisplay.propTypes = {
-        message: PropTypes.string.isRequired
-    };
-
     // Loading indicators
     if (loading) {
         return (
@@ -323,204 +313,198 @@ const Dashboard = ({ apiUrl = "/api/user-data", authToken = null }) => {
                     <div className="h-1 w-40 bg-gradient-to-r from-purple-500 to-indigo-500 rounded"></div>
                 </div>
 
-                {error && <ErrorDisplay message={error} />}
-
                 {refreshing && (
                     <div className="fixed top-0 left-0 right-0 z-50">
                         <div className="h-1 bg-purple-500 animate-pulse"></div>
                     </div>
                 )}
 
-                {!error && (
-                    <>
-                        {/* Date navigation */}
-                        <div className="mb-4 flex justify-between items-center">
-                            <button
-                                onClick={goToPreviousWeek}
-                                disabled={currentWeekIndex >= totalWeeks - 1}
-                                className={`flex items-center px-3 py-2 rounded bg-purple-600 text-white ${currentWeekIndex >= totalWeeks - 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-purple-700'}`}
-                            >
-                                <ChevronLeft size={16} className="mr-1" />
-                                <span>Previous</span>
-                            </button>
+                {/* Date navigation */}
+                <div className="mb-4 flex justify-between items-center">
+                    <button
+                        onClick={goToPreviousWeek}
+                        disabled={currentWeekIndex >= totalWeeks - 1}
+                        className={`flex items-center px-3 py-2 rounded bg-purple-600 text-white ${currentWeekIndex >= totalWeeks - 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-purple-700'}`}
+                    >
+                        <ChevronLeft size={16} className="mr-1" />
+                        <span>Previous</span>
+                    </button>
 
-                            <div className="text-white">
-                                {displayData.length > 0 ? (
-                                    <span>
-                                        {formatDate(displayData[displayData.length - 1]?.date || '')} - {formatDate(displayData[0]?.date || '')}
-                                    </span>
-                                ) : (
-                                    <span>No data available</span>
-                                )}
-                            </div>
+                    <div className="text-white">
+                        {displayData.length > 0 ? (
+                            <span>
+                                {formatDate(displayData[displayData.length - 1]?.date || '')} - {formatDate(displayData[0]?.date || '')}
+                            </span>
+                        ) : (
+                            <span>No data available</span>
+                        )}
+                    </div>
 
-                            <button
-                                onClick={goToNextWeek}
-                                disabled={currentWeekIndex <= 0}
-                                className={`flex items-center px-3 py-2 rounded bg-purple-600 text-white ${currentWeekIndex <= 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-purple-700'}`}
-                            >
-                                <span>Next</span>
-                                <ChevronRight size={16} className="ml-1" />
-                            </button>
+                    <button
+                        onClick={goToNextWeek}
+                        disabled={currentWeekIndex <= 0}
+                        className={`flex items-center px-3 py-2 rounded bg-purple-600 text-white ${currentWeekIndex <= 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-purple-700'}`}
+                    >
+                        <span>Next</span>
+                        <ChevronRight size={16} className="ml-1" />
+                    </button>
+                </div>
+
+                {/* Refresh button */}
+                <div className="mb-6 flex justify-end">
+                    <button
+                        onClick={fetchData}
+                        disabled={refreshing}
+                        className={`px-3 py-2 rounded bg-indigo-600 text-white ${refreshing ? 'opacity-50 cursor-not-allowed' : 'hover:bg-indigo-700'}`}
+                    >
+                        {refreshing ? 'Refreshing...' : 'Refresh Data'}
+                    </button>
+                </div>
+
+                {/* Sleep Scorecard */}
+                <div className="mb-6">
+                    <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg shadow-lg p-4 flex items-center justify-between">
+                        <div className="text-white">
+                            <h3 className="text-lg font-semibold mb-1">Sleep Score</h3>
+                            <p className="text-sm opacity-80">
+                                {displayData.length > 0
+                                    ? `${formatDate(displayData[displayData.length - 1]?.date || '')} - ${formatDate(displayData[0]?.date || '')}`
+                                    : 'No data available'}
+                            </p>
                         </div>
-
-                        {/* Refresh button */}
-                        <div className="mb-6 flex justify-end">
-                            <button
-                                onClick={fetchData}
-                                disabled={refreshing}
-                                className={`px-3 py-2 rounded bg-indigo-600 text-white ${refreshing ? 'opacity-50 cursor-not-allowed' : 'hover:bg-indigo-700'}`}
-                            >
-                                {refreshing ? 'Refreshing...' : 'Refresh Data'}
-                            </button>
+                        <div className="flex items-center">
+                            <div className="text-4xl font-bold text-white mr-2">{sleepScore}</div>
+                            <div className="text-lg text-white opacity-80">/100</div>
                         </div>
+                    </div>
+                </div>
 
-                        {/* Sleep Scorecard */}
-                        <div className="mb-6">
-                            <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg shadow-lg p-4 flex items-center justify-between">
-                                <div className="text-white">
-                                    <h3 className="text-lg font-semibold mb-1">Sleep Score</h3>
-                                    <p className="text-sm opacity-80">
-                                        {displayData.length > 0
-                                            ? `${formatDate(displayData[displayData.length - 1]?.date || '')} - ${formatDate(displayData[0]?.date || '')}`
-                                            : 'No data available'}
-                                    </p>
-                                </div>
-                                <div className="flex items-center">
-                                    <div className="text-4xl font-bold text-white mr-2">{sleepScore}</div>
-                                    <div className="text-lg text-white opacity-80">/100</div>
-                                </div>
-                            </div>
+                {/* Line Chart: Sleep Quality Over Time */}
+                <Card
+                    title="Sleep Quality Trends"
+                    icon={<Moon size={20} />}
+                    isOpen={showSleepQuality}
+                    toggleOpen={() => setShowSleepQuality(!showSleepQuality)}
+                >
+                    {displayData.length > 0 ? (
+                        <ResponsiveContainer width="100%" height={300}>
+                            <AreaChart data={displayData}>
+                                <defs>
+                                    <linearGradient id="colorSleep" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%" stopColor={colors.accent1} stopOpacity={0.8}/>
+                                        <stop offset="95%" stopColor={colors.accent1} stopOpacity={0}/>
+                                    </linearGradient>
+                                </defs>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
+                                <XAxis
+                                    dataKey="date"
+                                    stroke={colors.text}
+                                    tickFormatter={formatDate}
+                                />
+                                <YAxis
+                                    label={{
+                                        value: 'Sleep Quality (1-10)',
+                                        angle: -90,
+                                        position: 'insideLeft',
+                                        style: { fill: colors.text }
+                                    }}
+                                    domain={[0, 10]}
+                                    stroke={colors.text}
+                                />
+                                <Tooltip content={<CustomTooltip />} />
+                                <Legend />
+                                <Area
+                                    type="monotone"
+                                    dataKey="sleepQuality"
+                                    stroke={colors.accent1}
+                                    strokeWidth={3}
+                                    fillOpacity={1}
+                                    fill="url(#colorSleep)"
+                                    name="Sleep Quality"
+                                    activeDot={{ r: 8, fill: colors.accent2 }}
+                                />
+                            </AreaChart>
+                        </ResponsiveContainer>
+                    ) : (
+                        <div className="text-center p-6 text-gray-500">No sleep quality data available for this period</div>
+                    )}
+                </Card>
+
+                {/* Multi-Bar Chart: Sleep Factors Comparison */}
+                <Card
+                    title="Sleep Factors Analysis"
+                    icon={<AlertCircle size={20} />}
+                    isOpen={showSleepFactors}
+                    toggleOpen={() => setShowSleepFactors(!showSleepFactors)}
+                >
+                    <div className="mb-4 flex flex-wrap gap-3">
+                        <div className="flex items-center">
+                            <div className="w-3 h-3 rounded-full bg-indigo-500 mr-1"></div>
+                            <span className="text-xs">Sleep Duration</span>
                         </div>
-
-                        {/* Line Chart: Sleep Quality Over Time */}
-                        <Card
-                            title="Sleep Quality Trends"
-                            icon={<Moon size={20} />}
-                            isOpen={showSleepQuality}
-                            toggleOpen={() => setShowSleepQuality(!showSleepQuality)}
-                        >
-                            {displayData.length > 0 ? (
-                                <ResponsiveContainer width="100%" height={300}>
-                                    <AreaChart data={displayData}>
-                                        <defs>
-                                            <linearGradient id="colorSleep" x1="0" y1="0" x2="0" y2="1">
-                                                <stop offset="5%" stopColor={colors.accent1} stopOpacity={0.8}/>
-                                                <stop offset="95%" stopColor={colors.accent1} stopOpacity={0}/>
-                                            </linearGradient>
-                                        </defs>
-                                        <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
-                                        <XAxis
-                                            dataKey="date"
-                                            stroke={colors.text}
-                                            tickFormatter={formatDate}
-                                        />
-                                        <YAxis
-                                            label={{
-                                                value: 'Sleep Quality (1-10)',
-                                                angle: -90,
-                                                position: 'insideLeft',
-                                                style: { fill: colors.text }
-                                            }}
-                                            domain={[0, 10]}
-                                            stroke={colors.text}
-                                        />
-                                        <Tooltip content={<CustomTooltip />} />
-                                        <Legend />
-                                        <Area
-                                            type="monotone"
-                                            dataKey="sleepQuality"
-                                            stroke={colors.accent1}
-                                            strokeWidth={3}
-                                            fillOpacity={1}
-                                            fill="url(#colorSleep)"
-                                            name="Sleep Quality"
-                                            activeDot={{ r: 8, fill: colors.accent2 }}
-                                        />
-                                    </AreaChart>
-                                </ResponsiveContainer>
-                            ) : (
-                                <div className="text-center p-6 text-gray-500">No sleep quality data available for this period</div>
-                            )}
-                        </Card>
-
-                        {/* Multi-Bar Chart: Sleep Factors Comparison */}
-                        <Card
-                            title="Sleep Factors Analysis"
-                            icon={<AlertCircle size={20} />}
-                            isOpen={showSleepFactors}
-                            toggleOpen={() => setShowSleepFactors(!showSleepFactors)}
-                        >
-                            <div className="mb-4 flex flex-wrap gap-3">
-                                <div className="flex items-center">
-                                    <div className="w-3 h-3 rounded-full bg-indigo-500 mr-1"></div>
-                                    <span className="text-xs">Sleep Duration</span>
-                                </div>
-                                <div className="flex items-center">
-                                    <div className="w-3 h-3 rounded-full bg-amber-500 mr-1"></div>
-                                    <span className="text-xs">Caffeine</span>
-                                </div>
-                                <div className="flex items-center">
-                                    <div className="w-3 h-3 rounded-full bg-emerald-500 mr-1"></div>
-                                    <span className="text-xs">Activity</span>
-                                </div>
-                                <div className="flex items-center">
-                                    <div className="w-3 h-3 rounded-full bg-pink-500 mr-1"></div>
-                                    <span className="text-xs">Screen Time</span>
-                                </div>
-                                <div className="flex items-center">
-                                    <div className="w-3 h-3 rounded-full bg-violet-500 mr-1"></div>
-                                    <span className="text-xs">Study</span>
-                                </div>
-                            </div>
-                            {displayData.length > 0 ? (
-                                <ResponsiveContainer width="100%" height={300}>
-                                    <BarChart data={displayData}>
-                                        <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
-                                        <XAxis
-                                            dataKey="date"
-                                            stroke={colors.text}
-                                            tickFormatter={formatDate}
-                                        />
-                                        <YAxis stroke={colors.text} />
-                                        <Tooltip
-                                            formatter={(value, name) => [value, name]}
-                                            labelFormatter={formatDate}
-                                        />
-                                        <Legend />
-                                        <Bar
-                                            dataKey="sleepDuration"
-                                            fill={colors.sleepDuration}
-                                            name="Sleep Duration (hrs)"
-                                        />
-                                        <Bar
-                                            dataKey="caffeineIntake"
-                                            fill={colors.caffeineIntake}
-                                            name="Caffeine Intake (cups)"
-                                        />
-                                        <Bar
-                                            dataKey="physicalActivity"
-                                            fill={colors.physicalActivity}
-                                            name="Physical Activity (hrs)"
-                                        />
-                                        <Bar
-                                            dataKey="screenTime"
-                                            fill={colors.screenTime}
-                                            name="Screen Time (hrs)"
-                                        />
-                                        <Bar
-                                            dataKey="studyHours"
-                                            fill={colors.studyHours}
-                                            name="Study Hours"
-                                        />
-                                    </BarChart>
-                                </ResponsiveContainer>
-                            ) : (
-                                <div className="text-center p-6 text-gray-500">No sleep factors data available for this period</div>
-                            )}
-                        </Card>
-                    </>
-                )}
+                        <div className="flex items-center">
+                            <div className="w-3 h-3 rounded-full bg-amber-500 mr-1"></div>
+                            <span className="text-xs">Caffeine</span>
+                        </div>
+                        <div className="flex items-center">
+                            <div className="w-3 h-3 rounded-full bg-emerald-500 mr-1"></div>
+                            <span className="text-xs">Activity</span>
+                        </div>
+                        <div className="flex items-center">
+                            <div className="w-3 h-3 rounded-full bg-pink-500 mr-1"></div>
+                            <span className="text-xs">Screen Time</span>
+                        </div>
+                        <div className="flex items-center">
+                            <div className="w-3 h-3 rounded-full bg-violet-500 mr-1"></div>
+                            <span className="text-xs">Study</span>
+                        </div>
+                    </div>
+                    {displayData.length > 0 ? (
+                        <ResponsiveContainer width="100%" height={300}>
+                            <BarChart data={displayData}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
+                                <XAxis
+                                    dataKey="date"
+                                    stroke={colors.text}
+                                    tickFormatter={formatDate}
+                                />
+                                <YAxis stroke={colors.text} />
+                                <Tooltip
+                                    formatter={(value, name) => [value, name]}
+                                    labelFormatter={formatDate}
+                                />
+                                <Legend />
+                                <Bar
+                                    dataKey="sleepDuration"
+                                    fill={colors.sleepDuration}
+                                    name="Sleep Duration (hrs)"
+                                />
+                                <Bar
+                                    dataKey="caffeineIntake"
+                                    fill={colors.caffeineIntake}
+                                    name="Caffeine Intake (cups)"
+                                />
+                                <Bar
+                                    dataKey="physicalActivity"
+                                    fill={colors.physicalActivity}
+                                    name="Physical Activity (hrs)"
+                                />
+                                <Bar
+                                    dataKey="screenTime"
+                                    fill={colors.screenTime}
+                                    name="Screen Time (hrs)"
+                                />
+                                <Bar
+                                    dataKey="studyHours"
+                                    fill={colors.studyHours}
+                                    name="Study Hours"
+                                />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    ) : (
+                        <div className="text-center p-6 text-gray-500">No sleep factors data available for this period</div>
+                    )}
+                </Card>
             </div>
         </div>
     );
