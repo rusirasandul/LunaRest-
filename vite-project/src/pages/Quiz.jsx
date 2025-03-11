@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { questions } from "../utils/data";
+import { useNavigate } from 'react-router-dom';
 
 const Quiz = () => {
     const [currentIndex, setCurrentIndex] = useState(0)
     const [answers, setAnswers] = useState({})
     const [quizComplete, setQuizComplete] = useState(false)
+    const navigate = useNavigate(); // Initialize the navigate function
 
     // Handle radio button selection
     const handleAnswerChange = (option) => {
@@ -31,6 +33,15 @@ const Quiz = () => {
         if (currentIndex > 0) {
             setCurrentIndex(currentIndex - 1)
         }
+    }
+
+    // Navigation handlers for recommendation and journal pages
+    const goToRecommendations = () => {
+        navigate('/Recommendation');
+    }
+
+    const goToJournal = () => {
+        navigate('/Journal');
     }
 
     return (
@@ -143,10 +154,16 @@ const Quiz = () => {
                             </div>
 
                             <div className="flex justify-center gap-24 mt-25">
-                                <button className="h-[50px] w-[40%] rounded-lg text-lg font-semibold bg-blue-950 text-white hover:bg-blue-900 shadow-md shadow-gray-600 transition-colors">
-                                    Recommandation log
+                                <button
+                                    onClick={goToRecommendations}
+                                    className="h-[50px] w-[40%] rounded-lg text-lg font-semibold bg-blue-950 text-white hover:bg-blue-900 shadow-md shadow-gray-600 transition-colors"
+                                >
+                                    Recommendation log
                                 </button>
-                                <button className="h-[50px] w-[40%] rounded-lg text-lg font-semibold bg-blue-950 text-white hover:bg-blue-900 shadow-md shadow-gray-600 transition-colors">
+                                <button
+                                    onClick={goToJournal}
+                                    className="h-[50px] w-[40%] rounded-lg text-lg font-semibold bg-blue-950 text-white hover:bg-blue-900 shadow-md shadow-gray-600 transition-colors"
+                                >
                                     Sleep Journal
                                 </button>
                             </div>
@@ -159,7 +176,6 @@ const Quiz = () => {
 }
 
 export default Quiz
-
 
 
 
