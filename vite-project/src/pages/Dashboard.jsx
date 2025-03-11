@@ -204,6 +204,12 @@ const Dashboard = ({ apiUrl = "/api/user-data", authToken = null }) => {
             setAnimateHeader(true);
         }, 300);
 
+        // Load Roboto font from Google Fonts
+        const robotoFont = document.createElement('link');
+        robotoFont.rel = 'stylesheet';
+        robotoFont.href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap';
+        document.head.appendChild(robotoFont);
+
         return () => {
             clearTimeout(animationTimer);
         };
@@ -227,7 +233,7 @@ const Dashboard = ({ apiUrl = "/api/user-data", authToken = null }) => {
     const CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length > 0 && payload[0] && 'value' in payload[0]) {
             return (
-                <div className="bg-white p-4 border border-purple-300 rounded shadow-lg">
+                <div className="bg-white p-4 border border-purple-300 rounded shadow-lg" style={{ fontFamily: 'Roboto, sans-serif' }}>
                     <p className="font-bold text-purple-900">{formatDate(label)}</p>
                     <p className="text-purple-800">
                         <span className="font-medium">Sleep Quality: </span>
@@ -253,7 +259,7 @@ const Dashboard = ({ apiUrl = "/api/user-data", authToken = null }) => {
     // Card component with toggle
     const Card = ({ title, icon, children, isOpen, toggleOpen }) => {
         return (
-            <div className="bg-white rounded-lg shadow-lg mb-6 overflow-hidden transition-all duration-300 hover:shadow-xl">
+            <div className="bg-white rounded-lg shadow-lg mb-6 overflow-hidden transition-all duration-300 hover:shadow-xl" style={{ fontFamily: 'Roboto, sans-serif' }}>
                 <div
                     className="p-4 flex justify-between items-center cursor-pointer bg-gradient-to-r from-purple-600 to-indigo-600 text-white"
                     onClick={toggleOpen}
@@ -294,7 +300,7 @@ const Dashboard = ({ apiUrl = "/api/user-data", authToken = null }) => {
     // Loading indicators
     if (loading) {
         return (
-            <div style={{ backgroundColor: colors.background }} className="p-5 min-h-screen flex items-center justify-center">
+            <div style={{ backgroundColor: colors.background, fontFamily: 'Roboto, sans-serif' }} className="p-5 pt-16 min-h-screen flex items-center justify-center">
                 <div className="animate-pulse flex flex-col items-center">
                     <div className="w-12 h-12 border-4 border-t-purple-500 border-r-transparent border-b-purple-500 border-l-transparent rounded-full animate-spin mb-4"></div>
                     <p className="text-xl text-white">Loading your sleep insights...</p>
@@ -304,7 +310,7 @@ const Dashboard = ({ apiUrl = "/api/user-data", authToken = null }) => {
     }
 
     return (
-        <div style={{ backgroundColor: colors.background }} className="p-5 pt-16 min-h-screen relative">
+        <div style={{ backgroundColor: colors.background, fontFamily: 'Roboto, sans-serif' }} className="p-5 pt-16 min-h-screen relative">
             <BackgroundPattern />
 
             <div className={`relative z-10 transition-all duration-700 ${animateHeader ? 'opacity-100' : 'opacity-0'}`}>
@@ -314,7 +320,7 @@ const Dashboard = ({ apiUrl = "/api/user-data", authToken = null }) => {
                 </div>
 
                 {refreshing && (
-                    <div className="fixed top-0 left-0 right-0 z-50">
+                    <div className="fixed top-16 left-0 right-0 z-50">
                         <div className="h-1 bg-purple-500 animate-pulse"></div>
                     </div>
                 )}
@@ -400,19 +406,21 @@ const Dashboard = ({ apiUrl = "/api/user-data", authToken = null }) => {
                                     dataKey="date"
                                     stroke={colors.text}
                                     tickFormatter={formatDate}
+                                    style={{ fontFamily: 'Roboto, sans-serif' }}
                                 />
                                 <YAxis
                                     label={{
                                         value: 'Sleep Quality (1-10)',
                                         angle: -90,
                                         position: 'insideLeft',
-                                        style: { fill: colors.text }
+                                        style: { fill: colors.text, fontFamily: 'Roboto, sans-serif' }
                                     }}
                                     domain={[0, 10]}
                                     stroke={colors.text}
+                                    style={{ fontFamily: 'Roboto, sans-serif' }}
                                 />
                                 <Tooltip content={<CustomTooltip />} />
-                                <Legend />
+                                <Legend wrapperStyle={{ fontFamily: 'Roboto, sans-serif' }} />
                                 <Area
                                     type="monotone"
                                     dataKey="sleepQuality"
@@ -467,13 +475,18 @@ const Dashboard = ({ apiUrl = "/api/user-data", authToken = null }) => {
                                     dataKey="date"
                                     stroke={colors.text}
                                     tickFormatter={formatDate}
+                                    style={{ fontFamily: 'Roboto, sans-serif' }}
                                 />
-                                <YAxis stroke={colors.text} />
+                                <YAxis
+                                    stroke={colors.text}
+                                    style={{ fontFamily: 'Roboto, sans-serif' }}
+                                />
                                 <Tooltip
                                     formatter={(value, name) => [value, name]}
                                     labelFormatter={formatDate}
+                                    contentStyle={{ fontFamily: 'Roboto, sans-serif' }}
                                 />
-                                <Legend />
+                                <Legend wrapperStyle={{ fontFamily: 'Roboto, sans-serif' }} />
                                 <Bar
                                     dataKey="sleepDuration"
                                     fill={colors.sleepDuration}
