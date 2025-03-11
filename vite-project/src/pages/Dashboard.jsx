@@ -304,7 +304,7 @@ const Dashboard = ({ apiUrl = "/api/user-data", authToken = null }) => {
     }
 
     return (
-        <div style={{ backgroundColor: colors.background }} className="p-5 min-h-screen relative">
+        <div style={{ backgroundColor: colors.background }} className="p-5 pt-16 min-h-screen relative">
             <BackgroundPattern />
 
             <div className={`relative z-10 transition-all duration-700 ${animateHeader ? 'opacity-100' : 'opacity-0'}`}>
