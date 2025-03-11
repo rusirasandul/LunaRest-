@@ -36,6 +36,7 @@ public class WebSecurityConfig {
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/registration/**").permitAll() // Allow public access to registration
+                        .requestMatchers("/api/profile/**").authenticated()
                         .requestMatchers("/api/v1/sleepdata/**").hasRole("ADMIN") // Only allow access to users with ADMIN role
                         .anyRequest().authenticated() // Protect other endpoints
                 )
