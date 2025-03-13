@@ -1,47 +1,49 @@
 "use client"
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { questions } from "../utils/data";
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from "framer-motion";
 
 const Quiz = () => {
     const [currentIndex, setCurrentIndex] = useState(0)
     const [answers, setAnswers] = useState({})
     const [quizComplete, setQuizComplete] = useState(false)
     const [validationError, setValidationError] = useState("")
-    const navigate = useNavigate(); // Initialize the navigate function
+    const [progress, setProgress] = useState(0)
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        setProgress((currentIndex / (questions.length - 1)) * 100);
+    }, [currentIndex]);
 
     // Handle radio button selection
     const handleAnswerChange = (option) => {
         setAnswers((prev) => ({ ...prev, [currentIndex]: option }))
-        setValidationError("") // Clear validation error when user selects an option
+        setValidationError("")
     }
 
     // Handle text input changes
-    // Added this function to handle text input for questions without options
     const handleTextInputChange = (e) => {
         setAnswers((prev) => ({ ...prev, [currentIndex]: e.target.value }))
-        setValidationError("") // Clear validation error when user types
+        setValidationError("")
     }
 
     // Validate current question before proceeding
     const validateCurrentQuestion = () => {
         const currentAnswer = answers[currentIndex]
         
-        // If no answer is provided
         if (currentAnswer === undefined || currentAnswer === "") {
             setValidationError("Please provide an answer before continuing")
             return false
         }
 
-        // Question-specific validations based on index
         switch (currentIndex) {
-            case 0: // Name validation
+            case 0:
                 if (currentAnswer.trim() === "") {
                     setValidationError("Please enter your name")
                     return false
                 }
-                // Check for numbers in the name
                 if (/\d/.test(currentAnswer)) {
                     setValidationError("Name cannot contain numbers")
                     return false
@@ -121,19 +123,17 @@ const Quiz = () => {
                 break
         }
         
-        // If we reach here, validation passed
         return true
     }
 
     const handleNext = () => {
-        // Validate current question before proceeding
         if (!validateCurrentQuestion()) {
             return
         }
         
         if (currentIndex < questions.length - 1) {
             setCurrentIndex(currentIndex + 1)
-            setValidationError("") // Clear validation error when moving to next question
+            setValidationError("")
         } else {
             setQuizComplete(true)
         }
@@ -145,7 +145,7 @@ const Quiz = () => {
         }
     }
 
-    // Navigation handlers for recommendation and journal pages
+    // Navigation handlers
     const goToRecommendations = () => {
         navigate('/Recommendation');
     }
@@ -154,9 +154,8 @@ const Quiz = () => {
         navigate('/Journal');
     }
 
-    // Helper function to get input type and placeholder based on question index
+    // Helper function to get input props
     const getInputProps = (index) => {
-        // Default props
         let props = {
             type: "text",
             placeholder: "Type your answer here",
@@ -165,7 +164,6 @@ const Quiz = () => {
             step: undefined
         }
         
-        // Customize based on question index
         switch (index) {
             case 2: // Age
                 props.type = "number"
@@ -219,141 +217,270 @@ const Quiz = () => {
         return props
     }
 
+    // Animation variants
+    const cardVariants = {
+        hidden: { opacity: 0, y: 50 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+        exit: { opacity: 0, y: -50, transition: { duration: 0.3 } }
+    };
+
+    const buttonVariants = {
+        hover: { scale: 1.05, transition: { duration: 0.2 } },
+        tap: { scale: 0.95, transition: { duration: 0.1 } }
+    };
+
+    const optionVariants = {
+        hidden: { opacity: 0, x: -20 },
+        visible: i => ({ 
+            opacity: 1, 
+            x: 0, 
+            transition: { 
+                delay: i * 0.1,
+                duration: 0.3
+            } 
+        }),
+        hover: { 
+            backgroundColor: "rgba(219, 234, 254, 0.8)", 
+            scale: 1.02,
+            transition: { duration: 0.2 } 
+        }
+    };
+
     return (
-        <div className="h-screen w-screen bg-[url(/background.jpg)] bg-cover bg-center">
+        <div className="h-screen w-screen bg-[url(/background.jpg)] bg-cover bg-center overflow-hidden">
+            {/* Animated stars background overlay */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/10 via-blue-950/30 to-black/50"></div>
+            
             {/* Centered Quiz Card */}
             <div className="relative flex items-center justify-center min-h-screen p-4">
-                <div className="bg-white/70 rounded-3xl p-6 w-[650px] min-h-[500px] flex flex-col items-center shadow-2xl border border-white/30">
+                <motion.div 
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                    className="bg-white/70 backdrop-blur-sm rounded-3xl p-8 w-[650px] min-h-[500px] flex flex-col items-center shadow-2xl border border-white/30"
+                >
                     {/* Logo */}
-                    <div className="w-12 h-12 self-start">
+                    <motion.div 
+                        initial={{ y: -20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.3, duration: 0.5 }}
+                        className="w-14 h-14 self-start"
+                    >
                         <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
-                    </div>
+                    </motion.div>
+
+                    {/* Progress bar */}
+                    <motion.div 
+                        initial={{ width: 0, opacity: 0 }}
+                        animate={{ width: "90%", opacity: 1 }}
+                        transition={{ delay: 0.4, duration: 0.5 }}
+                        className="w-[90%] h-2 bg-gray-200 rounded-full mt-4 overflow-hidden"
+                    >
+                        <motion.div 
+                            initial={{ width: 0 }}
+                            animate={{ width: `${progress}%` }}
+                            transition={{ duration: 0.5 }}
+                            className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full"
+                        />
+                    </motion.div>
+                    
+                    <motion.p 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 0.7 }}
+                        className="text-sm text-blue-900 mt-1"
+                    >
+                        Question {currentIndex + 1} of {questions.length}
+                    </motion.p>
 
                     {!quizComplete ? (
-                        <div className="w-full flex flex-col items-center text-center gap-10 mt-5">
-                            {/* Question */}
-                            <h3 className="text-2xl font-heading semibold text-blue-950">{questions[currentIndex].question}</h3>
-
-                            {/* Options or Text Input based on question type */}
-                            <div className="w-full flex flex-col items-center gap-3">
-                                {questions[currentIndex].options.length > 0 ? (
-                                    // Render radio buttons for questions with options
-                                    questions[currentIndex].options.map((option, idx) => (
-                                        <label
-                                            key={idx}
-                                            className="flex items-center gap-3 w-[80%] bg-white/90 p-3 rounded-md border border-gray-300 cursor-pointer hover:bg-blue-100 transition"
-                                        >
-                                            <input
-                                                type="radio"
-                                                name={`question-${currentIndex}`}
-                                                value={option}
-                                                checked={answers[currentIndex] === option}
-                                                onChange={() => handleAnswerChange(option)}
-                                                className="h-5 w-5"
-                                            />
-                                            <span className="text-lg">{option}</span>
-                                        </label>
-                                    ))
-                                ) : (
-                                    // Render text input for questions without options
-                                    <div className="w-[80%] relative mt-15 mb-19">
-                                        {/* Get input props based on question index */}
-                                        {(() => {
-                                            const inputProps = getInputProps(currentIndex)
-                                            return (
-                                                <input
-                                                    type={inputProps.type}
-                                                    value={answers[currentIndex] || ""}
-                                                    onChange={handleTextInputChange}
-                                                    placeholder={inputProps.placeholder}
-                                                    min={inputProps.min}
-                                                    max={inputProps.max}
-                                                    step={inputProps.step}
-                                                    className="w-full bg-transparent border-0 border-b-2 border-black p-2 text-lg focus:outline-none focus:border-blue-500"
-                                                />
-                                            )
-                                        })()}
-                                    </div>
-                                )}
-                            </div>
-                            
-                            {/* Validation Error Message */}
-                            {validationError && (
-                                <div className="text-red-600 font-medium -mt-5">
-                                    {validationError}
-                                </div>
-                            )}
-
-                            {/* Modified Navigation Buttons Section */}
-                            <div
-                                className={`w-full mt-6 ${
-                                    currentIndex === 0 ? "flex justify-center" : "flex justify-between"
-                                }`}
+                        <AnimatePresence mode="wait">
+                            <motion.div 
+                                key={currentIndex}
+                                variants={cardVariants}
+                                initial="hidden"
+                                animate="visible"
+                                exit="exit"
+                                className="w-full flex flex-col items-center text-center gap-8 mt-5"
                             >
-                                {currentIndex > 0 && (
-                                    <button
-                                        onClick={handlePrevious}
-                                        className="h-[50px] w-[40%] rounded-lg text-lg font-semibold bg-blue-950 text-white hover:bg-blue-900 shadow-md shadow-gray-600 transition-colors"
-                                    >
-                                        Previous
-                                    </button>
-                                )}
+                                {/* Question */}
+                                <motion.h3 
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.2, duration: 0.5 }}
+                                    className="text-2xl font-heading font-semibold text-blue-950 px-4"
+                                >
+                                    {questions[currentIndex].question}
+                                </motion.h3>
 
-                                <button
-                                    onClick={handleNext}
-                                    className={`h-[50px] rounded-lg text-lg font-semibold bg-blue-950 text-white hover:bg-blue-900 shadow-md shadow-gray-600 transition-colors ${
-                                        currentIndex === 0 ? "w-[60%]" : "w-[40%]"
+                                {/* Options or Text Input based on question type */}
+                                <div className="w-full flex flex-col items-center gap-3">
+                                    {questions[currentIndex].options.length > 0 ? (
+                                        // Render radio buttons for questions with options
+                                        questions[currentIndex].options.map((option, idx) => (
+                                            <motion.label
+                                                key={idx}
+                                                custom={idx}
+                                                variants={optionVariants}
+                                                initial="hidden"
+                                                animate="visible"
+                                                whileHover="hover"
+                                                className="flex items-center gap-3 w-[85%] bg-white/90 p-4 rounded-lg border border-gray-300 cursor-pointer shadow-sm transition-all"
+                                            >
+                                                <input
+                                                    type="radio"
+                                                    name={`question-${currentIndex}`}
+                                                    value={option}
+                                                    checked={answers[currentIndex] === option}
+                                                    onChange={() => handleAnswerChange(option)}
+                                                    className="h-5 w-5 accent-blue-600"
+                                                />
+                                                <span className="text-lg text-gray-800">{option}</span>
+                                            </motion.label>
+                                        ))
+                                    ) : (
+                                        // Render text input for questions without options
+                                        <motion.div 
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: 0.3, duration: 0.5 }}
+                                            className="w-[85%] relative mt-4 mb-6"
+                                        >
+                                            {(() => {
+                                                const inputProps = getInputProps(currentIndex)
+                                                return (
+                                                    <input
+                                                        type={inputProps.type}
+                                                        value={answers[currentIndex] || ""}
+                                                        onChange={handleTextInputChange}
+                                                        placeholder={inputProps.placeholder}
+                                                        min={inputProps.min}
+                                                        max={inputProps.max}
+                                                        step={inputProps.step}
+                                                        className="w-full bg-white/80 backdrop-blur-sm border-0 border-b-2 border-blue-500 p-3 text-lg rounded-t-lg focus:outline-none focus:border-blue-700 focus:ring-2 focus:ring-blue-200 transition-all shadow-sm"
+                                                    />
+                                                )
+                                            })()}
+                                        </motion.div>
+                                    )}
+                                </div>
+                                
+                                {/* Validation Error Message */}
+                                <AnimatePresence>
+                                    {validationError && (
+                                        <motion.div 
+                                            initial={{ opacity: 0, y: -10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: -10 }}
+                                            className="text-red-600 font-medium -mt-4 bg-red-50 px-4 py-2 rounded-lg border border-red-100"
+                                        >
+                                            {validationError}
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+
+                                {/* Navigation Buttons Section */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.4, duration: 0.5 }}
+                                    className={`w-full mt-4 ${
+                                        currentIndex === 0 ? "flex justify-center" : "flex justify-between"
                                     }`}
                                 >
-                                    {currentIndex === questions.length - 1 ? "Submit" : "Next"}
-                                </button>
-                            </div>
-                        </div>
+                                    {currentIndex > 0 && (
+                                        <motion.button
+                                            variants={buttonVariants}
+                                            whileHover="hover"
+                                            whileTap="tap"
+                                            onClick={handlePrevious}
+                                            className="h-[50px] w-[40%] rounded-lg text-lg font-semibold bg-gradient-to-r from-blue-800 to-blue-950 text-white shadow-lg shadow-blue-900/20 transition-all"
+                                        >
+                                            Previous
+                                        </motion.button>
+                                    )}
+
+                                    <motion.button
+                                        variants={buttonVariants}
+                                        whileHover="hover"
+                                        whileTap="tap"
+                                        onClick={handleNext}
+                                        className={`h-[50px] rounded-lg text-lg font-semibold bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg shadow-indigo-900/20 transition-all ${
+                                            currentIndex === 0 ? "w-[60%]" : "w-[40%]"
+                                        }`}
+                                    >
+                                        {currentIndex === questions.length - 1 ? "Submit" : "Next"}
+                                    </motion.button>
+                                </motion.div>
+                            </motion.div>
+                        </AnimatePresence>
                     ) : (
-                        <div className="text-center w-full">
-                            <h3 className="text-2xl font-bold text-blue-950 mb-4">Rest Assured!</h3>
-                            <h4 className="text-xl font-semibold text-gray-700">Your Sleep Insights Are In!</h4>
-                            <div className="flex justify-center gap-20 mb-8 mt-15">
-                                <div className="w-[40%]">
-                                    <input
-                                        type="text"
-                                        value={answers[currentIndex] || ""}
-                                        onChange={handleTextInputChange}
-                                        placeholder="Type your answer here"
-                                        className="w-full bg-black text-white border-0 rounded-md p-3 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400 mb-2"
-                                    />
-                                    <h3 className="text-2xl font-heading semibold text-blue-950">Sleep Score</h3>
-                                </div>
+                        <motion.div 
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.6 }}
+                            className="text-center w-full py-6"
+                        >
+                            <motion.div
+                                initial={{ y: -20, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{ delay: 0.2, duration: 0.5 }}
+                            >
+                                <h3 className="text-3xl font-bold text-blue-950 mb-2">Rest Assured!</h3>
+                                <h4 className="text-xl font-semibold text-gray-700 mb-8">Your Sleep Insights Are In!</h4>
+                            </motion.div>
+                            
+                            <div className="flex justify-center gap-8 mb-12">
+                                <motion.div 
+                                    initial={{ opacity: 0, x: -30 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: 0.4, duration: 0.5 }}
+                                    className="w-[40%] bg-gradient-to-br from-blue-900 to-indigo-900 p-6 rounded-2xl shadow-xl"
+                                >
+                                    <div className="text-5xl font-bold text-white mb-4">85</div>
+                                    <h3 className="text-xl font-heading font-semibold text-blue-100">Sleep Score</h3>
+                                </motion.div>
 
-                                <div className="w-[40%]">
-                                    <input
-                                        type="text"
-                                        value={answers[currentIndex] || ""}
-                                        onChange={handleTextInputChange}
-                                        placeholder="Type your answer here"
-                                        className="w-full bg-black text-white border-0 rounded-md p-3 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400 mb-2"
-                                    />
-                                    <h3 className="text-2xl font-heading semibold text-blue-950">Sleep Status</h3>
-                                </div>
+                                <motion.div 
+                                    initial={{ opacity: 0, x: 30 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: 0.5, duration: 0.5 }}
+                                    className="w-[40%] bg-gradient-to-br from-indigo-800 to-purple-900 p-6 rounded-2xl shadow-xl"
+                                >
+                                    <div className="text-2xl font-bold text-white mb-4">Good</div>
+                                    <h3 className="text-xl font-heading font-semibold text-blue-100">Sleep Status</h3>
+                                </motion.div>
                             </div>
 
-                            <div className="flex justify-center gap-24 mt-25">
-                                <button
+                            <div className="flex justify-center gap-6 mt-6">
+                                <motion.button
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.6, duration: 0.5 }}
+                                    variants={buttonVariants}
+                                    whileHover="hover"
+                                    whileTap="tap"
                                     onClick={goToRecommendations}
-                                    className="h-[50px] w-[40%] rounded-lg text-lg font-semibold bg-blue-950 text-white hover:bg-blue-900 shadow-md shadow-gray-600 transition-colors"
+                                    className="h-[50px] w-[45%] rounded-lg text-lg font-semibold bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-lg shadow-blue-900/20 transition-all"
                                 >
-                                    Recommendation log
-                                </button>
-                                <button
+                                    Recommendation Log
+                                </motion.button>
+                                
+                                <motion.button
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.7, duration: 0.5 }}
+                                    variants={buttonVariants}
+                                    whileHover="hover"
+                                    whileTap="tap"
                                     onClick={goToJournal}
-                                    className="h-[50px] w-[40%] rounded-lg text-lg font-semibold bg-blue-950 text-white hover:bg-blue-900 shadow-md shadow-gray-600 transition-colors"
+                                    className="h-[50px] w-[45%] rounded-lg text-lg font-semibold bg-gradient-to-r from-indigo-600 to-indigo-800 text-white shadow-lg shadow-indigo-900/20 transition-all"
                                 >
                                     Sleep Journal
-                                </button>
+                                </motion.button>
                             </div>
-                        </div>
+                        </motion.div>
                     )}
-                </div>
+                </motion.div>
             </div>
         </div>
     )
