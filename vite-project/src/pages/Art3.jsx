@@ -1,23 +1,123 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Play, Pause, SkipBack, SkipForward, Volume2, Shuffle, Repeat, Heart } from 'lucide-react';
 
 function Art3() {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
+  const [currentSong, setCurrentSong] = useState(null);
+  const [playlist, setPlaylist] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [accessToken, setAccessToken] = useState('');
+  const [playbackProgress, setPlaybackProgress] = useState(0);
 
-  // Sample song data
-  const currentSong = {
-    title: "Midnight Dreams",
-    artist: "Electronic Waves",
-    duration: 214, // duration in seconds
-    coverUrl: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=300&h=300&fit=crop"
-  };
+  // Fetch access token on mount
+  useEffect(() => {
+    const fetchToken = async () => {
+      try {
+        const response = await axios.post(
+          'https://accounts.spotify.com/api/token',
+          new URLSearchParams({
+            grant_type: 'client_credentials',
+            client_id: 'eb55132fff314b0ea6d834d68275e7e4',
+            client_secret: '9493d5abe7074482a5186bad79bdc96c',
+          }),
+          { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+        );
+        setAccessToken(response.data.access_token);
+      } catch (error) {
+        console.error('Error fetching access token:', error);
+      }
+    };
+
+    fetchToken();
+  }, []);
+
+  // Fetch playlist tracks
+  useEffect(() => {
+    const fetchPlaylist = async () => {
+      if (!accessToken) return;
+
+      try {
+        const response = await axios.get(
+          'https://api.spotify.com/v1/playlists/5FI8rn340FgsOB7B8Ic0DZ/tracks',
+          { headers: { Authorization: `Bearer ${accessToken}` } }
+        );
+
+        // Make sure the playlist is not empty
+        if (response.data.items.length > 0) {
+          setPlaylist(response.data.items);
+          const track = response.data.items[0].track;
+          setCurrentSong({
+            title: track.name,
+            artist: track.artists[0].name,
+            duration: track.duration_ms / 1000,
+            coverUrl: track.album.images[0].url,
+          });
+        } else {
+          console.log('No tracks found in the playlist');
+        }
+      } catch (error) {
+        console.error('Error fetching playlist:', error);
+      }
+    };
+
+    fetchPlaylist();
+  }, [accessToken]);
+
+  // Update playback progress if playing
+  useEffect(() => {
+    if (isPlaying && currentSong) {
+      const interval = setInterval(() => {
+        setPlaybackProgress((prev) => {
+          if (prev < currentSong.duration) {
+            return prev + 1;
+          }
+          clearInterval(interval);
+          return currentSong.duration;
+        });
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [isPlaying, currentSong]);
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
+
+  const handleNext = () => {
+    if (currentIndex < playlist.length - 1) {
+      const nextIndex = currentIndex + 1;
+      setCurrentIndex(nextIndex);
+      const track = playlist[nextIndex].track;
+      setCurrentSong({
+        title: track.name,
+        artist: track.artists[0].name,
+        duration: track.duration_ms / 1000,
+        coverUrl: track.album.images[0].url,
+      });
+      setPlaybackProgress(0); // Reset progress for new track
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentIndex > 0) {
+      const prevIndex = currentIndex - 1;
+      setCurrentIndex(prevIndex);
+      const track = playlist[prevIndex].track;
+      setCurrentSong({
+        title: track.name,
+        artist: track.artists[0].name,
+        duration: track.duration_ms / 1000,
+        coverUrl: track.album.images[0].url,
+      });
+      setPlaybackProgress(0); // Reset progress for new track
+    }
+  };
+
+  if (!currentSong) return <p>Loading playlist...</p>;
 
   return (
     <div className="min-h-screen bg-[#0a1128] text-white flex items-center justify-center p-8">
@@ -26,11 +126,7 @@ function Art3() {
         <div className="flex flex-col md:flex-row gap-8">
           {/* Album art */}
           <div className="w-full md:w-1/3">
-            <img 
-              src={currentSong.coverUrl} 
-              alt="Album Cover" 
-              className="w-full aspect-square rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300"
-            />
+            <img src={currentSong.coverUrl} alt="Album Cover" className="w-full aspect-square rounded-lg shadow-xl" />
           </div>
 
           {/* Player controls */}
@@ -43,47 +139,34 @@ function Art3() {
             {/* Progress bar */}
             <div className="mb-6">
               <div className="relative h-1 bg-blue-900 rounded-full">
-                <div 
+                <div
                   className="absolute h-full bg-blue-400 rounded-full"
-                  style={{ width: `${(currentTime / currentSong.duration) * 100}%` }}
+                  style={{ width: `${(playbackProgress / currentSong.duration) * 100}%` }}
                 ></div>
               </div>
-              <div className="flex justify-between text-sm mt-2 text-blue-300">
-                <span>{formatTime(currentTime)}</span>
+              <div className="flex justify-between text-xs text-blue-300 mt-2">
+                <span>{formatTime(playbackProgress)}</span>
                 <span>{formatTime(currentSong.duration)}</span>
               </div>
             </div>
 
             {/* Controls */}
-            <div className="flex flex-col gap-6">
-              <div className="flex items-center justify-center gap-8">
-                <button className="text-blue-300 hover:text-white transition-colors">
-                  <Shuffle size={20} />
-                </button>
-                <button className="text-blue-300 hover:text-white transition-colors">
-                  <SkipBack size={24} />
-                </button>
-                <button 
-                  className="bg-blue-400 p-4 rounded-full hover:bg-blue-500 transition-colors"
-                  onClick={() => setIsPlaying(!isPlaying)}
-                >
-                  {isPlaying ? <Pause size={24} /> : <Play size={24} />}
-                </button>
-                <button className="text-blue-300 hover:text-white transition-colors">
-                  <SkipForward size={24} />
-                </button>
-                <button className="text-blue-300 hover:text-white transition-colors">
-                  <Repeat size={20} />
-                </button>
-              </div>
-
-              {/* Volume control */}
-              <div className="flex items-center gap-4">
-                <Volume2 size={20} className="text-blue-300" />
-                <div className="flex-1 h-1 bg-blue-900 rounded-full">
-                  <div className="h-full w-3/4 bg-blue-400 rounded-full"></div>
-                </div>
-              </div>
+            <div className="flex items-center justify-center gap-8">
+              <button className="text-blue-300 hover:text-white" onClick={handlePrev}>
+                <SkipBack size={24} />
+              </button>
+              <button
+                className="bg-blue-400 p-4 rounded-full hover:bg-blue-500"
+                onClick={() => setIsPlaying(!isPlaying)}
+              >
+                {isPlaying ? <Pause size={24} /> : <Play size={24} />}
+              </button>
+              <button className="text-blue-300 hover:text-white" onClick={handleNext}>
+                <SkipForward size={24} />
+              </button>
+              <button className="text-blue-300 hover:text-white">
+                <Repeat size={20} />
+              </button>
             </div>
           </div>
         </div>
@@ -91,22 +174,19 @@ function Art3() {
         {/* Currently playing bar */}
         <div className="mt-8 pt-6 border-t border-blue-900 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <img 
-              src={currentSong.coverUrl} 
-              alt="Mini Cover" 
-              className="w-12 h-12 rounded"
-            />
+            <img src={currentSong.coverUrl} alt="Mini Cover" className="w-12 h-12 rounded" />
             <div>
               <p className="font-medium">{currentSong.title}</p>
               <p className="text-sm text-blue-300">{currentSong.artist}</p>
             </div>
           </div>
-          <button className="text-blue-300 hover:text-red-400 transition-colors">
+          <button className="text-blue-300 hover:text-red-400">
             <Heart size={20} />
           </button>
         </div>
       </div>
     </div>
+    
   );
 }
 
