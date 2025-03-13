@@ -4,13 +4,13 @@ import { Play, Pause, SkipBack, SkipForward, Volume2, Shuffle, Repeat, Heart, Mi
 function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
-  const [isMinimized, setIsMinimized] = useState(true);
-
+  const [isMinimized, setIsMinimized] = useState(false); // Start with full player by default
+  
   // For making the mini player draggable
   const playerRef = useRef(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
-  const startPosition = useRef({ x: 0, y: 0 });
+  const dragStartRef = useRef({ x: 0, y: 0 });
 
   // Sample song data
   const currentSong = {
@@ -37,43 +37,128 @@ function MusicPlayer() {
     return () => clearInterval(interval);
   }, [isPlaying, currentTime, currentSong.duration]);
 
-  // Handle dragging
+  // Handle drag start
   const handleMouseDown = (e) => {
-    // Prevent drag if the user is clicking on a button
-    if (e.target.tagName === 'BUTTON') return;
-    setIsDragging(true);
-    startPosition.current = { x: e.clientX - position.x, y: e.clientY - position.y };
-  };
-
-  const handleMouseMove = (e) => {
-    if (isDragging) {
-      setPosition({
-        x: e.clientX - startPosition.current.x,
-        y: e.clientY - startPosition.current.y
-      });
+    // Only proceed if the click wasn't on a button or other interactive element
+    if (e.target.tagName === 'BUTTON' || 
+        e.target.closest('button') !== null || 
+        e.target.tagName === 'INPUT') {
+      return;
     }
+    
+    setIsDragging(true);
+    // Store the initial position of the cursor relative to the player
+    dragStartRef.current = { 
+      x: e.clientX - position.x, 
+      y: e.clientY - position.y 
+    };
+    
+    // Prevent text selection during drag
+    e.preventDefault();
   };
 
+  // Handle drag move
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    
+    setPosition({
+      x: e.clientX - dragStartRef.current.x,
+      y: e.clientY - dragStartRef.current.y
+    });
+  };
+
+  // Handle drag end
   const handleMouseUp = () => {
     setIsDragging(false);
   };
 
-  // Add event listeners when dragging
+  // Setup and cleanup drag event listeners
   useEffect(() => {
     if (isDragging) {
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', handleMouseUp);
-    } else {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
     }
-
-    // Clean up the event listeners
+    
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
     };
   }, [isDragging]);
+
+  // For touch devices
+  const handleTouchStart = (e) => {
+    if (e.target.tagName === 'BUTTON' || 
+        e.target.closest('button') !== null || 
+        e.target.tagName === 'INPUT') {
+      return;
+    }
+    
+    const touch = e.touches[0];
+    setIsDragging(true);
+    dragStartRef.current = { 
+      x: touch.clientX - position.x, 
+      y: touch.clientY - position.y 
+    };
+    e.preventDefault();
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isDragging) return;
+    
+    const touch = e.touches[0];
+    setPosition({
+      x: touch.clientX - dragStartRef.current.x,
+      y: touch.clientY - dragStartRef.current.y
+    });
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+  };
+
+  // Add touch event listeners
+  useEffect(() => {
+    const playerElement = playerRef.current;
+    
+    if (playerElement && isMinimized) {
+      playerElement.addEventListener('touchstart', handleTouchStart, { passive: false });
+      document.addEventListener('touchmove', handleTouchMove, { passive: false });
+      document.addEventListener('touchend', handleTouchEnd);
+    }
+    
+    return () => {
+      if (playerElement) {
+        playerElement.removeEventListener('touchstart', handleTouchStart);
+        document.removeEventListener('touchmove', handleTouchMove);
+        document.removeEventListener('touchend', handleTouchEnd);
+      }
+    };
+  }, [isMinimized, isDragging]);
+
+  // Prevent mini player from going off-screen
+  useEffect(() => {
+    if (isMinimized && playerRef.current) {
+      const rect = playerRef.current.getBoundingClientRect();
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      
+      if (rect.right > viewportWidth) {
+        setPosition(prev => ({ ...prev, x: prev.x - (rect.right - viewportWidth) - 10 }));
+      }
+      
+      if (rect.bottom > viewportHeight) {
+        setPosition(prev => ({ ...prev, y: prev.y - (rect.bottom - viewportHeight) - 10 }));
+      }
+      
+      if (rect.left < 0) {
+        setPosition(prev => ({ ...prev, x: prev.x - rect.left + 10 }));
+      }
+      
+      if (rect.top < 0) {
+        setPosition(prev => ({ ...prev, y: prev.y - rect.top + 10 }));
+      }
+    }
+  }, [isMinimized, position]);
 
   // Full player component
   const FullPlayer = () => (
@@ -93,7 +178,7 @@ function MusicPlayer() {
         <div className="w-full md:w-2/3 flex flex-col justify-between">
           <div className="flex justify-between items-start">
             <div>
-              <h1 className="text-3xl font-bold mb-2">{currentSong.title}</h1>
+              <h1 className="text-3xl font-bold mb-2 text-white">{currentSong.title}</h1>
               <p className="text-lg text-blue-300 mb-8">{currentSong.artist}</p>
             </div>
             <button
@@ -157,7 +242,7 @@ function MusicPlayer() {
   // Mini player component
   const MiniPlayer = () => (
     <div
-      className="bg-blue-950 rounded-lg shadow-lg p-3 flex items-center gap-3 max-w-md transition-all duration-300"
+      className={`bg-blue-950 rounded-lg shadow-lg p-3 flex items-center gap-3 max-w-md transition-all duration-300 cursor-${isDragging ? 'grabbing' : 'grab'}`}
       style={{ transform: `translate(${position.x}px, ${position.y}px)` }}
       ref={playerRef}
       onMouseDown={handleMouseDown}
@@ -173,9 +258,10 @@ function MusicPlayer() {
         src={currentSong.coverUrl}
         alt="Mini Cover"
         className="w-12 h-12 rounded"
+        onMouseDown={(e) => e.stopPropagation()}
       />
 
-      <div className="flex-1 min-w-0">
+      <div className="flex-1 min-w-0" onMouseDown={(e) => e.stopPropagation()}>
         <p className="font-medium text-white truncate">{currentSong.title}</p>
         <p className="text-sm text-blue-300 truncate">{currentSong.artist}</p>
       </div>
@@ -192,14 +278,6 @@ function MusicPlayer() {
         </button>
         <button className="text-blue-300 hover:text-white transition-colors">
           <SkipForward size={18} />
-        </button>
-
-        {/* Close button to remove mini player */}
-        <button
-          onClick={() => setIsMinimized(false)}
-          className="text-red-500 hover:text-red-700 p-1"
-        >
-          <X size={16} />
         </button>
       </div>
     </div>
