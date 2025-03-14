@@ -3,12 +3,44 @@ import heroImg from "../assets/heroImg.png";
 import Art1 from './Art1';
 import Art2 from './Art2';
 import Art3 from './Art3';
-import { FaBrain, FaChartLine, FaBook, FaBullseye, FaChartBar, FaLeaf } from 'react-icons/fa';
-import { motion } from 'framer-motion';
+import { FaBrain, FaChartLine, FaBook, FaBullseye, FaChartBar, FaLeaf, FaStar, FaMoon } from 'react-icons/fa';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef, useEffect, useState } from 'react';
 //import SplashScreen from './SplashScreen'
 
 const Home = () => {
     const navigate = useNavigate();
+    const heroRef = useRef(null);
+    const { scrollYProgress } = useScroll({
+        target: heroRef,
+        offset: ["start start", "end start"]
+    });
+    
+    const y = useTransform(scrollYProgress, [0, 1], [0, 300]);
+    const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+    
+    // State for animated stars
+    const [stars, setStars] = useState([]);
+    
+    useEffect(() => {
+        // Generate random stars for the background
+        const generateStars = () => {
+            const newStars = [];
+            for (let i = 0; i < 20; i++) {
+                newStars.push({
+                    id: i,
+                    x: Math.random() * 100,
+                    y: Math.random() * 100,
+                    size: Math.random() * 0.5 + 0.2,
+                    opacity: Math.random() * 0.7 + 0.3,
+                    duration: Math.random() * 10 + 5
+                });
+            }
+            setStars(newStars);
+        };
+        
+        generateStars();
+    }, []);
 
     // Sleep statistics for the "Problem" section
     const sleepStats = [
@@ -80,95 +112,242 @@ const Home = () => {
         }
     };
 
+    // Add new animation variants
+    const textReveal = {
+        hidden: { opacity: 0, y: 50 },
+        visible: (i) => ({
+            opacity: 1,
+            y: 0,
+            transition: {
+                delay: 0.3 * i,
+                duration: 0.8,
+                ease: [0.215, 0.61, 0.355, 1]
+            }
+        })
+    };
+    
+    const floatingAnimation = {
+        y: [-10, 10],
+        transition: {
+            y: {
+                duration: 2,
+                repeat: Infinity,
+                repeatType: "reverse",
+                ease: "easeInOut"
+            }
+        }
+    };
+
     return (
         <>
         {/*<SplashScreen/>*/}
             {/* Hero Section */}
-            <section 
+            <motion.section 
+                ref={heroRef}
                 id='home' 
-                className='relative flex items-center w-full min-h-screen bg-center bg-no-repeat bg-cover pt-28 overflow-hidden'
+                className='relative flex items-center justify-center w-full min-h-screen bg-center bg-no-repeat bg-cover pt-28 overflow-hidden'
                 style={{
                     backgroundImage: `url(${heroImg})`
                 }}
             >
-                <div className='absolute inset-0 bg-gradient-to-b from-purple-900/30 to-black/70'></div>
-                <div className='container relative flex flex-col h-full p-8 mx-auto z-10'>
-                    {/* Main Content */}
-                    <motion.div 
-                        className='flex flex-col max-w-2xl gap-4 text-nav'
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8 }}
+                {/* Enhanced gradient overlay */}
+                <div className='absolute inset-0 bg-gradient-to-b from-purple-900/40 via-purple-900/50 to-black/80'></div>
+                
+                {/* Animated stars background */}
+                {stars.map((star) => (
+                    <motion.div
+                        key={star.id}
+                        className="absolute text-white/30"
+                        style={{
+                            left: `${star.x}%`,
+                            top: `${star.y}%`,
+                            fontSize: `${star.size}rem`,
+                        }}
+                        animate={{
+                            opacity: [star.opacity, star.opacity * 0.5, star.opacity],
+                            scale: [1, 1.2, 1]
+                        }}
+                        transition={{
+                            duration: star.duration,
+                            repeat: Infinity,
+                            repeatType: "reverse"
+                        }}
                     >
-                        <motion.h1 
-                            className='text-5xl font-bold md:text-6xl'
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.3, duration: 0.8 }}
-                        >
-                            Improve Your Sleep, Enhance Your Life
-                            <motion.span 
-                                className='block mt-2 text-transparent font-heading bg-gradient-to-r from-h2 to-nav bg-clip-text'
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.6, duration: 0.8 }}
-                            >
-                                Smart Sleep Tracking for Students
-                            </motion.span>
-                        </motion.h1>
-                        <motion.div 
-                            className='mt-4'
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.9, duration: 0.8 }}
-                        >
-                            <h2 className='text-3xl font-semibold md:text-4xl text-white/90'>
-                                We Help
-                            </h2>
-                            <h2 className='text-3xl font-semibold md:text-4xl text-white/90'>
-                                You Sleep Better!
-                            </h2>
-                        </motion.div>
-                        <motion.p 
-                            className='mt-4 text-lg text-white/80 max-w-xl'
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 1.2, duration: 0.8 }}
-                        >
-                            LunaRest uses AI to analyze your sleep patterns, provide personalized recommendations, 
-                            and help you achieve better sleep quality for improved academic performance.
-                        </motion.p>
-                        <motion.div 
-                            className='mt-8 flex gap-4'
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 1.5, duration: 0.8 }}
-                        >
-                            <motion.button 
-                                onClick={() => navigate('/login')}
-                                className='px-8 py-3 text-xl font-bold text-white transition-all bg-purple-900 rounded-lg hover:bg-purple-800 hover:shadow-lg hover:shadow-purple-500/30 hover:-translate-y-1'
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                            >
-                                GET STARTED
-                            </motion.button>
-                            <motion.button 
-                                onClick={() => document.getElementById('problem').scrollIntoView({ behavior: 'smooth' })}
-                                className='px-8 py-3 text-xl font-bold text-purple-900 transition-all bg-white/90 rounded-lg hover:bg-white hover:shadow-lg hover:shadow-white/30 hover:-translate-y-1'
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                            >
-                                LEARN MORE
-                            </motion.button>
-                        </motion.div>
+                        <FaStar />
                     </motion.div>
-                    
-                    {/* Floating elements for visual interest */}
-                    <div className="absolute top-1/4 right-10 w-20 h-20 rounded-full bg-purple-500/20 blur-xl animate-pulse"></div>
-                    <div className="absolute bottom-1/4 left-10 w-32 h-32 rounded-full bg-blue-500/20 blur-xl animate-pulse" style={{animationDelay: '1s'}}></div>
-                    <div className="absolute top-1/2 right-1/4 w-16 h-16 rounded-full bg-pink-500/20 blur-xl animate-pulse" style={{animationDelay: '2s'}}></div>
-                </div>
-            </section>
+                ))}
+                
+                {/* Animated moon */}
+                <motion.div 
+                    className="absolute top-20 right-20 text-purple-300/60 hidden md:block"
+                    style={{ fontSize: "5rem" }}
+                    animate={floatingAnimation}
+                >
+                    <FaMoon />
+                </motion.div>
+                
+                {/* Main content container with parallax effect */}
+                <motion.div 
+                    className='container relative flex flex-col items-center justify-center h-full p-8 mx-auto z-10'
+                    style={{ y, opacity }}
+                >
+                    {/* Main Content */}
+                    <div className="flex flex-col md:flex-row items-center justify-between w-full gap-8">
+                        <motion.div 
+                            className='flex flex-col max-w-2xl gap-6 text-nav'
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 1 }}
+                        >
+                            {/* Animated heading with text reveal */}
+                            <div className="overflow-hidden">
+                                <motion.h1 
+                                    className='text-5xl font-bold md:text-7xl leading-tight'
+                                    custom={1}
+                                    initial="hidden"
+                                    animate="visible"
+                                    variants={textReveal}
+                                >
+                                    <span className="block">Transform Your</span>
+                                    <motion.span 
+                                        className='block mt-2 text-transparent font-heading bg-gradient-to-r from-purple-400 via-pink-300 to-purple-200 bg-clip-text'
+                                        custom={2}
+                                        variants={textReveal}
+                                    >
+                                        Sleep Experience
+                                    </motion.span>
+                                </motion.h1>
+                            </div>
+                            
+                            <motion.p 
+                                className='mt-4 text-xl text-white/90 max-w-xl leading-relaxed'
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 1.2, duration: 0.8 }}
+                            >
+                                <span className="text-purple-300 font-semibold">LunaRest</span> uses advanced AI to analyze your sleep patterns and provide personalized recommendations for optimal rest and enhanced academic performance.
+                            </motion.p>
+                            
+                            <motion.div 
+                                className='mt-8 flex flex-wrap gap-4'
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 1.5, duration: 0.8 }}
+                            >
+                                <motion.button 
+                                    onClick={() => navigate('/login')}
+                                    className='px-8 py-4 text-xl font-bold text-white transition-all bg-gradient-to-r from-purple-700 to-purple-900 rounded-full hover:shadow-lg hover:shadow-purple-500/30 hover:-translate-y-1'
+                                    whileHover={{ 
+                                        scale: 1.05,
+                                        boxShadow: "0 0 20px rgba(168, 85, 247, 0.5)"
+                                    }}
+                                    whileTap={{ scale: 0.95 }}
+                                >
+                                    GET STARTED
+                                </motion.button>
+                                <motion.button 
+                                    onClick={() => document.getElementById('problem').scrollIntoView({ behavior: 'smooth' })}
+                                    className='px-8 py-4 text-xl font-bold text-purple-900 transition-all bg-white/90 backdrop-blur-sm rounded-full hover:bg-white hover:shadow-lg hover:shadow-white/30 hover:-translate-y-1'
+                                    whileHover={{ 
+                                        scale: 1.05,
+                                        boxShadow: "0 0 20px rgba(255, 255, 255, 0.5)"
+                                    }}
+                                    whileTap={{ scale: 0.95 }}
+                                >
+                                    LEARN MORE
+                                </motion.button>
+                            </motion.div>
+                        </motion.div>
+                        
+                        {/* Animated decorative element */}
+                        <motion.div 
+                            className="hidden md:block relative w-96 h-96"
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.5, duration: 1 }}
+                        >
+                            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-md border border-white/10"></div>
+                            <motion.div 
+                                className="absolute inset-4 rounded-full bg-gradient-to-br from-purple-600/20 to-pink-600/20 backdrop-blur-md border border-white/10"
+                                animate={{ rotate: 360 }}
+                                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                            ></motion.div>
+                            <motion.div 
+                                className="absolute inset-8 rounded-full bg-gradient-to-br from-purple-700/20 to-pink-700/20 backdrop-blur-md border border-white/10"
+                                animate={{ rotate: -360 }}
+                                transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                            ></motion.div>
+                            <motion.div 
+                                className="absolute inset-0 flex items-center justify-center"
+                                animate={floatingAnimation}
+                            >
+                                <span className="text-6xl text-white/80">🌙</span>
+                            </motion.div>
+                        </motion.div>
+                    </div>
+                </motion.div>
+                
+                {/* Enhanced floating elements */}
+                <motion.div 
+                    className="absolute top-1/4 right-10 w-32 h-32 rounded-full bg-purple-500/20 blur-xl"
+                    animate={{ 
+                        scale: [1, 1.2, 1],
+                        opacity: [0.2, 0.3, 0.2]
+                    }}
+                    transition={{ 
+                        duration: 4,
+                        repeat: Infinity,
+                        repeatType: "reverse"
+                    }}
+                ></motion.div>
+                <motion.div 
+                    className="absolute bottom-1/4 left-10 w-40 h-40 rounded-full bg-blue-500/20 blur-xl"
+                    animate={{ 
+                        scale: [1, 1.3, 1],
+                        opacity: [0.2, 0.4, 0.2]
+                    }}
+                    transition={{ 
+                        duration: 5,
+                        repeat: Infinity,
+                        repeatType: "reverse",
+                        delay: 1
+                    }}
+                ></motion.div>
+                <motion.div 
+                    className="absolute top-1/2 right-1/4 w-24 h-24 rounded-full bg-pink-500/20 blur-xl"
+                    animate={{ 
+                        scale: [1, 1.4, 1],
+                        opacity: [0.2, 0.3, 0.2]
+                    }}
+                    transition={{ 
+                        duration: 6,
+                        repeat: Infinity,
+                        repeatType: "reverse",
+                        delay: 2
+                    }}
+                ></motion.div>
+                
+                {/* Scroll indicator */}
+                <motion.div 
+                    className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 2, duration: 1 }}
+                >
+                    <p className="text-white/70 mb-2 text-sm">Scroll to explore</p>
+                    <motion.div 
+                        className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center p-1"
+                        animate={{ y: [0, 10, 0] }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                    >
+                        <motion.div 
+                            className="w-1 h-2 bg-white/70 rounded-full"
+                            animate={{ y: [0, 6, 0] }}
+                            transition={{ duration: 1.5, repeat: Infinity }}
+                        />
+                    </motion.div>
+                </motion.div>
+            </motion.section>
 
             {/* Problem Section */}
             <section id="problem" className="w-full py-20 text-white bg-heroBg relative overflow-hidden">
