@@ -1,123 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Play, Pause, SkipBack, SkipForward, Volume2, Shuffle, Repeat, Heart } from 'lucide-react';
+import React from 'react';
+import { Play, Pause, SkipBack, SkipForward, Repeat, Heart } from 'lucide-react';
+import { useMusicPlayer } from './MusicPlayerContext';
 
 function Art3() {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentSong, setCurrentSong] = useState(null);
-  const [playlist, setPlaylist] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [accessToken, setAccessToken] = useState('');
-  const [playbackProgress, setPlaybackProgress] = useState(0);
+  const {
+    isPlaying,
+    setIsPlaying,
+    currentSong,
+    handleNext,
+    handlePrev,
+    playbackProgress,
+  } = useMusicPlayer();
 
-  // Fetch access token on mount
-  useEffect(() => {
-    const fetchToken = async () => {
-      try {
-        const response = await axios.post(
-          'https://accounts.spotify.com/api/token',
-          new URLSearchParams({
-            grant_type: 'client_credentials',
-            client_id: 'eb55132fff314b0ea6d834d68275e7e4',
-            client_secret: '9493d5abe7074482a5186bad79bdc96c',
-          }),
-          { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
-        );
-        setAccessToken(response.data.access_token);
-      } catch (error) {
-        console.error('Error fetching access token:', error);
-      }
-    };
-
-    fetchToken();
-  }, []);
-
-  // Fetch playlist tracks
-  useEffect(() => {
-    const fetchPlaylist = async () => {
-      if (!accessToken) return;
-
-      try {
-        const response = await axios.get(
-          'https://api.spotify.com/v1/playlists/5FI8rn340FgsOB7B8Ic0DZ/tracks',
-          { headers: { Authorization: `Bearer ${accessToken}` } }
-        );
-
-        // Make sure the playlist is not empty
-        if (response.data.items.length > 0) {
-          setPlaylist(response.data.items);
-          const track = response.data.items[0].track;
-          setCurrentSong({
-            title: track.name,
-            artist: track.artists[0].name,
-            duration: track.duration_ms / 1000,
-            coverUrl: track.album.images[0].url,
-          });
-        } else {
-          console.log('No tracks found in the playlist');
-        }
-      } catch (error) {
-        console.error('Error fetching playlist:', error);
-      }
-    };
-
-    fetchPlaylist();
-  }, [accessToken]);
-
-  // Update playback progress if playing
-  useEffect(() => {
-    if (isPlaying && currentSong) {
-      const interval = setInterval(() => {
-        setPlaybackProgress((prev) => {
-          if (prev < currentSong.duration) {
-            return prev + 1;
-          }
-          clearInterval(interval);
-          return currentSong.duration;
-        });
-      }, 1000);
-
-      return () => clearInterval(interval);
-    }
-  }, [isPlaying, currentSong]);
+  if (!currentSong) return <p>Loading playlist...</p>;
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
-
-  const handleNext = () => {
-    if (currentIndex < playlist.length - 1) {
-      const nextIndex = currentIndex + 1;
-      setCurrentIndex(nextIndex);
-      const track = playlist[nextIndex].track;
-      setCurrentSong({
-        title: track.name,
-        artist: track.artists[0].name,
-        duration: track.duration_ms / 1000,
-        coverUrl: track.album.images[0].url,
-      });
-      setPlaybackProgress(0); // Reset progress for new track
-    }
-  };
-
-  const handlePrev = () => {
-    if (currentIndex > 0) {
-      const prevIndex = currentIndex - 1;
-      setCurrentIndex(prevIndex);
-      const track = playlist[prevIndex].track;
-      setCurrentSong({
-        title: track.name,
-        artist: track.artists[0].name,
-        duration: track.duration_ms / 1000,
-        coverUrl: track.album.images[0].url,
-      });
-      setPlaybackProgress(0); // Reset progress for new track
-    }
-  };
-
-  if (!currentSong) return <p>Loading playlist...</p>;
 
   return (
     <div className="min-h-screen bg-[#0a1128] text-white flex items-center justify-center p-8">
@@ -126,7 +27,11 @@ function Art3() {
         <div className="flex flex-col md:flex-row gap-8">
           {/* Album art */}
           <div className="w-full md:w-1/3">
-            <img src={currentSong.coverUrl} alt="Album Cover" className="w-full aspect-square rounded-lg shadow-xl" />
+            <img
+              src={currentSong.coverUrl}
+              alt="Album Cover"
+              className="w-full aspect-square rounded-lg shadow-xl"
+            />
           </div>
 
           {/* Player controls */}
@@ -186,7 +91,6 @@ function Art3() {
         </div>
       </div>
     </div>
-    
   );
 }
 
