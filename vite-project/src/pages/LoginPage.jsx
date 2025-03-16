@@ -1,10 +1,63 @@
+import { useState, useEffect } from 'react';
 import { Mail, Lock } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-
+import { useNavigate, useLocation } from 'react-router-dom';
+import { login } from '../services/authService';
 import log1 from "../assets/log1.jpg";
 
 const LoginPage = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const [formData, setFormData] = useState({
+        email: '',
+        password: ''
+    });
+    const [error, setError] = useState('');
+    const [message, setMessage] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        // Check if there's a message from registration
+        if (location.state?.message) {
+            setMessage(location.state.message);
+        }
+    }, [location]);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+        setLoading(true);
+
+        // Basic validation
+        if (!formData.email || !formData.password) {
+            setError('Email and password are required');
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const result = await login(formData.email, formData.password);
+
+            if (result.success) {
+                // Login successful, redirect to dashboard or home
+                navigate('/dashboard');
+            } else {
+                setError(result.error);
+            }
+        } catch (err) {
+            setError('An unexpected error occurred. Please try again later.');
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     // Function to handle navigation to signup page
     const handleSignupRedirect = () => {
@@ -43,7 +96,19 @@ const LoginPage = () => {
                         <p className="text-gray-500 mt-2 sm:mt-3 text-base sm:text-1lg">Please enter your details</p>
                     </div>
 
-                    <form className="space-y-6 sm:space-y-8 flex flex-col items-center">
+                    {message && (
+                        <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
+                            {message}
+                        </div>
+                    )}
+
+                    {error && (
+                        <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                            {error}
+                        </div>
+                    )}
+
+                    <form className="space-y-6 sm:space-y-8 flex flex-col items-center" onSubmit={handleSubmit}>
                         <div className="space-y-2 sm:space-y-3 w-full sm:w-3/4">
                             <label className="block text-sm sm:text-base font-medium text-gray-700">
                                 Email Address
@@ -54,9 +119,12 @@ const LoginPage = () => {
                                 </div>
                                 <input
                                     type="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
                                     className="block w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3
-                            text-base sm:text-lg border border-gray-300 rounded-lg
-                            focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+                                    text-base sm:text-lg border border-gray-300 rounded-lg
+                                    focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
                                     placeholder="Enter your email"
                                 />
                             </div>
@@ -72,9 +140,12 @@ const LoginPage = () => {
                                 </div>
                                 <input
                                     type="password"
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleChange}
                                     className="block w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3
-                            text-base sm:text-lg border border-gray-300 rounded-lg
-                            focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+                                    text-base sm:text-lg border border-gray-300 rounded-lg
+                                    focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
                                     placeholder="Enter your password"
                                 />
                             </div>
@@ -82,11 +153,11 @@ const LoginPage = () => {
 
                         <button
                             type="submit"
-                            className="w-full sm:w-3/4 bg-[#172960] text-white
-                        py-2.5 sm:py-3 px-4 text-base sm:text-lg rounded-lg
-                        hover:bg-blue-700 transition duration-200"
+                            disabled={loading}
+                            className={`w-full sm:w-3/4 ${loading ? 'bg-gray-400' : 'bg-[#172960] hover:bg-blue-700'} 
+                            text-white py-2.5 sm:py-3 px-4 text-base sm:text-lg rounded-lg transition duration-200`}
                         >
-                            Log In
+                            {loading ? 'Logging in...' : 'Log In'}
                         </button>
 
                         <div className="text-center w-full sm:w-3/4">
@@ -96,9 +167,9 @@ const LoginPage = () => {
                                 type="button"
                                 onClick={handleSignupRedirect}
                                 className="mt-3 sm:mt-4 w-full flex items-center justify-center
-                        gap-2 sm:gap-3 border border-gray-300 rounded-lg
-                        py-2.5 sm:py-3 px-4 hover:bg-gray-50
-                        transition duration-200 bg-white text-base sm:text-lg"
+                                gap-2 sm:gap-3 border border-gray-300 rounded-lg
+                                py-2.5 sm:py-3 px-4 hover:bg-gray-50
+                                transition duration-200 bg-white text-base sm:text-lg"
                             >
                                 <Mail className="h-5 w-5 sm:h-6 sm:w-6 text-gray-600" />
                                 Sign up with Email
