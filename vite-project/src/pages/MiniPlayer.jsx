@@ -2,6 +2,7 @@ import React from 'react';
 import { Play, Pause, SkipBack, SkipForward, X } from 'lucide-react';
 import { useMusicPlayer } from '../pages/MusicPlayerContext'; // Ensure this path is correct
 
+
 function MiniPlayer() {
   const {
     isPlaying,
