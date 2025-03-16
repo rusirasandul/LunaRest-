@@ -12,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +26,17 @@ public class AuthController {
     private final AppUserService appUserService;
     private final RegistrationService registrationService;
     private final JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
+    public AuthController(AuthenticationManager authenticationManager,
+                          AppUserService appUserService,
+                          RegistrationService registrationService,
+                          JwtTokenProvider jwtTokenProvider) {
+        this.authenticationManager = authenticationManager;
+        this.appUserService = appUserService;
+        this.registrationService = registrationService;
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody RegistrationRequest request) {
