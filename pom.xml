@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.lunarest</groupId>
-	<artifactId>logginResgister</artifactId>
+	<artifactId>loginRegister</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>logginResgister</name>
+	<name>loginRegister</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
@@ -62,14 +62,10 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
+		<dependency>z
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<!-- Hibernate Validator -->
 		<dependency>
@@ -78,17 +74,17 @@
 			<version>6.2.0.Final</version>
 		</dependency>
 
-			<!-- Spring Web for REST controllers -->
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-web</artifactId>
-			</dependency>
+		<!-- Spring Web for REST controllers -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
 
-			<!-- Spring Security for OAuth 2.0 -->
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-oauth2-client</artifactId>
-			</dependency>
+		<!-- Spring Security for OAuth 2.0 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-oauth2-client</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>com.google.api-client</groupId>
@@ -98,10 +94,11 @@
 
 		<!-- Google Fit API -->
 		<dependency>
-			<groupId>com.google.apis</groupId>
-			<artifactId>google-api-services-fitness</artifactId>
-			<version>v1-rev20231102-1.32.1</version> <!-- Check for the latest version -->
-		</dependency>
+        <groupId>com.google.apis</groupId>
+        <artifactId>google-api-services-fitness</artifactId>
+        <version>v1-rev20231107-2.0.0</version>
+    	</dependency>
+
 
 		<!-- Jackson for JSON processing -->
 		<dependency>
@@ -110,14 +107,28 @@
 			<version>2.15.2</version> <!-- Use a compatible version -->
 		</dependency>
 
+		 <dependency>
+        <groupId>com.google.http-client</groupId>
+        <artifactId>google-http-client-jackson2</artifactId>
+        <version>1.43.3</version>
+    </dependency>
+    <dependency>
+        <groupId>com.google.api-client</groupId>
+        <artifactId>google-api-client-jackson2</artifactId>
+        <version>2.2.0</version>
+    </dependency>
+
+	<dependency>
+    	<groupId>com.google.auth</groupId>
+    	<artifactId>google-auth-library-oauth2-http</artifactId>
+    	<version>1.22.0</version>
+	</dependency>
+
 		<!-- Spring Security OAuth2 Client -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-oauth2-client</artifactId>
 		</dependency>
-
-
-
 
 		<!-- Java Bean Validation API -->
 		<dependency>
@@ -131,8 +142,6 @@
 			<version>1.18.22</version>
 			<scope>provided</scope>
 		</dependency>
-
-
 
 	</dependencies>
 
@@ -164,5 +173,12 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<repositories>
+		<repository>
+			<id>google-maven-central</id>
+			<url>https://maven.google.com/</url>
+		</repository>
+	</repositories>
 
 </project>
