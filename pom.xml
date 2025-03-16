@@ -94,11 +94,10 @@
 
 		<!-- Google Fit API -->
 		<dependency>
-        <groupId>com.google.apis</groupId>
-        <artifactId>google-api-services-fitness</artifactId>
-        <version>v1-rev20231107-2.0.0</version>
-    	</dependency>
-
+			<groupId>com.google.apis</groupId>
+			<artifactId>google-api-services-fitness</artifactId>
+			<version>v1-rev20231107-2.0.0</version>
+		</dependency>
 
 		<!-- Jackson for JSON processing -->
 		<dependency>
@@ -108,21 +107,21 @@
 		</dependency>
 
 		 <dependency>
-        <groupId>com.google.http-client</groupId>
-        <artifactId>google-http-client-jackson2</artifactId>
-        <version>1.43.3</version>
-    </dependency>
-    <dependency>
-        <groupId>com.google.api-client</groupId>
-        <artifactId>google-api-client-jackson2</artifactId>
-        <version>2.2.0</version>
-    </dependency>
+			<groupId>com.google.http-client</groupId>
+			<artifactId>google-http-client-jackson2</artifactId>
+			<version>1.43.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.api-client</groupId>
+			<artifactId>google-api-client-jackson2</artifactId>
+			<version>2.2.0</version>
+		</dependency>
 
-	<dependency>
-    	<groupId>com.google.auth</groupId>
-    	<artifactId>google-auth-library-oauth2-http</artifactId>
-    	<version>1.22.0</version>
-	</dependency>
+		<dependency>
+			<groupId>com.google.auth</groupId>
+			<artifactId>google-auth-library-oauth2-http</artifactId>
+			<version>1.22.0</version>
+		</dependency>
 
 		<!-- Spring Security OAuth2 Client -->
 		<dependency>
