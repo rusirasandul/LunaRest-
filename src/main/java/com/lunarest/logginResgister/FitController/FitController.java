@@ -20,7 +20,6 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.fitness.Fitness;
-import com.google.api.services.fitness.model.ListSessionResponse;
 
 
 @RestController
