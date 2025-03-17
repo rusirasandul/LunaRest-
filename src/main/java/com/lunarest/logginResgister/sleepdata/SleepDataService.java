@@ -179,4 +179,43 @@ public class SleepDataService {
                 "averagePhysicalActivityLevel", sleepRecords.stream().mapToInt(SleepData::getPhysicalActivityLevel).average().orElse(0.0)
         );
     }
+
+    // New method to handle requests from frontend
+    public SleepData addSleepDataFromRequest(AppUser user, SleepDataRequest request) {
+        // Prevent duplicate entries for the same day
+        LocalDate today = LocalDate.now();
+        Optional<SleepData> existingData = sleepDataRepository.findByUserAndDate(user, today);
+        if (existingData.isPresent()) {
+            throw new IllegalStateException("Sleep data for today already exists.");
+        }
+
+        // Parse time strings to LocalTime
+        LocalTime weekdaysSleepStart = LocalTime.parse(request.getWeekdaysSleepStart());
+        LocalTime weekdaysSleepEnd = LocalTime.parse(request.getWeekdaysSleepEnd());
+        LocalTime weekendsSleepStart = LocalTime.parse(request.getWeekendsSleepStart());
+        LocalTime weekendsSleepEnd = LocalTime.parse(request.getWeekendsSleepEnd());
+
+        // Create a new sleep data entry
+        SleepData sleepData = new SleepData(
+                user, today, request.getName(), request.getAge(), request.getGender(), request.getUniversityYear(),
+                request.getWeekdaysSleepDuration(), request.getWeekendsSleepDuration(),
+                request.getWeekdaysStudyHours(), request.getWeekendsStudyHours(),
+                request.getWeekdaysScreenTime(), request.getWeekendsScreenTime(),
+                request.getCaffeineIntake(), request.getPhysicalActivityLevel(),
+                weekdaysSleepStart, weekdaysSleepEnd, weekendsSleepStart, weekendsSleepEnd
+        );
+
+        sleepDataRepository.save(sleepData);
+
+        // Call ML Model for Sleep Quality Prediction
+        int predictedSleepQuality = getSleepQualityPrediction(sleepData);
+        sleepData.setSleepQuality(predictedSleepQuality);
+
+        // Generate recommendation based on sleep data
+        String recommendation = recommendationService.generateRecommendation(sleepData);
+        sleepData.setRecommendation(recommendation);
+
+        // Save updated sleep data with prediction and recommendation
+        return sleepDataRepository.save(sleepData);
+    }
 }

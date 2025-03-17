@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/v1/sleepdata")
@@ -55,6 +57,30 @@ public class SleepDataController {
         }
     }
 
+    @PostMapping("/add")
+    public ResponseEntity<?> addSleepData(
+            @AuthenticationPrincipal AppUser user,
+            @RequestBody SleepDataRequest request) {
+        try {
+            // Call service to add sleep data
+            SleepData savedData = sleepDataService.addSleepDataFromRequest(user, request);
+            
+            // Create response with sleep quality and recommendation
+            Map<String, Object> response = new HashMap<>();
+            response.put("sleepQuality", savedData.getSleepQuality());
+            response.put("recommendation", savedData.getRecommendation());
+            response.put("message", "Sleep data added successfully");
+            
+            return ResponseEntity.ok(response);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", e.getMessage()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("message", "An error occurred while processing your request"));
+        }
+    }
 
     @GetMapping
     public List<SleepData> getSleepData(@AuthenticationPrincipal AppUser user) {
