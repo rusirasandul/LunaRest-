@@ -316,7 +316,11 @@ const Quiz = () => {
     };
 
     return (
-        <div className="h-screen w-screen bg-[url(/background.jpg)] bg-cover bg-center overflow-hidden">
+        <div className="h-screen w-screen bg-[url(/background.jpg)] bg-cover bg-center overflow-hidden font-[Roboto]">
+
+            {/* Add Roboto font link in the component */}
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+
             {/* Animated stars background overlay */}
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/10 via-blue-950/30 to-black/50"></div>
             

@@ -16,9 +16,9 @@ const art1 = () => {
                             Automatic Sleep Tracking
                         </h3>
                         <p className="mt-4 leading-relaxed text-gray-200">
-                            LunaRest's sleep tracking feature allows you to effortlessly track your sleep each 
+                            LunaRest&#39;s sleep tracking feature allows you to effortlessly track your sleep each
                             night without having to manually start tracking each night. Once enabled, our 
-                            technology uses your device's motion data to monitor your sleep and provide you 
+                            technology uses your device&#39;s motion data to monitor your sleep and provide you
                             with detailed insights into your sleep quality.
                         </p>
                         <p className="mt-4 leading-relaxed text-gray-200">
