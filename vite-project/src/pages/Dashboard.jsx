@@ -313,7 +313,7 @@ const Dashboard = ({ apiUrl = "/api/user-data", authToken = null }) => {
         <div style={{ backgroundColor: colors.background, fontFamily: 'Roboto, sans-serif' }} className="p-5 pt-16 min-h-screen relative">
             <BackgroundPattern />
 
-            <div className={`relative z-10 transition-all duration-700 ${animateHeader ? 'opacity-100' : 'opacity-0'}`}>
+            <div className={`relative z-10 transition-all duration-700 ${animateHeader ? 'opacity-100' : 'opacity-0'} max-w-4xl mx-auto`}>
                 <div className="flex flex-col items-center mb-8">
                     <h2 className="text-3xl font-bold text-center text-white mb-2">Sleep & Lifestyle Analytics</h2>
                     <div className="h-1 w-40 bg-gradient-to-r from-purple-500 to-indigo-500 rounded"></div>
@@ -393,46 +393,48 @@ const Dashboard = ({ apiUrl = "/api/user-data", authToken = null }) => {
                     toggleOpen={() => setShowSleepQuality(!showSleepQuality)}
                 >
                     {displayData.length > 0 ? (
-                        <ResponsiveContainer width="100%" height={300}>
-                            <AreaChart data={displayData}>
-                                <defs>
-                                    <linearGradient id="colorSleep" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="5%" stopColor={colors.accent1} stopOpacity={0.8}/>
-                                        <stop offset="95%" stopColor={colors.accent1} stopOpacity={0}/>
-                                    </linearGradient>
-                                </defs>
-                                <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
-                                <XAxis
-                                    dataKey="date"
-                                    stroke={colors.text}
-                                    tickFormatter={formatDate}
-                                    style={{ fontFamily: 'Roboto, sans-serif' }}
-                                />
-                                <YAxis
-                                    label={{
-                                        value: 'Sleep Quality (1-10)',
-                                        angle: -90,
-                                        position: 'insideLeft',
-                                        style: { fill: colors.text, fontFamily: 'Roboto, sans-serif' }
-                                    }}
-                                    domain={[0, 10]}
-                                    stroke={colors.text}
-                                    style={{ fontFamily: 'Roboto, sans-serif' }}
-                                />
-                                <Tooltip content={<CustomTooltip />} />
-                                <Legend wrapperStyle={{ fontFamily: 'Roboto, sans-serif' }} />
-                                <Area
-                                    type="monotone"
-                                    dataKey="sleepQuality"
-                                    stroke={colors.accent1}
-                                    strokeWidth={3}
-                                    fillOpacity={1}
-                                    fill="url(#colorSleep)"
-                                    name="Sleep Quality"
-                                    activeDot={{ r: 8, fill: colors.accent2 }}
-                                />
-                            </AreaChart>
-                        </ResponsiveContainer>
+                        <div className="mx-auto max-w-3xl">
+                            <ResponsiveContainer width="100%" height={300}>
+                                <AreaChart data={displayData}>
+                                    <defs>
+                                        <linearGradient id="colorSleep" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="5%" stopColor={colors.accent1} stopOpacity={0.8}/>
+                                            <stop offset="95%" stopColor={colors.accent1} stopOpacity={0}/>
+                                        </linearGradient>
+                                    </defs>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
+                                    <XAxis
+                                        dataKey="date"
+                                        stroke={colors.text}
+                                        tickFormatter={formatDate}
+                                        style={{ fontFamily: 'Roboto, sans-serif' }}
+                                    />
+                                    <YAxis
+                                        label={{
+                                            value: 'Sleep Quality (1-10)',
+                                            angle: -90,
+                                            position: 'insideLeft',
+                                            style: { fill: colors.text, fontFamily: 'Roboto, sans-serif' }
+                                        }}
+                                        domain={[0, 10]}
+                                        stroke={colors.text}
+                                        style={{ fontFamily: 'Roboto, sans-serif' }}
+                                    />
+                                    <Tooltip content={<CustomTooltip />} />
+                                    <Legend wrapperStyle={{ fontFamily: 'Roboto, sans-serif' }} />
+                                    <Area
+                                        type="monotone"
+                                        dataKey="sleepQuality"
+                                        stroke={colors.accent1}
+                                        strokeWidth={3}
+                                        fillOpacity={1}
+                                        fill="url(#colorSleep)"
+                                        name="Sleep Quality"
+                                        activeDot={{ r: 8, fill: colors.accent2 }}
+                                    />
+                                </AreaChart>
+                            </ResponsiveContainer>
+                        </div>
                     ) : (
                         <div className="text-center p-6 text-gray-500">No sleep quality data available for this period</div>
                     )}
@@ -445,7 +447,7 @@ const Dashboard = ({ apiUrl = "/api/user-data", authToken = null }) => {
                     isOpen={showSleepFactors}
                     toggleOpen={() => setShowSleepFactors(!showSleepFactors)}
                 >
-                    <div className="mb-4 flex flex-wrap gap-3">
+                    <div className="mb-4 flex flex-wrap gap-3 justify-center">
                         <div className="flex items-center">
                             <div className="w-3 h-3 rounded-full bg-indigo-500 mr-1"></div>
                             <span className="text-xs">Sleep Duration</span>
@@ -468,52 +470,54 @@ const Dashboard = ({ apiUrl = "/api/user-data", authToken = null }) => {
                         </div>
                     </div>
                     {displayData.length > 0 ? (
-                        <ResponsiveContainer width="100%" height={300}>
-                            <BarChart data={displayData}>
-                                <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
-                                <XAxis
-                                    dataKey="date"
-                                    stroke={colors.text}
-                                    tickFormatter={formatDate}
-                                    style={{ fontFamily: 'Roboto, sans-serif' }}
-                                />
-                                <YAxis
-                                    stroke={colors.text}
-                                    style={{ fontFamily: 'Roboto, sans-serif' }}
-                                />
-                                <Tooltip
-                                    formatter={(value, name) => [value, name]}
-                                    labelFormatter={formatDate}
-                                    contentStyle={{ fontFamily: 'Roboto, sans-serif' }}
-                                />
-                                <Legend wrapperStyle={{ fontFamily: 'Roboto, sans-serif' }} />
-                                <Bar
-                                    dataKey="sleepDuration"
-                                    fill={colors.sleepDuration}
-                                    name="Sleep Duration (hrs)"
-                                />
-                                <Bar
-                                    dataKey="caffeineIntake"
-                                    fill={colors.caffeineIntake}
-                                    name="Caffeine Intake (cups)"
-                                />
-                                <Bar
-                                    dataKey="physicalActivity"
-                                    fill={colors.physicalActivity}
-                                    name="Physical Activity (hrs)"
-                                />
-                                <Bar
-                                    dataKey="screenTime"
-                                    fill={colors.screenTime}
-                                    name="Screen Time (hrs)"
-                                />
-                                <Bar
-                                    dataKey="studyHours"
-                                    fill={colors.studyHours}
-                                    name="Study Hours"
-                                />
-                            </BarChart>
-                        </ResponsiveContainer>
+                        <div className="mx-auto max-w-3xl">
+                            <ResponsiveContainer width="100%" height={300}>
+                                <BarChart data={displayData}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
+                                    <XAxis
+                                        dataKey="date"
+                                        stroke={colors.text}
+                                        tickFormatter={formatDate}
+                                        style={{ fontFamily: 'Roboto, sans-serif' }}
+                                    />
+                                    <YAxis
+                                        stroke={colors.text}
+                                        style={{ fontFamily: 'Roboto, sans-serif' }}
+                                    />
+                                    <Tooltip
+                                        formatter={(value, name) => [value, name]}
+                                        labelFormatter={formatDate}
+                                        contentStyle={{ fontFamily: 'Roboto, sans-serif' }}
+                                    />
+                                    <Legend wrapperStyle={{ fontFamily: 'Roboto, sans-serif' }} />
+                                    <Bar
+                                        dataKey="sleepDuration"
+                                        fill={colors.sleepDuration}
+                                        name="Sleep Duration (hrs)"
+                                    />
+                                    <Bar
+                                        dataKey="caffeineIntake"
+                                        fill={colors.caffeineIntake}
+                                        name="Caffeine Intake (cups)"
+                                    />
+                                    <Bar
+                                        dataKey="physicalActivity"
+                                        fill={colors.physicalActivity}
+                                        name="Physical Activity (hrs)"
+                                    />
+                                    <Bar
+                                        dataKey="screenTime"
+                                        fill={colors.screenTime}
+                                        name="Screen Time (hrs)"
+                                    />
+                                    <Bar
+                                        dataKey="studyHours"
+                                        fill={colors.studyHours}
+                                        name="Study Hours"
+                                    />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
                     ) : (
                         <div className="text-center p-6 text-gray-500">No sleep factors data available for this period</div>
                     )}
