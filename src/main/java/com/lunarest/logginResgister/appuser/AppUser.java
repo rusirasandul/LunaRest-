@@ -38,6 +38,8 @@ public class AppUser implements UserDetails {
     private String email;
     private String password;
     private String profileImage; // New field for profile image URL
+    private String firstName;
+    private String lastName;
 
     @Enumerated(EnumType.STRING)
     private AppUserRole appUserRole;
