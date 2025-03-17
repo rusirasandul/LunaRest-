@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+
 
 const AboutAndFAQ = () => {
     // Features data
@@ -357,9 +359,11 @@ const AboutAndFAQ = () => {
                             <div className="relative z-10">
                                 <h3 className="text-white text-2xl md:text-3xl font-bold mb-4">Still have questions?</h3>
                                 <p className="text-white mb-8 text-lg max-w-xl mx-auto">Our team is here to help you get the most out of Lunarest. Feel free to reach out with any questions!</p>
-                                <button className="bg-white text-[#9F1CFD] hover:bg-[#080030] hover:text-white transition-colors duration-300 px-8 py-3 rounded-full font-medium shadow-md transform hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
-                                    Contact Support
-                                </button>
+                                <Link to="/contact">
+                                    <button className="bg-white text-[#9F1CFD] hover:bg-[#080030] hover:text-white transition-colors duration-300 px-8 py-3 rounded-full font-medium shadow-md transform hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
+                                        Contact Support
+                                    </button>
+                                </Link>
                             </div>
                         </div>
                     </div>
