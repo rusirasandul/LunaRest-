@@ -11,6 +11,10 @@ const Quiz = () => {
     const [quizComplete, setQuizComplete] = useState(false)
     const [validationError, setValidationError] = useState("")
     const [progress, setProgress] = useState(0)
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [submitError, setSubmitError] = useState("")
+    const [sleepScore, setSleepScore] = useState(null)
+    const [sleepStatus, setSleepStatus] = useState("")
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -135,7 +139,7 @@ const Quiz = () => {
             setCurrentIndex(currentIndex + 1)
             setValidationError("")
         } else {
-            setQuizComplete(true)
+            submitSleepData();
         }
     }
 
@@ -244,6 +248,71 @@ const Quiz = () => {
             scale: 1.02,
             transition: { duration: 0.2 } 
         }
+    };
+
+    // Function to submit sleep data to backend
+    const submitSleepData = async () => {
+        setIsSubmitting(true);
+        setSubmitError("");
+        
+        try {
+            // Format the data according to your backend API requirements
+            const formattedData = {
+                name: answers[0],
+                gender: answers[1],
+                age: parseInt(answers[2]),
+                universityYear: parseInt(answers[3]),
+                weekdaysSleepDuration: parseFloat(answers[4]),
+                weekendsSleepDuration: parseFloat(answers[5]),
+                weekdaysStudyHours: parseFloat(answers[6]),
+                weekendsStudyHours: parseFloat(answers[7]),
+                weekdaysScreenTime: parseFloat(answers[8]),
+                weekendsScreenTime: parseFloat(answers[9]),
+                caffeineIntake: parseInt(answers[10]),
+                physicalActivityLevel: parseInt(answers[11]),
+                // Convert time strings to proper format (assuming format like "HH:MM")
+                weekdaysSleepStart: "22:00", // Default or get from additional questions
+                weekdaysSleepEnd: "07:00",   // Default or get from additional questions
+                weekendsSleepStart: "23:00", // Default or get from additional questions
+                weekendsSleepEnd: "08:00"    // Default or get from additional questions
+            };
+            
+            // Send data to backend
+            const response = await fetch('http://localhost:8080/api/v1/sleepdata/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}` // Assuming token auth
+                },
+                body: JSON.stringify(formattedData)
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to submit sleep data');
+            }
+            
+            const data = await response.json();
+            
+            // Set sleep score and status from response
+            setSleepScore(data.sleepQuality);
+            setSleepStatus(getSleepStatus(data.sleepQuality));
+            setQuizComplete(true);
+            
+        } catch (error) {
+            console.error('Error submitting sleep data:', error);
+            setSubmitError(error.message || 'An error occurred while submitting your data');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+    
+    // Helper function to determine sleep status based on score
+    const getSleepStatus = (score) => {
+        if (score >= 8) return "Excellent";
+        if (score >= 6) return "Good";
+        if (score >= 4) return "Fair";
+        return "Poor";
     };
 
     return (
@@ -436,7 +505,7 @@ const Quiz = () => {
                                     transition={{ delay: 0.4, duration: 0.5 }}
                                     className="w-[40%] bg-gradient-to-br from-blue-900 to-indigo-900 p-6 rounded-2xl shadow-xl"
                                 >
-                                    <div className="text-5xl font-bold text-white mb-4">85</div>
+                                    <div className="text-5xl font-bold text-white mb-4">{sleepScore || "N/A"}</div>
                                     <h3 className="text-xl font-heading font-semibold text-blue-100">Sleep Score</h3>
                                 </motion.div>
 
@@ -446,10 +515,21 @@ const Quiz = () => {
                                     transition={{ delay: 0.5, duration: 0.5 }}
                                     className="w-[40%] bg-gradient-to-br from-indigo-800 to-purple-900 p-6 rounded-2xl shadow-xl"
                                 >
-                                    <div className="text-2xl font-bold text-white mb-4">Good</div>
+                                    <div className="text-2xl font-bold text-white mb-4">{sleepStatus || "N/A"}</div>
                                     <h3 className="text-xl font-heading font-semibold text-blue-100">Sleep Status</h3>
                                 </motion.div>
                             </div>
+
+                            {/* Show error message if submission failed */}
+                            {submitError && (
+                                <motion.div 
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    className="text-red-600 bg-red-50 p-3 rounded-lg mb-6 border border-red-200"
+                                >
+                                    {submitError}
+                                </motion.div>
+                            )}
 
                             <div className="flex justify-center gap-6 mt-6">
                                 <motion.button
@@ -482,6 +562,16 @@ const Quiz = () => {
                     )}
                 </motion.div>
             </div>
+            
+            {/* Loading overlay when submitting */}
+            {isSubmitting && (
+                <div className="absolute inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-xl shadow-xl">
+                        <div className="animate-spin h-10 w-10 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+                        <p className="text-gray-700 font-medium">Processing your sleep data...</p>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
