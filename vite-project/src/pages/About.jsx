@@ -141,7 +141,17 @@ const AboutAndFAQ = () => {
     }, []);
 
     return (
-        <div className="bg-[#F0EEFF] overflow-hidden">
+        <div className="bg-[#F0EEFF] overflow-hidden font-roboto">
+
+            {/* Google Fonts Import for Roboto */}
+            <style>{`
+                @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+    
+                    * {
+                        font-family: 'Roboto', sans-serif;
+                    }
+            `}</style>
+
             {/* Animated Background Elements */}
             <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
                 <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-[#9F1CFD] opacity-5 blur-3xl animate-float-slow"></div>
