@@ -22,6 +22,7 @@ export function MusicPlayerProvider({ children }) {
             grant_type: 'client_credentials',
             client_id: 'eb55132fff314b0ea6d834d68275e7e4',
             client_secret: '9493d5abe7074482a5186bad79bdc96c',
+            scope:"streaming user-read-email user-read-private"
           }),
           { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
         );
@@ -51,6 +52,7 @@ export function MusicPlayerProvider({ children }) {
           'https://api.spotify.com/v1/playlists/5FI8rn340FgsOB7B8Ic0DZ/tracks',
           { headers: { Authorization: `Bearer ${accessToken}` } }
         );
+        console.log(response.data);
 
         if (response.data.items.length > 0) {
           setPlaylist(response.data.items);
