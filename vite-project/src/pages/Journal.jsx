@@ -12,7 +12,7 @@ import {
 // Single Journal Entry Component
 const JournalEntry = ({ entry, index }) => (
   <div
-    className="bg-indigo-950/40 rounded-lg p-6 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 mb-6 border border-indigo-800/30 backdrop-blur-sm"
+    className="bg-indigo-950/40 rounded-lg p-6 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 mb-6 border border-indigo-800/30 backdrop-blur-sm "
     style={{ animation: `fadeSlideIn 0.5s ease-out ${index * 0.1}s both` }}
   >
     <div className="grid md:grid-cols-2 gap-6">
@@ -115,8 +115,8 @@ function Journal() {
   ]);
 
   return (
-    <section className="min-h-screen bg-gradient-to-b from-[#0a0225] via-indigo-950 to-purple-950 text-white p-8">
-      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=2342')] opacity-5 bg-cover bg-center mix-blend-overlay" />
+    <section className="min-h-screen bg-gradient-to-b from-[#0a0225] via-indigo-950 to-purple-950 text-white p-8 ">
+      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=2342')] opacity-5 bg-cover bg-center mix-blend-overlay " />
       <main className="max-w-6xl mx-auto relative">
         {/* Heading */}
         <div className="text-center mb-12 mt-10">

@@ -19,6 +19,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import LoadingPage from "./pages/LoadingPage";
 import MiniPlayer from "./pages/MiniPlayer"; // Fixed import path
 import Home from "./pages/Home"; // Added missing import
+import ProtectedRoute from "./pages/ProtectedRoute";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);

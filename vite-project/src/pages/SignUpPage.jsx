@@ -73,7 +73,7 @@ const SignUpPage = () => {
     };
 
     return (
-        <div className="relative min-h-screen flex items-center justify-center">
+        <div className="relative min-h-screen flex items-center justify-center mt-7">
             {/* Full screen background image */}
             <img
                 src={log1}

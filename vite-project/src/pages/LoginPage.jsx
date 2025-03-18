@@ -65,7 +65,7 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="relative min-h-screen flex items-center">
+        <div className="relative min-h-screen flex items-center mt-7">
             {/* Full screen background image */}
             <img
                 src={log1}

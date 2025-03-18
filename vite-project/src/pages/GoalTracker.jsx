@@ -1,45 +1,76 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, Cell } from "recharts";
-import { Moon, Award, TrendingUp, Activity } from "lucide-react";
+import { Moon, Award, TrendingUp, Activity, Coffee, UserPlus, Settings, Bell } from "lucide-react";
 
 // Utility function for combining class names
 const cn = (...inputs) => {
     return inputs.filter(Boolean).join(" ");
 };
 
-// Button component
-const Button = ({ className, children, ...props }) => {
+// Button component with hover animation
+const Button = ({ className, children, icon, ...props }) => {
     return (
         <button
         className={cn(
-            "inline-flex items-center justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50",
+            "inline-flex items-center justify-center rounded-md bg-purple-700 px-4 py-2 text-sm font-medium text-white transition-all duration-300 hover:bg-purple-800 hover:shadow-lg hover:shadow-purple-900/20 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:opacity-50 transform hover:-translate-y-0.5",
             className
         )}
         {...props}
         >
-        {children}
+            {icon && <span className="mr-2">{icon}</span>}
+            {children}
         </button>
     );
 };
 
 Button.propTypes = {
     className: PropTypes.string,
-    children: PropTypes.node.isRequired
+    children: PropTypes.node.isRequired,
+    icon: PropTypes.node
 };
 
-// Card component
-const Card = ({ className, children }) => {
+// Card component with hover effect
+const Card = ({ className, children, hoverEffect = false }) => {
     return (
-        <div className={cn("bg-white rounded-lg shadow-md border border-gray-100", className)}>
-        {children}
+        <div className={cn(
+            "bg-gray-800 rounded-lg shadow-md border border-gray-700 transition-all duration-300",
+            hoverEffect && "hover:border-purple-500/50 hover:shadow-lg hover:shadow-purple-900/20",
+            className
+        )}>
+            {children}
         </div>
     );
 };
 
 Card.propTypes = {
     className: PropTypes.string,
-    children: PropTypes.node.isRequired
+    children: PropTypes.node.isRequired,
+    hoverEffect: PropTypes.bool
+};
+
+// Badge component
+const Badge = ({ children, color = "purple" }) => {
+    const colorClasses = {
+        purple: "bg-purple-500/20 text-purple-300",
+        blue: "bg-blue-500/20 text-blue-300",
+        red: "bg-red-500/20 text-red-300",
+        green: "bg-green-500/20 text-green-300"
+    };
+
+    return (
+        <span className={cn(
+            "inline-block px-2 py-1 text-xs font-medium rounded-full",
+            colorClasses[color]
+        )}>
+            {children}
+        </span>
+    );
+};
+
+Badge.propTypes = {
+    children: PropTypes.node.isRequired,
+    color: PropTypes.string
 };
 
 const SleepQualityTracker = () => {
@@ -53,16 +84,18 @@ const SleepQualityTracker = () => {
     const [loading, setLoading] = useState(true);
     const [weeklyData, setWeeklyData] = useState([]);
     const [error, setError] = useState(null);
+    const [showMenu, setShowMenu] = useState(false);
+    const [animatedEntries, setAnimatedEntries] = useState(false);
 
-    // Color palette
+    // Color palette - Updated for dark theme
     const COLORS = {
-        primary: "#4f46e5", // indigo-600
-        secondary: "#c7d2fe", // indigo-200
-        accent: "#818cf8", // indigo-400
+        primary: "#a78bfa", // purple-400
+        secondary: "#7c3aed", // purple-600
+        accent: "#8b5cf6", // violet-500
         success: "#10b981", // emerald-500
         warning: "#f59e0b", // amber-500
-        optimal: "#4f46e5", // blue for optimal sleep (≤ 5)
-        excessive: "#ef4444", // red for excessive sleep (> 5)
+        optimal: "#818cf8", // indigo-400
+        excessive: "#f87171", // red-400
     };
 
     const BADGES = {
@@ -76,30 +109,40 @@ const SleepQualityTracker = () => {
         const fetchUserSleepData = async () => {
             setLoading(true);
             try {
-                // Fetch data from your JSON file or API endpoint
-                const response = await fetch('/data/sleep-data.json');
+                // Simulate API call with timeout
+                await new Promise(resolve => setTimeout(resolve, 1500));
                 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                
-                const data = await response.json();
+                // Mock data
+                const data = {
+                    weeklyData: [
+                        { day: "Mon", quality: 4.2 },
+                        { day: "Tue", quality: 3.8 },
+                        { day: "Wed", quality: 4.5 },
+                        { day: "Thu", quality: 6.2 },
+                        { day: "Fri", quality: 5.9 },
+                        { day: "Sat", quality: 4.7 },
+                        { day: "Sun", quality: 4.1 }
+                    ],
+                    userGoal: 5,
+                    currentStreak: 3,
+                    badge: "Bronze Sleeper"
+                };
                 
                 // Process and set the data
-                // Get the previous day's quality (second to last in the weekly data)
                 const prevIndex = data.weeklyData.length - 2;
                 const prevDayQuality = prevIndex >= 0 ? data.weeklyData[prevIndex].quality : 0;
-                
-                // Get the latest prediction (last in the weekly data)
                 const latestQuality = data.weeklyData[data.weeklyData.length - 1].quality;
                 
                 setPrevQuality(prevDayQuality);
                 setLatestQuality(latestQuality);
-                setGoal(data.userGoal || 5); // Updated default goal to 5
+                setGoal(data.userGoal || 5);
                 setStreak(data.currentStreak || 0);
                 setBadge(data.badge || null);
                 setWeeklyData(data.weeklyData || []);
                 setLoading(false);
+                
+                // Trigger animations after data is loaded
+                setTimeout(() => setAnimatedEntries(true), 300);
             } catch (error) {
                 console.error('Error fetching sleep data:', error);
                 setError("Failed to load sleep data. Please try again later.");
@@ -112,11 +155,9 @@ const SleepQualityTracker = () => {
 
     // Update streak and badge when latest quality changes
     useEffect(() => {
-        // Changed to consider optimal sleep as 5 or below
         if (latestQuality <= 5 && !loading) {
             setStreak(prevStreak => {
                 const newStreak = prevStreak + 1;
-                // Update badge based on streak
                 if (newStreak === 3) setBadge("Bronze Sleeper");
                 if (newStreak === 5) setBadge("Silver Sleeper");
                 if (newStreak === 7) setBadge("Gold Sleeper");
@@ -130,9 +171,6 @@ const SleepQualityTracker = () => {
         if (!isNaN(numGoal) && numGoal > 0 && numGoal <= 10) {
             setGoal(numGoal);
             setInputGoal("");
-            
-            // Here you would typically update the user's goal in your database
-            // saveUserGoal(numGoal);
         }
     };
 
@@ -144,32 +182,26 @@ const SleepQualityTracker = () => {
         return COLORS.primary;
     };
 
-    // Goal progress calculation - Modified to consider lower values as better
-    // If goal is 5, and user has 4, they're at 100% of goal (or better)
+    // Goal progress calculation
     const progressPercentage = goal >= 5 
         ? Math.min(100, ((5 - Math.abs(latestQuality - 5)) / 5) * 100)
         : Math.min(100, (latestQuality / goal) * 100);
     
-    // Calculate improvement - lower is better if above 5, higher is better if below 5
+    // Calculate improvement
     const isCurrentExcessive = latestQuality > 5;
     const isPrevExcessive = prevQuality > 5;
     
     let improvement;
     if (isCurrentExcessive && isPrevExcessive) {
-        // Both excessive, lower is better
         improvement = (prevQuality - latestQuality).toFixed(1);
     } else if (!isCurrentExcessive && !isPrevExcessive) {
-        // Both optimal, higher is better (up to 5)
         improvement = (latestQuality - prevQuality).toFixed(1);
-        // But cap at 5
         if (latestQuality > 5 && prevQuality <= 5) {
             improvement = -Math.abs(improvement);
         }
     } else if (isCurrentExcessive && !isPrevExcessive) {
-        // Was optimal, now excessive - that's bad
         improvement = -Math.abs((latestQuality - 5).toFixed(1));
     } else {
-        // Was excessive, now optimal - that's good
         improvement = Math.abs((5 - latestQuality).toFixed(1));
     }
 
@@ -180,24 +212,31 @@ const SleepQualityTracker = () => {
         return quality > 5 ? COLORS.excessive : COLORS.optimal;
     };
 
+    // Loading screen with animation
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-screen p-6 bg-gray-50" style={{ marginTop: '20px' }}>
+            <div className="flex items-center justify-center min-h-screen p-6 bg-gray-900">
                 <div className="text-center">
-                    <div className="w-16 h-16 mx-auto mb-4 border-4 border-indigo-500 rounded-full border-t-transparent animate-spin"></div>
-                    <p className="font-medium text-indigo-600">Loading your sleep data...</p>
+                    <div className="relative w-16 h-16 mx-auto mb-6">
+                        <div className="absolute top-0 w-16 h-16 border-4 border-purple-500 rounded-full opacity-25"></div>
+                        <div className="absolute top-0 w-16 h-16 border-4 border-t-transparent border-purple-500 rounded-full animate-spin"></div>
+                        <Moon className="absolute top-0 left-0 right-0 bottom-0 m-auto w-6 h-6 text-purple-300 animate-pulse" />
+                    </div>
+                    <h3 className="mb-2 text-xl font-semibold text-purple-400">SleepTracker</h3>
+                    <p className="text-gray-400">Loading your sleep insights...</p>
                 </div>
             </div>
         );
     }
 
+    // Error screen
     if (error) {
         return (
-            <div className="flex items-center justify-center min-h-screen p-6 bg-gray-50" style={{ marginTop: '20px' }}>
+            <div className="flex items-center justify-center min-h-screen p-6 bg-gray-900">
                 <Card className="max-w-md p-6 text-center">
-                    <h2 className="mb-2 text-xl font-bold text-red-600">Error</h2>
-                    <p className="text-gray-700">{error}</p>
-                    <Button className="mt-4" onClick={() => window.location.reload()}>
+                    <h2 className="mb-2 text-xl font-bold text-red-400">Error</h2>
+                    <p className="mb-4 text-gray-300">{error}</p>
+                    <Button onClick={() => window.location.reload()}>
                         Try Again
                     </Button>
                 </Card>
@@ -205,203 +244,351 @@ const SleepQualityTracker = () => {
         );
     }
 
+    // Main UI
     return (
-        <div className="min-h-screen p-4 sm:p-6 bg-gray-50" >
-            <div className="max-w-4xl mx-auto ">
-                <Card className="overflow-hidden">
-                    <div className="p-4 text-white sm:p-6 md:p-8 bg-gradient-to-r from-indigo-500 to-purple-600">
-                        <div className="flex items-center mb-2">
-                            <Moon className="w-6 h-6 mr-3" />
-                            <h1 className="text-xl font-bold sm:text-2xl">Sleep Quality Prediction</h1>
-                        </div>
-                        <p className="text-sm text-indigo-100">Personalized sleep tracking with AI prediction</p>
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-950 to-gray-900">
+            {/* Navigation */}
+            <nav className="fixed top-0 left-0 right-0 z-10 bg-gray-900/90 backdrop-blur-sm shadow-lg border-b border-gray-800">
+                <div className="flex items-center justify-between px-4 py-4 max-w-6xl mx-auto">
+                    <div className="flex items-center">
+                        <Moon className="w-6 h-6 mr-2 text-purple-500" />
+                        <span className="text-xl font-bold text-white">SleepTracker</span>
                     </div>
                     
-                    <div className="p-4 sm:p-6 md:p-8">
-                        {/* Weekly Trend Chart */}
-                        <Card className="p-4 mb-6">
-                            <h2 className="flex items-center mb-4 text-lg font-semibold text-gray-800">
-                                <Activity className="w-5 h-5 mr-2 text-indigo-500" />
-                                Weekly Sleep Quality Trend
-                            </h2>
-                            <div className="w-full h-64">
-                                <ResponsiveContainer width="100%" height="100%">
-                                    <BarChart
-                                        data={weeklyData}
-                                        margin={{ top: 5, right: 30, left: 0, bottom: 5 }}
-                                    >
-                                        <XAxis dataKey="day" />
-                                        <YAxis domain={[0, 10]} />
-                                        <Tooltip 
-                                            formatter={(value) => [`${value}/10`, 'Sleep Quality']}
-                                            labelFormatter={(label) => `Day: ${label}`}
-                                        />
-                                        <Legend />
-                                        <Bar 
-                                            name="Sleep Quality" 
-                                            dataKey="quality" 
-                                            radius={[4, 4, 0, 0]}
-                                        >
-                                            {weeklyData.map((entry, index) => (
-                                                <Cell key={`cell-${index}`} fill={getBarColor(entry.quality)} />
-                                            ))}
-                                        </Bar>
-                                    </BarChart>
-                                </ResponsiveContainer>
+                    {/* Desktop nav */}
+                    <div className="hidden md:flex items-center space-x-6">
+                        <a href="#" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">Dashboard</a>
+                        <a href="#" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">Insights</a>
+                        <a href="#" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">Community</a>
+                        <a href="#" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">Help</a>
+                    </div>
+                    
+                    {/* User menu */}
+                    <div className="flex items-center space-x-3">
+                        <button className="p-2 text-gray-300 hover:text-white transition-colors">
+                            <Bell className="w-5 h-5" />
+                        </button>
+                        <div className="relative">
+                            <button 
+                                className="flex items-center space-x-2"
+                                onClick={() => setShowMenu(!showMenu)}
+                            >
+                                <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center">
+                                    <span className="text-xs font-medium text-white">JD</span>
+                                </div>
+                                <span className="hidden md:inline text-sm font-medium text-white">John Doe</span>
+                            </button>
+                            
+                            {showMenu && (
+                                <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg border border-gray-700 overflow-hidden animate-fadeIn">
+                                    <div className="py-2">
+                                        <a href="#" className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+                                            <UserPlus className="w-4 h-4 mr-2" />
+                                            Profile
+                                        </a>
+                                        <a href="#" className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+                                            <Settings className="w-4 h-4 mr-2" />
+                                            Settings
+                                        </a>
+                                        <a href="#" className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+                                            <Coffee className="w-4 h-4 mr-2" />
+                                            Support
+                                        </a>
+                                        <hr className="my-1 border-gray-700" />
+                                        <a href="#" className="flex items-center px-4 py-2 text-sm text-red-400 hover:bg-gray-700 transition-colors">
+                                            Sign out
+                                        </a>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            {/* Main content */}
+            <div className="pt-24 pb-12 px-4 sm:px-6 md:px-8 max-w-6xl mx-auto">
+                <div className={cn(
+                    "mb-8 opacity-0 transform translate-y-4 transition-all duration-500", 
+                    animatedEntries && "opacity-100 translate-y-0"
+                )}>
+                    <h1 className="text-3xl font-bold text-white">Sleep Dashboard</h1>
+                    <p className="mt-2 text-gray-400">Track, analyze, and improve your sleep quality</p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    {/* Key metrics */}
+                    {[
+                        {
+                            title: "Current Sleep Quality",
+                            value: `${latestQuality.toFixed(1)}/10`,
+                            desc: latestQuality > 5 ? "Excessive" : "Optimal",
+                            color: latestQuality > 5 ? "red" : "blue",
+                            icon: <Moon className="w-5 h-5" />
+                        },
+                        {
+                            title: "Success Streak",
+                            value: streak,
+                            desc: "consecutive optimal days",
+                            color: "purple",
+                            icon: <TrendingUp className="w-5 h-5" />
+                        },
+                        {
+                            title: "Today's Goal",
+                            value: `${goal}/10`,
+                            desc: `${progressPercentage.toFixed(0)}% complete`,
+                            color: "green",
+                            icon: <Award className="w-5 h-5" />
+                        }
+                    ].map((metric, index) => (
+                        <Card 
+                            key={index} 
+                            hoverEffect={true}
+                            className={cn(
+                                "p-6 opacity-0 transform translate-y-4 transition-all duration-500",
+                                animatedEntries && "opacity-100 translate-y-0",
+                                // Stagger the animations
+                                animatedEntries && `transition-delay-${index * 100}`
+                            )}
+                        >
+                            <div className="flex items-center mb-4">
+                                <div className={`w-10 h-10 rounded-lg flex items-center justify-center mr-3 bg-${metric.color === "red" ? "red" : metric.color === "blue" ? "blue" : metric.color === "green" ? "green" : "purple"}-500/20`}>
+                                    <span className={`text-${metric.color === "red" ? "red" : metric.color === "blue" ? "blue" : metric.color === "green" ? "green" : "purple"}-400`}>
+                                        {metric.icon}
+                                    </span>
+                                </div>
+                                <div>
+                                    <h3 className="text-sm font-medium text-gray-400">{metric.title}</h3>
+                                    <div className="flex items-center">
+                                        <p className="text-2xl font-bold text-white">{metric.value}</p>
+                                        <Badge color={metric.color} className="ml-2">{metric.desc}</Badge>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="mt-2 text-center">
-                                <span className="inline-block px-2 py-1 text-sm rounded-md" 
-                                      style={{ 
-                                          backgroundColor: latestQuality > 5 ? 'rgba(239, 68, 68, 0.1)' : 'rgba(79, 70, 229, 0.1)',
-                                          color: latestQuality > 5 ? 'rgb(220, 38, 38)' : 'rgb(67, 56, 202)'
-                                      }}>
-                                    Today's Predicted Quality: {latestQuality.toFixed(1)}/10
-                                    {latestQuality > 5 ? " (Excessive)" : " (Optimal)"}
-                                </span>
-                                <p className="mt-1 text-xs text-gray-500">
-                                    Optimal sleep quality is 5 or below. Values above 5 indicate excessive sleep.
+                        </Card>
+                    ))}
+                </div>
+
+                {/* Main content grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Chart - takes up 2 columns */}
+                    <Card className={cn(
+                        "p-6 lg:col-span-2 opacity-0 transform translate-y-4 transition-all duration-500",
+                        animatedEntries && "opacity-100 translate-y-0 transition-delay-300"
+                    )}>
+                        <h2 className="flex items-center mb-4 text-lg font-semibold text-white">
+                            <Activity className="w-5 h-5 mr-2 text-purple-400" />
+                            Weekly Sleep Quality Trend
+                        </h2>
+                        <div className="w-full h-64 mb-4">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <BarChart
+                                    data={weeklyData}
+                                    margin={{ top: 5, right: 30, left: 0, bottom: 5 }}
+                                >
+                                    <XAxis dataKey="day" stroke="#9ca3af" />
+                                    <YAxis domain={[0, 10]} stroke="#9ca3af" />
+                                    <Tooltip 
+                                        formatter={(value) => [`${value}/10`, 'Sleep Quality']}
+                                        labelFormatter={(label) => `Day: ${label}`}
+                                        contentStyle={{ backgroundColor: '#374151', borderColor: '#4B5563', color: '#F9FAFB' }}
+                                        labelStyle={{ color: '#F9FAFB' }}
+                                    />
+                                    <Legend wrapperStyle={{ color: '#D1D5DB' }} />
+                                    <Bar 
+                                        name="Sleep Quality" 
+                                        dataKey="quality" 
+                                        radius={[4, 4, 0, 0]}
+                                        animationBegin={300}
+                                        animationDuration={1500}
+                                    >
+                                        {weeklyData.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={getBarColor(entry.quality)} />
+                                        ))}
+                                    </Bar>
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
+                        <div className="mt-2 text-center p-3 bg-gray-800/50 rounded-lg border border-gray-700">
+                            <p className="text-sm text-gray-300">
+                                <span className="font-medium">Sleep quality optimal range: </span> 
+                                Values between 1-5 indicate optimal sleep quality, while values above 5 suggest excessive sleep.
+                            </p>
+                        </div>
+                    </Card>
+
+                    {/* Right column */}
+                    <div className="flex flex-col space-y-6">
+                        {/* Goal setting */}
+                        <Card className={cn(
+                            "p-6 opacity-0 transform translate-y-4 transition-all duration-500",
+                            animatedEntries && "opacity-100 translate-y-0 transition-delay-400"
+                        )}>
+                            <h2 className="flex items-center mb-4 text-lg font-semibold text-white">
+                                <TrendingUp className="w-5 h-5 mr-2 text-purple-400" />
+                                Set Sleep Goal
+                            </h2>
+                            <div className="mb-4">
+                                <p className="mb-2 text-sm text-gray-300">Target Quality: <span className="font-semibold text-purple-400">{goal}/10</span></p>
+                                <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
+                                    <div 
+                                        className="h-full bg-gradient-to-r from-purple-600 to-blue-600 rounded-full transition-all duration-1000 ease-out"
+                                        style={{ width: `${progressPercentage}%` }}
+                                    ></div>
+                                </div>
+                                <p className="mt-2 text-xs text-gray-400">
+                                    {progressPercentage < 100 
+                                        ? `You're ${progressPercentage.toFixed(1)}% of the way to your goal` 
+                                        : 'Goal achieved! 🎉'}
                                 </p>
+                            </div>
+                            <div className="flex gap-2">
+                                <input
+                                    type="number"
+                                    min="1"
+                                    max="10"
+                                    step="0.1"
+                                    value={inputGoal}
+                                    onChange={(e) => setInputGoal(e.target.value)}
+                                    className="flex-1 px-3 py-2 text-sm text-gray-200 border border-gray-600 rounded-md bg-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors"
+                                    placeholder="New goal (1-10)"
+                                />
+                                <Button onClick={handleSetGoal}>Update</Button>
                             </div>
                         </Card>
 
-                        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-                            {/* Goal Setting Card */}
-                            <Card className="p-4">
-                                <h2 className="flex items-center mb-3 text-lg font-semibold text-gray-800">
-                                    <TrendingUp className="w-5 h-5 mr-2 text-indigo-500" />
-                                    Sleep Goal
-                                </h2>
-                                <div className="mb-4">
-                                    <p className="mb-1 text-sm text-gray-600">Target Quality: <span className="font-semibold text-indigo-600">{goal}/10</span></p>
-                                    <div className="w-full bg-gray-200 rounded-full h-2.5">
-                                        <div 
-                                            className="bg-indigo-600 h-2.5 rounded-full transition-all duration-500" 
-                                            style={{ width: `${progressPercentage}%` }}
-                                        ></div>
-                                    </div>
-                                    <p className="mt-1 text-xs text-gray-500">
-                                        {progressPercentage < 100 
-                                            ? `You're ${progressPercentage.toFixed(1)}% of the way there` 
-                                            : 'Goal achieved! 🎉'}
-                                    </p>
-                                </div>
-                                <div className="flex gap-2">
-                                    <input
-                                        type="number"
-                                        min="1"
-                                        max="10"
-                                        step="0.1"
-                                        value={inputGoal}
-                                        onChange={(e) => setInputGoal(e.target.value)}
-                                        className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                        placeholder="New goal (1-10)"
-                                    />
-                                    <Button onClick={handleSetGoal}>Update</Button>
-                                </div>
-                            </Card>
+                        {/* Achievements */}
+                        <Card className={cn(
+                            "p-6 opacity-0 transform translate-y-4 transition-all duration-500",
+                            animatedEntries && "opacity-100 translate-y-0 transition-delay-500"
+                        )}>
+                            <h2 className="flex items-center mb-4 text-lg font-semibold text-white">
+                                <Award className="w-5 h-5 mr-2 text-purple-400" />
+                                Achievements
+                            </h2>
 
-                            {/* Achievement Card */}
-                            <Card className="p-4">
-                                <h2 className="flex items-center mb-3 text-lg font-semibold text-gray-800">
-                                    <Award className="w-5 h-5 mr-2 text-indigo-500" />
-                                    Achievements
-                                </h2>
-                                <div className="flex items-center justify-between">
+                            {badge && (
+                                <div className="mb-4 p-4 rounded-lg bg-gray-800/50 border border-gray-700 flex items-center">
+                                    <div 
+                                        className="w-12 h-12 rounded-full flex items-center justify-center mr-4"
+                                        style={{ backgroundColor: getBadgeColor(), color: badge.includes("Gold") ? "#333" : "white" }}
+                                    >
+                                        <span className="text-xl">🏆</span>
+                                    </div>
                                     <div>
-                                        <p className="text-sm text-gray-600">Current Streak</p>
-                                        <p className="text-3xl font-bold text-indigo-600">{streak}</p>
-                                        <p className="text-xs text-gray-500">consecutive days with optimal sleep</p>
+                                        <h3 className="font-medium text-white">{badge}</h3>
+                                        <p className="text-sm text-gray-400">Earned for {streak} days of optimal sleep</p>
                                     </div>
-                                    {badge && (
-                                        <div 
-                                            className="px-3 py-2 text-sm font-medium rounded-full" 
-                                            style={{ backgroundColor: getBadgeColor(), color: badge.includes("Gold") ? "#333" : "white" }}
-                                        >
-                                            🏆 {badge}
-                                        </div>
-                                    )}
                                 </div>
-                            </Card>
+                            )}
 
-                            {/* Stats Card */}
-                            <Card className="p-4">
-                                <h2 className="mb-3 text-lg font-semibold text-gray-800">Quick Stats</h2>
+                            <div className="p-4 rounded-lg bg-gray-800/50 border border-gray-700">
+                                <h3 className="font-medium text-white mb-2">Next milestones</h3>
                                 <div className="space-y-3">
-                                    <div className="flex items-center justify-between p-2 rounded-md bg-gray-50">
-                                        <span className="text-sm text-gray-600">Previous Quality</span>
-                                        <span 
-                                            className="font-semibold" 
-                                            style={{ color: prevQuality > 5 ? COLORS.excessive : COLORS.optimal }}
-                                        >
-                                            {prevQuality.toFixed(1)}/10
-                                        </span>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-sm text-gray-300">7 days streak</span>
+                                        <Badge color="purple">Gold Sleeper</Badge>
                                     </div>
-                                    <div className="flex items-center justify-between p-2 rounded-md bg-gray-50">
-                                        <span className="text-sm text-gray-600">Predicted Quality</span>
-                                        <span 
-                                            className="font-semibold" 
-                                            style={{ color: latestQuality > 5 ? COLORS.excessive : COLORS.optimal }}
-                                        >
-                                            {latestQuality.toFixed(1)}/10
-                                        </span>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-sm text-gray-300">14 days streak</span>
+                                        <Badge color="blue">Sleep Master</Badge>
                                     </div>
-                                    <div className="flex items-center justify-between p-2 rounded-md bg-gray-50">
-                                        <span className="text-sm text-gray-600">Improvement</span>
-                                        <span className="font-semibold" style={{ color: improvementColor }}>
-                                            {improvement > 0 ? '+' : ''}{improvement}
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center justify-between p-2 rounded-md bg-gray-50">
-                                        <span className="text-sm text-gray-600">Optimal Range</span>
-                                        <span className="font-semibold text-indigo-600">
-                                            1-5
-                                        </span>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-sm text-gray-300">30 days streak</span>
+                                        <Badge color="green">Sleep Legend</Badge>
                                     </div>
                                 </div>
-                            </Card>
-                        </div>
+                            </div>
+                        </Card>
+                    </div>
+                </div>
 
-                        {/* Recommendations */}
+                {/* Recommendations */}
+                <Card className={cn(
+                    "p-6 mt-6 opacity-0 transform translate-y-4 transition-all duration-500",
+                    animatedEntries && "opacity-100 translate-y-0 transition-delay-600"
+                )}>
+                    <h2 className="mb-4 text-lg font-semibold text-white">
+                        {latestQuality > 5 ? "Recommendations for Excessive Sleep" : "Personalized Recommendations"}
+                    </h2>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {latestQuality > 5 ? (
-                            <Card className="p-4 mt-6 border-red-100 bg-red-50">
-                                <h2 className="mb-2 text-lg font-semibold text-red-700">
-                                    Recommendations for Excessive Sleep
-                                </h2>
-                                <ul className="space-y-2">
-                                    <li className="flex items-start text-sm text-gray-700">
-                                        <span className="mr-2 text-red-500">•</span> 
-                                        Try to limit your sleep duration to 7-8 hours per night
-                                    </li>
-                                    <li className="flex items-start text-sm text-gray-700">
-                                        <span className="mr-2 text-red-500">•</span> 
-                                        Set a consistent wake-up time and avoid oversleeping on weekends
-                                    </li>
-                                    <li className="flex items-start text-sm text-gray-700">
-                                        <span className="mr-2 text-red-500">•</span> 
-                                        If you consistently need more than 9 hours of sleep, consider consulting a healthcare provider
-                                    </li>
-                                </ul>
-                            </Card>
+                            // Excessive sleep recommendations
+                            [
+                                {
+                                    icon: <Moon className="w-5 h-5" />,
+                                    title: "Limit Sleep Duration",
+                                    desc: "Try to limit your sleep to 7-8 hours per night for optimal rest."
+                                },
+                                {
+                                    icon: <Activity className="w-5 h-5" />,
+                                    title: "Consistent Wake-Up",
+                                    desc: "Set a consistent wake-up time and avoid oversleeping on weekends."
+                                },
+                                {
+                                    icon: <Coffee className="w-5 h-5" />,
+                                    title: "Morning Routine",
+                                    desc: "Establish an energizing morning routine to start your day effectively."
+                                }
+                            ].map((item, index) => (
+                                <div 
+                                    key={index} 
+                                    className={cn(
+                                        "p-4 rounded-lg bg-gray-800/50 border border-gray-700 hover:border-red-500/30 transition-colors",
+                                        "opacity-0 transform translate-y-4 transition-all duration-500",
+                                        animatedEntries && "opacity-100 translate-y-0",
+                                        // Stagger the animations
+                                        animatedEntries && `transition-delay-${600 + index * 100}`
+                                    )}
+                                >
+                                    <div className="flex items-center mb-2">
+                                        <div className="w-8 h-8 rounded-lg flex items-center justify-center mr-3 bg-red-500/20 text-red-400">
+                                            {item.icon}
+                                        </div>
+                                        <h3 className="font-medium text-white">{item.title}</h3>
+                                    </div>
+                                    <p className="text-sm text-gray-300">{item.desc}</p>
+                                </div>
+                            ))
                         ) : (
-                            <Card className="p-4 mt-6 border-indigo-100 bg-indigo-50">
-                                <h2 className="mb-2 text-lg font-semibold text-indigo-700">
-                                    Personalized Recommendations
-                                </h2>
-                                <ul className="space-y-2">
-                                    <li className="flex items-start text-sm text-gray-700">
-                                        <span className="mr-2 text-indigo-500">•</span> 
-                                        You're sleeping at an optimal level, maintain your current sleep routine
-                                    </li>
-                                    <li className="flex items-start text-sm text-gray-700">
-                                        <span className="mr-2 text-indigo-500">•</span> 
-                                        Continue to maintain a consistent sleep schedule
-                                    </li>
-                                    <li className="flex items-start text-sm text-gray-700">
-                                        <span className="mr-2 text-indigo-500">•</span> 
-                                        Your sleep quality is excellent - keep focusing on your bedtime routine
-                                    </li>
-                                </ul>
-                            </Card>
+                            // Optimal sleep recommendations
+                            [
+                                {
+                                    icon: <Moon className="w-5 h-5" />,
+                                    title: "Maintain Your Routine",
+                                    desc: "You're sleeping at an optimal level. Keep your current sleep schedule."
+                                },
+                                {
+                                    icon: <Activity className="w-5 h-5" />,
+                                    title: "Pre-Sleep Relaxation",
+                                    desc: "Continue your effective pre-sleep relaxation techniques."
+                                },
+                                {
+                                    icon: <Coffee className="w-5 h-5" />,
+                                    title: "Bedtime Consistency",
+                                    desc: "Your consistent bedtime is working well. Keep it up!"
+                                }
+                            ].map((item, index) => (
+                                <div 
+                                    key={index} 
+                                    className={cn(
+                                        "p-4 rounded-lg bg-gray-800/50 border border-gray-700 hover:border-purple-500/30 transition-colors",
+                                        "opacity-0 transform translate-y-4 transition-all duration-500",
+                                        animatedEntries && "opacity-100 translate-y-0",
+                                        // Stagger the animations
+                                        animatedEntries && `transition-delay-${600 + index * 100}`
+                                    )}
+                                >
+                                    <div className="flex items-center mb-2">
+                                        <div className="w-8 h-8 rounded-lg flex items-center justify-center mr-3 bg-purple-500/20 text-purple-400">
+                                            {item.icon}
+                                        </div>
+                                        <h3 className="font-medium text-white">{item.title}</h3>
+                                    </div>
+                                    <p className="text-sm text-gray-300">{item.desc}</p>
+                                </div>
+                            ))
                         )}
                     </div>
                 </Card>
