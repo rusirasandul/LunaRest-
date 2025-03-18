@@ -316,7 +316,7 @@ const Quiz = () => {
     };
 
     return (
-        <div className="h-screen w-screen bg-[url(/background.jpg)] bg-cover bg-center overflow-hidden font-[Roboto]">
+        <div className="h-screen w-screen bg-[url(./assets/background.jpg)] bg-cover bg-center overflow-hidden font-[Roboto]">
 
             {/* Add Roboto font link in the component */}
             <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
