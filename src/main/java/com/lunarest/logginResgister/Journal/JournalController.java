@@ -1,40 +1,43 @@
 package com.lunarest.logginResgister.Journal;
 
-import com.lunarest.logginResgister.Journal.JournalEntry;
-import com.lunarest.logginResgister.Journal.JournalRepository;
+import com.lunarest.logginResgister.appuser.AppUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/api/journals")
+@RequestMapping("/api/v1/journal")
 public class JournalController {
+    private final JournalService journalService;
 
     @Autowired
-    private JournalService journalService;
-
-    // Get all journal entries
-    @GetMapping
-    public List<JournalEntry> getAllEntries() {
-        return journalService.getAllEntries();
+    public JournalController(JournalService journalService) {
+        this.journalService = journalService;
     }
 
-    // Get a single journal entry by ID
-    @GetMapping("/{id}")
-    public JournalEntry getEntryById(@PathVariable Long id) {
-        return journalService.getEntryById(id);
-    }
-
-    // Create or update a journal entry
     @PostMapping
-    public JournalEntry createOrUpdateEntry(@RequestBody JournalEntry entry) {
-        return journalService.saveEntry(entry);
+    public ResponseEntity<?> addJournalEntry(@AuthenticationPrincipal AppUser user,
+                                             @RequestBody Map<String, String> request) {
+        String text = request.get("text");
+        String mood = request.get("mood");
+        LocalDate date = LocalDate.now();
+        JournalEntry entry = journalService.addJournalEntry(user, text, mood, date);
+        return ResponseEntity.ok(entry);
     }
 
-    // Delete a journal entry by ID
+    @GetMapping
+    public List<JournalEntry> getJournalEntries(@AuthenticationPrincipal AppUser user) {
+        return journalService.getJournalEntriesByUser(user);
+    }
+
     @DeleteMapping("/{id}")
-    public void deleteEntry(@PathVariable Long id) {
-        journalService.deleteEntry(id);
+    public ResponseEntity<?> deleteJournalEntry(@PathVariable Long id) {
+        journalService.deleteJournalEntry(id);
+        return ResponseEntity.ok("Journal entry deleted successfully");
     }
 }

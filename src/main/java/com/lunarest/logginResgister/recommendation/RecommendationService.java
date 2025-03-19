@@ -1,5 +1,6 @@
 package com.lunarest.logginResgister.recommendation;
 
+import com.lunarest.logginResgister.sleepdata.SleepData;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -52,5 +53,6 @@ public class RecommendationService {
 
         return "No recommendation available at the moment.";
     }
+
 }
 

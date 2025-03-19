@@ -1,38 +1,30 @@
 package com.lunarest.logginResgister.Journal;
 
-
-
-import com.lunarest.logginResgister.Journal.JournalEntry;
-import com.lunarest.logginResgister.Journal.JournalRepository;
+import com.lunarest.logginResgister.appuser.AppUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
 public class JournalService {
+    private final JournalRepository journalRepository;
 
     @Autowired
-    private JournalRepository journalRepository;
-
-    // Get all journal entries
-    public List<JournalEntry> getAllEntries() {
-        return journalRepository.findAll();
+    public JournalService(JournalRepository journalRepository) {
+        this.journalRepository = journalRepository;
     }
 
-    // Get a single journal entry by ID
-    public JournalEntry getEntryById(Long id) {
-        return journalRepository.findById(id).orElse(null);
-    }
-
-    // Create or update a journal entry
-    public JournalEntry saveEntry(JournalEntry entry) {
+    public JournalEntry addJournalEntry(AppUser user, String text, String mood, LocalDate date) {
+        JournalEntry entry = new JournalEntry(user, date, text, mood);
         return journalRepository.save(entry);
     }
 
-    // Delete a journal entry by ID
-    public void deleteEntry(Long id) {
+    public List<JournalEntry> getJournalEntriesByUser(AppUser user) {
+        return journalRepository.findByUser(user);
+    }
+
+    public void deleteJournalEntry(Long id) {
         journalRepository.deleteById(id);
     }
 }
-
