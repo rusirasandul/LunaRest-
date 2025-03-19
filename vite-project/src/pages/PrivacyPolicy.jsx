@@ -1,10 +1,45 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const PrivacyPolicy = () => {
     const [activeSection, setActiveSection] = useState(null);
+    const [isDesktop, setIsDesktop] = useState(true);
+
+    // Updated colors for better readability - lighter backgrounds and vibrant headers
+    const colors = {
+        primary: '#2a1b47', // Slightly lighter deep purple
+        secondary: '#280867', // Lighter medium purple
+        background: '#07011c', // Slightly lighter dark purple
+        cardBackground: '#5c566a', // Lighter card background
+        text: '#ffffff', // White text
+        headings: '#ffffff', // White for headings
+        accent: '#c4b5fd', // Very light purple for accents
+        highlight: '#a78bfa', // Vibrant purple highlight
+        linkColor: '#ddd6fe' // Very light purple for links
+    };
+
+    // Handle responsive behavior
+    useEffect(() => {
+        const handleResize = () => {
+            setIsDesktop(window.innerWidth >= 768);
+        };
+
+        handleResize();
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     const toggleSection = (sectionId) => {
         setActiveSection(activeSection === sectionId ? null : sectionId);
+    };
+
+    const scrollToSection = (sectionId) => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     };
 
     const sections = [
@@ -194,30 +229,78 @@ const PrivacyPolicy = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            <div className="bg-blue-900 text-white py-8">
-                <div className="container mx-auto px-4 md:px-6">
-                    <h1 className="text-3xl font-bold">Luna Rest Privacy Policy</h1>
-                    <p className="mt-2 text-blue-200">Last Updated: March 7, 2025</p>
+        <div className="min-h-screen font-sans" style={{
+            backgroundColor: colors.background,
+            backgroundImage: 'linear-gradient(to bottom right, rgba(167, 139, 250, 0.1), rgba(196, 181, 253, 0.1))',
+            fontFamily: "'Roboto', sans-serif"
+        }}>
+            {/* Space for navbar */}
+            <div className="h-16"></div>
+
+            {/* Header - More vibrant with gradient */}
+            <div className="py-16" style={{
+                background: 'linear-gradient(135deg, #4c1d95 0%, #5b21b6 50%, #7c3aed 100%)',
+                borderBottom: '1px solid rgba(196, 181, 253, 0.3)'
+            }}>
+                <div className="container mx-auto px-4 md:px-8 text-center md:text-left">
+                    <h1 className="text-3xl md:text-5xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-indigo-100 to-purple-100 mb-2">
+                        Luna Rest Privacy Policy
+                    </h1>
+                    <div className="w-24 h-1 bg-gradient-to-r from-indigo-300 to-purple-300 rounded-full mb-4 hidden md:block"></div>
+                    <p className="mt-4 text-white font-light text-lg">Last Updated: March 7, 2025</p>
                 </div>
             </div>
 
-            <div className="container mx-auto px-4 md:px-6 py-8">
-                <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div className="md:flex">
-                        {/* Table of Contents - Only shown on md screens and up */}
-                        <div className="hidden md:block w-64 bg-gray-50 p-6 border-r border-gray-200">
-                            <h2 className="text-lg font-semibold mb-4">Contents</h2>
+            {/* Breadcrumb - Brighter */}
+            <div className="container mx-auto px-4 md:px-8 py-4">
+                <div className="text-sm">
+                    <span className="text-indigo-300 hover:text-white cursor-pointer transition-colors">Home</span>
+                    <span className="mx-2 text-indigo-200">/</span>
+                    <span className="text-indigo-300 hover:text-white cursor-pointer transition-colors">Legal</span>
+                    <span className="mx-2 text-indigo-200">/</span>
+                    <span className="text-white font-medium">Privacy Policy</span>
+                </div>
+            </div>
+
+            {/* Main Content */}
+            <div className="container mx-auto px-4 md:px-8 py-6">
+                {/* Mobile Section Quick Links - Brighter */}
+                <div className="md:hidden mb-8">
+                    <h3 className="text-lg font-medium mb-3 text-white">Jump to section:</h3>
+                    <div className="flex flex-wrap gap-2">
+                        {sections.map((section) => (
+                            <button
+                                key={section.id}
+                                onClick={() => scrollToSection(section.id)}
+                                className="px-3 py-2 rounded-full text-sm font-medium text-white hover:bg-purple-500/40 border border-purple-300/40 transition-colors"
+                                style={{ background: 'rgba(139, 92, 246, 0.25)' }}
+                            >
+                                {section.title.split('.')[0]}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="flex flex-col md:flex-row gap-8">
+                    {/* Sidebar for desktop - lighter */}
+                    <div className="hidden md:block w-80 shrink-0">
+                        <div className="sticky top-20 rounded-xl shadow-lg p-6 border border-purple-300/40"
+                             style={{
+                                 background: 'linear-gradient(135deg, #4c1d95 0%, #5b21b6 100%)',
+                                 boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1)'
+                             }}>
+                            <h2 className="text-xl font-bold mb-6 text-white pb-3 border-b border-purple-300/40">Contents</h2>
                             <nav>
                                 <ul className="space-y-1">
                                     {sections.map((section) => (
                                         <li key={section.id}>
                                             <button
-                                                onClick={() => {
-                                                    const element = document.getElementById(section.id);
-                                                    element.scrollIntoView({ behavior: 'smooth' });
-                                                }}
-                                                className="text-blue-800 hover:text-blue-600 text-left text-sm py-1 w-full"
+                                                onClick={() => scrollToSection(section.id)}
+                                                className={`text-left w-full py-2.5 px-4 rounded-lg transition-all ${
+                                                    activeSection === section.id
+                                                        ? 'bg-purple-500/40 text-white font-medium'
+                                                        : 'text-white hover:bg-purple-600/30 hover:text-white'
+                                                }`}
                                             >
                                                 {section.title}
                                             </button>
@@ -226,45 +309,77 @@ const PrivacyPolicy = () => {
                                 </ul>
                             </nav>
                         </div>
+                    </div>
 
-                        {/* Main Content */}
-                        <div className="flex-1 p-6 md:p-8">
-                            <div className="space-y-6">
-                                {sections.map((section) => (
-                                    <div key={section.id} id={section.id} className="pb-6 border-b border-gray-200 last:border-b-0">
-                                        {/* Mobile accordion header */}
+                    {/* Main Content - lighter background */}
+                    <div className="flex-1">
+                        <div className="rounded-xl shadow-lg p-6 md:p-10 border border-purple-300/40"
+                             style={{
+                                 background: 'linear-gradient(135deg, #4c1d95 0%, #5b21b6 100%)',
+                                 boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1)'
+                             }}>
+                            <div className="prose max-w-none prose-headings:font-semibold prose-p:text-white prose-li:text-white prose-strong:text-white">
+                                {sections.map((section, index) => (
+                                    <div
+                                        key={section.id}
+                                        id={section.id}
+                                        className={`scroll-mt-24 ${index !== 0 ? 'mt-12' : ''}`}
+                                    >
+                                        {/* Mobile accordion header - more vibrant */}
                                         <div
-                                            className="md:hidden flex justify-between items-center cursor-pointer"
+                                            className="md:hidden flex justify-between items-center cursor-pointer py-3"
                                             onClick={() => toggleSection(section.id)}
                                         >
-                                            <h3 className="text-xl font-semibold text-gray-900">{section.title}</h3>
-                                            <svg
-                                                className={`w-5 h-5 transition-transform duration-200 ${activeSection === section.id ? 'transform rotate-180' : ''}`}
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                stroke="currentColor"
-                                            >
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                            </svg>
+                                            <h3 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-purple-100">{section.title}</h3>
+                                            <div className="flex items-center justify-center h-8 w-8 rounded-full text-white bg-purple-500/50">
+                                                <svg
+                                                    className={`w-5 h-5 transition-transform duration-300 ${activeSection === section.id ? 'transform rotate-180' : ''}`}
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    stroke="currentColor"
+                                                >
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                </svg>
+                                            </div>
                                         </div>
 
-                                        {/* Desktop heading (always visible) */}
-                                        <h3 className="hidden md:block text-xl font-semibold text-gray-900 mb-4">{section.title}</h3>
+                                        {/* Desktop heading - more vibrant */}
+                                        <h2 className="hidden md:block text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-purple-100 mb-6">{section.title}</h2>
 
-                                        {/* Content - conditional on mobile, always visible on desktop */}
-                                        <div className={`mt-2 text-gray-700 ${activeSection === section.id || window.innerWidth >= 768 ? 'block' : 'hidden md:block'}`}>
+                                        {/* Content */}
+                                        <div className={`mt-3 ${!isDesktop && activeSection !== section.id ? 'hidden' : 'block'}`}>
                                             {section.content}
                                         </div>
+
+                                        {index !== sections.length - 1 && <hr className="my-8 border-purple-300/40 md:hidden" />}
                                     </div>
                                 ))}
                             </div>
                         </div>
+
+                        {/* Jump back to top button - more vibrant */}
+                        <div className="mt-8 mb-6 text-center">
+                            <button
+                                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                                className="inline-flex items-center px-6 py-3 rounded-lg text-white font-medium transition-all duration-300 hover:shadow-lg hover:bg-gradient-to-r hover:from-purple-500 hover:to-indigo-500"
+                                style={{
+                                    background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
+                                    boxShadow: '0 4px 14px 0 rgba(139, 92, 246, 0.4)'
+                                }}
+                            >
+                                <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                                </svg>
+                                Back to top
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div className="mt-8 text-center text-gray-600 text-sm">
+                {/* Footer - brighter */}
+                <div className="mt-12 text-center text-white text-sm pb-16 border-t border-purple-300/40 pt-8">
                     <p>© 2025 Luna Rest. All rights reserved.</p>
-                    <p className="mt-1">Based in Colombo, Sri Lanka</p>
+                    <p className="mt-2">Based in Colombo, Sri Lanka</p>
                 </div>
             </div>
         </div>
@@ -272,3 +387,4 @@ const PrivacyPolicy = () => {
 };
 
 export default PrivacyPolicy;
+
