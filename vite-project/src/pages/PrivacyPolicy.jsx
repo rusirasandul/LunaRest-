@@ -376,11 +376,6 @@ const PrivacyPolicy = () => {
                     </div>
                 </div>
 
-                {/* Footer - brighter */}
-                <div className="mt-12 text-center text-white text-sm pb-16 border-t border-purple-300/40 pt-8">
-                    <p>© 2025 Luna Rest. All rights reserved.</p>
-                    <p className="mt-2">Based in Colombo, Sri Lanka</p>
-                </div>
             </div>
         </div>
     );
