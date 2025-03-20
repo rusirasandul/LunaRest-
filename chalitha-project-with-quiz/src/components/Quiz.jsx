@@ -12,26 +12,46 @@ const Quiz = () => {
   // Handle radio button selection
   const handleAnswerChange = (option) => {
     setAnswers((prev) => ({ ...prev, [currentIndex]: option }))
-    setError("") // Clear error when user answers
+    setError("")
   }
 
   // Handle text input changes
   const handleTextInputChange = (e) => {
-    setAnswers((prev) => ({ ...prev, [currentIndex]: e.target.value }))
-    setError("") // Clear error when user types
+    const value = e.target.value
+    setAnswers((prev) => ({ ...prev, [currentIndex]: value }))
+    
+    // Validate input as user types
+    const currentQuestion = questions[currentIndex]
+    if (currentQuestion.validate && value.trim() !== '') {
+      const validationError = currentQuestion.validate(value)
+      setError(validationError || "")
+    } else {
+      setError("")
+    }
   }
 
   const handleNext = () => {
-    // Check if current question is answered
     const currentAnswer = answers[currentIndex]
+    const currentQuestion = questions[currentIndex]
+
+    // Check if question is answered
     if (!currentAnswer || (typeof currentAnswer === 'string' && currentAnswer.trim() === '')) {
       setError("Please answer the question before proceeding")
       return
     }
 
+    // Validate answer format if validation exists
+    if (currentQuestion.validate && typeof currentAnswer === 'string') {
+      const validationError = currentQuestion.validate(currentAnswer)
+      if (validationError) {
+        setError(validationError)
+        return
+      }
+    }
+
     if (currentIndex < questions.length - 1) {
       setCurrentIndex(currentIndex + 1)
-      setError("") // Clear error when moving to next question
+      setError("")
     } else {
       setQuizComplete(true)
     }
@@ -40,36 +60,30 @@ const Quiz = () => {
   const handlePrevious = () => {
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1)
-      setError("") // Clear error when moving to previous question
+      setError("")
     }
   }
 
   return (
     <div className="h-screen w-screen bg-[url(/background.jpg)] bg-cover bg-center">
-      {/* Centered Quiz Card */}
       <div className="relative flex items-center justify-center min-h-screen p-4">
         <div className="bg-white/70 rounded-3xl p-6 w-[650px] min-h-[500px] flex flex-col items-center shadow-2xl border border-white/30">
-          {/* Logo */}
           <div className="w-12 h-12 self-start">
             <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
           </div>
 
           {!quizComplete ? (
             <div className="w-full flex flex-col items-center text-center gap-10 mt-5">
-              {/* Question */}
               <h3 className="text-2xl font-heading semibold text-blue-950">{questions[currentIndex].question}</h3>
 
-              {/* Error Message */}
               {error && (
                 <div className="w-[80%] p-3 bg-red-100 border border-red-400 text-red-700 rounded-md">
                   {error}
                 </div>
               )}
 
-              {/* Options or Text Input based on question type */}
               <div className="w-full flex flex-col items-center gap-3">
                 {questions[currentIndex].options.length > 0 ? (
-                  // Render radio buttons for questions with options
                   questions[currentIndex].options.map((option, idx) => (
                     <label
                       key={idx}
@@ -87,7 +101,6 @@ const Quiz = () => {
                     </label>
                   ))
                 ) : (
-                  // Render text input for questions without options
                   <div className="w-[80%] relative mt-15 mb-19">
                     <input
                       type="text"
@@ -102,7 +115,6 @@ const Quiz = () => {
                 )}
               </div>
 
-              {/* Navigation Buttons Section */}
               <div
                 className={`w-full mt-6 ${
                   currentIndex === 0 ? "flex justify-center" : "flex justify-between"
