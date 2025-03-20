@@ -591,7 +591,7 @@ const Home = () => {
             <Art1/>
             
             {/* Sleep Sounds Section (Original Art2) */}
-            <Art2/>
+            {/* <Art2/> */}
             
             {/* Music Player Section (Original Art3) */}
             <Art3/>
