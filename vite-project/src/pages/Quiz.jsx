@@ -56,8 +56,8 @@ const Quiz = () => {
                 
             case 2: // Age validation (18-25)
                 const age = Number(currentAnswer)
-                if (isNaN(age) || age < 18 || age > 25) {
-                    setValidationError("Age must be between 18 and 25")
+                if (isNaN(age) || age < 18 || age > 35) {
+                    setValidationError("Age must be between 18 and 35")
                     return false
                 }
                 break
@@ -171,7 +171,7 @@ const Quiz = () => {
         switch (index) {
             case 2: // Age
                 props.type = "number"
-                props.placeholder = "Enter age (18-25)"
+                props.placeholder = "Enter age (18-35)"
                 props.min = 18
                 props.max = 25
                 break
