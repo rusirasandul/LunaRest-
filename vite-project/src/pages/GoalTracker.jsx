@@ -219,8 +219,8 @@ const SleepQualityTracker = () => {
                 <div className="text-center">
                     <div className="relative w-16 h-16 mx-auto mb-6">
                         <div className="absolute top-0 w-16 h-16 border-4 border-purple-500 rounded-full opacity-25"></div>
-                        <div className="absolute top-0 w-16 h-16 border-4 border-t-transparent border-purple-500 rounded-full animate-spin"></div>
-                        <Moon className="absolute top-0 left-0 right-0 bottom-0 m-auto w-6 h-6 text-purple-300 animate-pulse" />
+                        <div className="absolute top-0 w-16 h-16 border-4 border-purple-500 rounded-full border-t-transparent animate-spin"></div>
+                        <Moon className="absolute top-0 bottom-0 left-0 right-0 w-6 h-6 m-auto text-purple-300 animate-pulse" />
                     </div>
                     <h3 className="mb-2 text-xl font-semibold text-purple-400">SleepTracker</h3>
                     <p className="text-gray-400">Loading your sleep insights...</p>
@@ -248,24 +248,24 @@ const SleepQualityTracker = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-950 to-gray-900">
             {/* Navigation */}
-            <nav className="fixed top-0 left-0 right-0 z-10 bg-gray-900/90 backdrop-blur-sm shadow-lg border-b border-gray-800">
-                <div className="flex items-center justify-between px-4 py-4 max-w-6xl mx-auto">
+            <nav className="fixed top-0 left-0 right-0 z-10 border-b border-gray-800 shadow-lg bg-gray-900/90 backdrop-blur-sm">
+                <div className="flex items-center justify-between max-w-6xl px-4 py-4 mx-auto">
                     <div className="flex items-center">
                         <Moon className="w-6 h-6 mr-2 text-purple-500" />
                         <span className="text-xl font-bold text-white">SleepTracker</span>
                     </div>
                     
                     {/* Desktop nav */}
-                    <div className="hidden md:flex items-center space-x-6">
-                        <a href="#" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">Dashboard</a>
-                        <a href="#" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">Insights</a>
-                        <a href="#" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">Community</a>
-                        <a href="#" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">Help</a>
+                    <div className="items-center hidden space-x-6 md:flex">
+                        <a href="#" className="text-sm font-medium text-gray-300 transition-colors hover:text-white">Dashboard</a>
+                        <a href="#" className="text-sm font-medium text-gray-300 transition-colors hover:text-white">Insights</a>
+                        <a href="#" className="text-sm font-medium text-gray-300 transition-colors hover:text-white">Community</a>
+                        <a href="#" className="text-sm font-medium text-gray-300 transition-colors hover:text-white">Help</a>
                     </div>
                     
                     {/* User menu */}
                     <div className="flex items-center space-x-3">
-                        <button className="p-2 text-gray-300 hover:text-white transition-colors">
+                        <button className="p-2 text-gray-300 transition-colors hover:text-white">
                             <Bell className="w-5 h-5" />
                         </button>
                         <div className="relative">
@@ -273,29 +273,29 @@ const SleepQualityTracker = () => {
                                 className="flex items-center space-x-2"
                                 onClick={() => setShowMenu(!showMenu)}
                             >
-                                <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center">
+                                <div className="flex items-center justify-center w-8 h-8 bg-purple-600 rounded-full">
                                     <span className="text-xs font-medium text-white">JD</span>
                                 </div>
-                                <span className="hidden md:inline text-sm font-medium text-white">John Doe</span>
+                                <span className="hidden text-sm font-medium text-white md:inline">John Doe</span>
                             </button>
                             
                             {showMenu && (
-                                <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg border border-gray-700 overflow-hidden animate-fadeIn">
+                                <div className="absolute right-0 w-48 mt-2 overflow-hidden bg-gray-800 border border-gray-700 rounded-md shadow-lg animate-fadeIn">
                                     <div className="py-2">
-                                        <a href="#" className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+                                        <a href="#" className="flex items-center px-4 py-2 text-sm text-gray-300 transition-colors hover:bg-gray-700 hover:text-white">
                                             <UserPlus className="w-4 h-4 mr-2" />
                                             Profile
                                         </a>
-                                        <a href="#" className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+                                        <a href="#" className="flex items-center px-4 py-2 text-sm text-gray-300 transition-colors hover:bg-gray-700 hover:text-white">
                                             <Settings className="w-4 h-4 mr-2" />
                                             Settings
                                         </a>
-                                        <a href="#" className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+                                        <a href="#" className="flex items-center px-4 py-2 text-sm text-gray-300 transition-colors hover:bg-gray-700 hover:text-white">
                                             <Coffee className="w-4 h-4 mr-2" />
                                             Support
                                         </a>
                                         <hr className="my-1 border-gray-700" />
-                                        <a href="#" className="flex items-center px-4 py-2 text-sm text-red-400 hover:bg-gray-700 transition-colors">
+                                        <a href="#" className="flex items-center px-4 py-2 text-sm text-red-400 transition-colors hover:bg-gray-700">
                                             Sign out
                                         </a>
                                     </div>
@@ -307,16 +307,16 @@ const SleepQualityTracker = () => {
             </nav>
 
             {/* Main content */}
-            <div className="pt-24 pb-12 px-4 sm:px-6 md:px-8 max-w-6xl mx-auto">
+            <div className="max-w-6xl px-4 pt-24 pb-12 mx-auto sm:px-6 md:px-8">
                 <div className={cn(
                     "mb-8 opacity-0 transform translate-y-4 transition-all duration-500", 
                     animatedEntries && "opacity-100 translate-y-0"
                 )}>
-                    <h1 className="text-3xl font-bold text-white">Sleep Dashboard</h1>
+                    <h1 className="text-3xl font-bold text-white">Sleep Goal Tracker</h1>
                     <p className="mt-2 text-gray-400">Track, analyze, and improve your sleep quality</p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div className="grid grid-cols-1 gap-6 mb-8 md:grid-cols-3">
                     {/* Key metrics */}
                     {[
                         {
@@ -370,7 +370,7 @@ const SleepQualityTracker = () => {
                 </div>
 
                 {/* Main content grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                     {/* Chart - takes up 2 columns */}
                     <Card className={cn(
                         "p-6 lg:col-span-2 opacity-0 transform translate-y-4 transition-all duration-500",
@@ -409,7 +409,7 @@ const SleepQualityTracker = () => {
                                 </BarChart>
                             </ResponsiveContainer>
                         </div>
-                        <div className="mt-2 text-center p-3 bg-gray-800/50 rounded-lg border border-gray-700">
+                        <div className="p-3 mt-2 text-center border border-gray-700 rounded-lg bg-gray-800/50">
                             <p className="text-sm text-gray-300">
                                 <span className="font-medium">Sleep quality optimal range: </span> 
                                 Values between 1-5 indicate optimal sleep quality, while values above 5 suggest excessive sleep.
@@ -430,9 +430,9 @@ const SleepQualityTracker = () => {
                             </h2>
                             <div className="mb-4">
                                 <p className="mb-2 text-sm text-gray-300">Target Quality: <span className="font-semibold text-purple-400">{goal}/10</span></p>
-                                <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div className="w-full h-2 overflow-hidden bg-gray-700 rounded-full">
                                     <div 
-                                        className="h-full bg-gradient-to-r from-purple-600 to-blue-600 rounded-full transition-all duration-1000 ease-out"
+                                        className="h-full transition-all duration-1000 ease-out rounded-full bg-gradient-to-r from-purple-600 to-blue-600"
                                         style={{ width: `${progressPercentage}%` }}
                                     ></div>
                                 </div>
@@ -450,7 +450,7 @@ const SleepQualityTracker = () => {
                                     step="0.1"
                                     value={inputGoal}
                                     onChange={(e) => setInputGoal(e.target.value)}
-                                    className="flex-1 px-3 py-2 text-sm text-gray-200 border border-gray-600 rounded-md bg-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors"
+                                    className="flex-1 px-3 py-2 text-sm text-gray-200 transition-colors bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                                     placeholder="New goal (1-10)"
                                 />
                                 <Button onClick={handleSetGoal}>Update</Button>
@@ -468,9 +468,9 @@ const SleepQualityTracker = () => {
                             </h2>
 
                             {badge && (
-                                <div className="mb-4 p-4 rounded-lg bg-gray-800/50 border border-gray-700 flex items-center">
+                                <div className="flex items-center p-4 mb-4 border border-gray-700 rounded-lg bg-gray-800/50">
                                     <div 
-                                        className="w-12 h-12 rounded-full flex items-center justify-center mr-4"
+                                        className="flex items-center justify-center w-12 h-12 mr-4 rounded-full"
                                         style={{ backgroundColor: getBadgeColor(), color: badge.includes("Gold") ? "#333" : "white" }}
                                     >
                                         <span className="text-xl">🏆</span>
@@ -482,18 +482,18 @@ const SleepQualityTracker = () => {
                                 </div>
                             )}
 
-                            <div className="p-4 rounded-lg bg-gray-800/50 border border-gray-700">
-                                <h3 className="font-medium text-white mb-2">Next milestones</h3>
+                            <div className="p-4 border border-gray-700 rounded-lg bg-gray-800/50">
+                                <h3 className="mb-2 font-medium text-white">Next milestones</h3>
                                 <div className="space-y-3">
-                                    <div className="flex justify-between items-center">
+                                    <div className="flex items-center justify-between">
                                         <span className="text-sm text-gray-300">7 days streak</span>
                                         <Badge color="purple">Gold Sleeper</Badge>
                                     </div>
-                                    <div className="flex justify-between items-center">
+                                    <div className="flex items-center justify-between">
                                         <span className="text-sm text-gray-300">14 days streak</span>
                                         <Badge color="blue">Sleep Master</Badge>
                                     </div>
-                                    <div className="flex justify-between items-center">
+                                    <div className="flex items-center justify-between">
                                         <span className="text-sm text-gray-300">30 days streak</span>
                                         <Badge color="green">Sleep Legend</Badge>
                                     </div>
@@ -512,7 +512,7 @@ const SleepQualityTracker = () => {
                         {latestQuality > 5 ? "Recommendations for Excessive Sleep" : "Personalized Recommendations"}
                     </h2>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                         {latestQuality > 5 ? (
                             // Excessive sleep recommendations
                             [
@@ -543,7 +543,7 @@ const SleepQualityTracker = () => {
                                     )}
                                 >
                                     <div className="flex items-center mb-2">
-                                        <div className="w-8 h-8 rounded-lg flex items-center justify-center mr-3 bg-red-500/20 text-red-400">
+                                        <div className="flex items-center justify-center w-8 h-8 mr-3 text-red-400 rounded-lg bg-red-500/20">
                                             {item.icon}
                                         </div>
                                         <h3 className="font-medium text-white">{item.title}</h3>
@@ -581,7 +581,7 @@ const SleepQualityTracker = () => {
                                     )}
                                 >
                                     <div className="flex items-center mb-2">
-                                        <div className="w-8 h-8 rounded-lg flex items-center justify-center mr-3 bg-purple-500/20 text-purple-400">
+                                        <div className="flex items-center justify-center w-8 h-8 mr-3 text-purple-400 rounded-lg bg-purple-500/20">
                                             {item.icon}
                                         </div>
                                         <h3 className="font-medium text-white">{item.title}</h3>
