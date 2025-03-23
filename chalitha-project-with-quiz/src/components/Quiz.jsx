@@ -8,6 +8,7 @@ const Quiz = () => {
   const [answers, setAnswers] = useState({})
   const [quizComplete, setQuizComplete] = useState(false)
   const [error, setError] = useState("")
+  
 
   // Handle radio button selection
   const handleAnswerChange = (option) => {
